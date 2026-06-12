@@ -187,6 +187,7 @@ a {
 .jyotish-intro-action {
   min-height: 44px;
   border-color: rgba(31, 92, 90, 0.28);
+  border-radius: 30px;
   color: var(--teal);
   background: transparent;
 }
