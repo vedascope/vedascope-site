@@ -54,7 +54,7 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
 
 if (!reducedMotion.matches && "IntersectionObserver" in window) {
   const sectionTargets = document.querySelectorAll(
-    "main > .section > .section-shell, .sutra-section > .section-shell"
+    "main > .section > .section-shell, .jyotish-intro > .section-shell, .sutra-section > .section-shell"
   );
   const cardGroups = document.querySelectorAll(".card-grid, .timeline-grid, .service-grid");
   const revealTargets = [...sectionTargets];
