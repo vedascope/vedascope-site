@@ -635,3 +635,13 @@ h3 {
     transition-duration: 0.01ms !important;
   }
 }
+.site-logo {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+}
