@@ -157,6 +157,47 @@ a {
   z-index: 1;
 }
 
+.hero-scroll-cue {
+  position: absolute;
+  z-index: 2;
+  top: calc(100svh - 72px);
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  aspect-ratio: 1;
+  color: rgba(247, 242, 231, 0.84);
+  border: 1px solid rgba(247, 242, 231, 0.28);
+  border-radius: 50%;
+  background: rgba(16, 24, 25, 0.34);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(8px);
+  transform: translateX(-50%);
+  transition:
+    color 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    transform 220ms ease;
+}
+
+.hero-scroll-cue span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.hero-scroll-cue:hover {
+  color: var(--ivory);
+  border-color: rgba(197, 148, 79, 0.72);
+  background: rgba(16, 24, 25, 0.54);
+  transform: translate(-50%, 2px);
+}
+
+.hero-scroll-cue:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
 .jyotish-intro {
   padding: 56px 0;
   border-bottom: 1px solid var(--line);
@@ -668,6 +709,11 @@ h3 {
 
   .hero-shell::after {
     top: 445px;
+  }
+
+  .hero-scroll-cue {
+    top: calc(100svh - 64px);
+    width: 44px;
   }
 
   .jyotish-intro {
