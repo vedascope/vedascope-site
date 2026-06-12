@@ -184,7 +184,7 @@ a {
   font-size: 1.05rem;
 }
 
-.jyotish-intro-action {
+.button.jyotish-intro-action {
   min-height: 44px;
   border-color: rgba(31, 92, 90, 0.28);
   border-radius: 30px;
