@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//vedascope//Events 2026//RU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:conference-2026@vedascope.ru
+DTSTAMP:20260614T000000Z
+DTSTART;VALUE=DATE:20260621
+DTEND;VALUE=DATE:20260623
+SUMMARY:7-я Международная конференция по Джйотиш
+LOCATION:Москва
+DESCRIPTION:30 лет школе Индубалы. Два дня докладов\, исследований\, живого общения и практики Джйотиш. Формат участия: очно в Москве и онлайн. Специальный гость: профессор Винай Кумар Пандей\, Бенаресский университет\, Индия. Контакт: https://t.me/ruzhin_pro
+URL:https://vedascope.ru/moskva-konferentsiya-2026
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

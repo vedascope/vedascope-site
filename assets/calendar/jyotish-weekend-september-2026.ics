@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//vedascope//Events 2026//RU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:jyotish-weekend-september-2026@vedascope.ru
+DTSTAMP:20260614T000000Z
+DTSTART;VALUE=DATE:20260919
+DTEND;VALUE=DATE:20260921
+SUMMARY:Джйотиш-выходные
+LOCATION:Природа / загородный формат
+DESCRIPTION:Ретрит на природе: Джйотиш\, практики внимания\, восстановление ритма и спокойная работа с жизненными периодами.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

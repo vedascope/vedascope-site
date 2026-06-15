@@ -1,0 +1,55 @@
+.global-footer {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(62px, 8vw, 94px) 0 28px;
+  color: #f7f2e7;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(197, 148, 79, 0.15), transparent 26%),
+    linear-gradient(145deg, #091213, #142120 62%, #0c1516);
+}
+
+.global-footer::before {
+  content: "";
+  position: absolute;
+  width: 440px;
+  height: 440px;
+  right: -270px;
+  bottom: -290px;
+  border: 1px solid rgba(197, 148, 79, 0.14);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.global-footer-shell { position: relative; z-index: 1; }
+.global-footer-main { display: grid; gap: 42px; }
+.global-footer-brand { max-width: 360px; }
+.global-footer-brand img { display: block; width: 150px; height: auto; margin-bottom: 24px; }
+.global-footer-brand p, .global-footer-contacts p { margin: 0; color: rgba(247, 242, 231, 0.58); font-size: 0.9rem; line-height: 1.7; }
+.global-footer-column { display: flex; align-items: flex-start; flex-direction: column; gap: 9px; }
+.global-footer-column h2 { margin: 0 0 10px; color: #c5944f; font-family: Inter, system-ui, sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.global-footer-column a { color: rgba(247, 242, 231, 0.74); font-size: 0.9rem; line-height: 1.5; transition: color 180ms ease, transform 180ms ease; }
+.global-footer-column a:hover { color: #f7f2e7; transform: translateX(3px); }
+.global-footer-contacts p { margin-top: 14px; }
+.global-footer-bottom { display: flex; align-items: flex-start; justify-content: space-between; gap: 28px; margin-top: clamp(48px, 7vw, 74px); padding-top: 24px; border-top: 1px solid rgba(247, 242, 231, 0.12); }
+.global-footer-bottom p { flex: 0 0 auto; margin: 0; color: rgba(247, 242, 231, 0.44); font-size: 0.78rem; }
+.global-footer-bottom > p::before { content: ""; display: block; width: 54px; height: 38px; margin-bottom: 9px; opacity: 0.05; background: url("../brand/ganesha-constellation.svg") center / 66px 66px no-repeat; filter: brightness(2.2) saturate(0.5); }
+.global-footer::after { content: ""; position: absolute; left: 4%; bottom: -110px; width: min(620px, 52vw); aspect-ratio: 2 / 1; opacity: 0.018; pointer-events: none; background: url("../brand/vedascope-ornament.svg") center / contain no-repeat; filter: brightness(2.2) saturate(0.55); }
+.global-footer-bottom nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px 24px; }
+.global-footer-bottom a { color: rgba(247, 242, 231, 0.5); font-size: 0.75rem; line-height: 1.5; transition: color 180ms ease; }
+.global-footer-bottom a:hover { color: #f7f2e7; }
+
+@media (min-width: 900px) {
+  .global-footer-main { grid-template-columns: minmax(250px, 1.4fr) repeat(3, minmax(130px, 0.7fr)); }
+}
+
+@media (max-width: 899px) {
+  .global-footer-main { grid-template-columns: 1fr; gap: 34px; }
+  .global-footer-brand { max-width: 320px; }
+  .global-footer-column { padding-top: 26px; border-top: 1px solid rgba(247, 242, 231, 0.1); }
+  .global-footer-bottom { align-items: flex-start; flex-direction: column; }
+  .global-footer-bottom nav { justify-content: flex-start; flex-direction: column; gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .global-footer-column a, .global-footer-bottom a { transition: none; }
+}

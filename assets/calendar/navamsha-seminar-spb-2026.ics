@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//vedascope//Events 2026//RU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:navamsha-seminar-spb-2026@vedascope.ru
+DTSTAMP:20260614T000000Z
+DTSTART:20260627T080000Z
+DTEND:20260627T140000Z
+SUMMARY:Семинар «Тайны навамши»
+LOCATION:Отель «Агни»\, Невский проспект\, 90–92Б\, этаж 2\, Санкт-Петербург
+DESCRIPTION:Семинар профессора Виная Кумара Пандея о значении навамши и синтезе натальной карты с картами делений для более точной интерпретации гороскопа. Формат участия: очно и онлайн. Вопросы: info@indubala.ru
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
