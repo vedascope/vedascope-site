@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Vedic Sky Clock vedascope: точное положение грах в знаках, накшатрах и падах.">
+    <title>Vedic Sky Clock — vedascope</title>
+    <link rel="canonical" href="https://vedascope.ru/sky-clock/">
+    <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="vedascope">
+    <meta property="og:url" content="https://vedascope.ru/sky-clock/">
+    <meta property="og:title" content="Vedic Sky Clock — vedascope">
+    <meta property="og:description" content="Точное положение грах в знаках, накшатрах и падах.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=20260615-2">
+    <link rel="stylesheet" href="../assets/css/sky-clock.css">
+    <script src="../assets/js/vedic-sky-clock.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header" aria-label="Главная навигация">
+      <a class="brand" href="/" aria-label="vedascope главная"><img src="../assets/img/logo_white.svg" alt="vedascope"></a>
+      <nav class="header-nav" aria-label="Разделы">
+        <a href="/">Главная</a>
+        <a href="/panchanga">Панчанга</a>
+        <a href="/sky-clock/">Sky Clock</a>
+        <a href="/#services">Сервисы</a>
+        <a href="/#community">Сообщество</a>
+      </nav>
+      <a class="header-action" href="/panchanga">Панчанга</a>
+    </header>
+
+    <main class="sky-page">
+      <section class="sky-workspace" aria-labelledby="sky-title">
+        <div class="sky-shell">
+          <div class="sky-heading">
+            <p class="eyebrow">vedascope</p>
+            <h1 id="sky-title">Vedic Sky Clock</h1>
+          </div>
+
+          <form class="sky-controls" data-sky-form>
+            <div class="sky-field">
+              <label for="sky-date">Дата</label>
+              <input id="sky-date" name="date" type="date" required>
+            </div>
+            <div class="sky-field">
+              <label for="sky-time">Время</label>
+              <input id="sky-time" name="time" type="time" required>
+            </div>
+            <div class="sky-field sky-field-location">
+              <label for="sky-location">Локация</label>
+              <select id="sky-location" name="location">
+                <option value="amsterdam">Амстердам</option>
+                <option value="moscow">Москва</option>
+                <option value="new-york">Нью-Йорк</option>
+                <option value="vladivostok">Владивосток</option>
+                <option value="london">Лондон</option>
+                <option value="delhi">Дели</option>
+              </select>
+            </div>
+            <input name="lat" type="hidden">
+            <input name="lon" type="hidden">
+            <input name="tz" type="hidden">
+            <button class="sky-button" type="submit">Обновить</button>
+          </form>
+
+          <section class="sky-stage" aria-label="Vedic Sky Clock">
+            <div class="sky-clock-frame">
+              <svg class="sky-clock-svg" data-sky-svg viewBox="0 0 1000 1000" role="img" aria-labelledby="sky-svg-title sky-svg-description">
+                <title id="sky-svg-title">Vedic Sky Clock</title>
+                <desc id="sky-svg-description">Положение грах по сидерической долготе в знаках, накшатрах и падах.</desc>
+              </svg>
+            </div>
+            <aside class="sky-readout" aria-live="polite">
+              <div>
+                <span class="sky-readout-kicker">Локация</span>
+                <strong data-sky-location>Амстердам</strong>
+              </div>
+              <div>
+                <span class="sky-readout-kicker">Время</span>
+                <strong data-sky-datetime>—</strong>
+              </div>
+              <div class="sky-graha-detail" data-sky-detail>
+                <span class="sky-readout-kicker">Граха</span>
+                <strong>—</strong>
+                <p>Выберите точку на колесе.</p>
+              </div>
+              <p class="sky-status" data-sky-status></p>
+            </aside>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="global-footer">
+      <div class="section-shell global-footer-shell">
+        <div class="global-footer-main">
+          <div class="global-footer-brand"><a href="/"><img src="../assets/img/logo_white.svg" alt="vedascope"></a><p>vedascope — проект об исследовании судьбы, времени и жизненных циклов через призму Джйотиш.</p></div>
+          <nav class="global-footer-column"><h2>Навигация</h2><a href="/">Главная</a><a href="/panchanga">Панчанга</a><a href="/sky-clock/">Sky Clock</a><a href="/#services">Сервисы</a><a href="/#community">Сообщество</a></nav>
+          <nav class="global-footer-column"><h2>Сервисы</h2><a href="/panchanga">Панчанга дня</a><a href="/sky-clock/">Vedic Sky Clock</a><a href="/#services">Накшатра</a><a href="/#services">Мухурта</a></nav>
+          <div class="global-footer-column global-footer-contacts"><h2>Контакты</h2><a href="https://t.me/ruzhin_pro">t.me/ruzhin_pro</a><a href="mailto:mrsrg@yandex.ru">mrsrg@yandex.ru</a><p>ИП Ружин С. Г.<br>ОГРНИП 321470400068502</p></div>
+        </div>
+        <div class="global-footer-bottom"><p>© 2026 vedascope</p><nav><a href="../legal/privacy.html">Политика конфиденциальности</a><a href="../legal/personal-data.html">Политика обработки персональных данных</a><a href="../legal/consent.html">Согласие на обработку персональных данных</a></nav></div>
+      </div>
+    </footer>
+  </body>
+</html>
