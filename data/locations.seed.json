@@ -1,0 +1,98 @@
+[
+  {
+    "id": "seed:moscow-ru",
+    "name": "Москва",
+    "aliases": ["moscow", "москва"],
+    "country": "Россия",
+    "region": "Москва",
+    "latitude": 55.7558,
+    "longitude": 37.6173,
+    "timezone": "Europe/Moscow",
+    "source": "seed",
+    "population": 13000000
+  },
+  {
+    "id": "seed:saint-petersburg-ru",
+    "name": "Санкт-Петербург",
+    "aliases": ["saint petersburg", "st petersburg", "spb", "санкт-петербург", "санкт петербург", "петербург"],
+    "country": "Россия",
+    "region": "Санкт-Петербург",
+    "latitude": 59.9386,
+    "longitude": 30.3141,
+    "timezone": "Europe/Moscow",
+    "source": "seed",
+    "population": 5600000
+  },
+  {
+    "id": "seed:amsterdam-nl",
+    "name": "Амстердам",
+    "aliases": ["amsterdam", "амстердам"],
+    "country": "Нидерланды",
+    "region": "Северная Голландия",
+    "latitude": 52.3676,
+    "longitude": 4.9041,
+    "timezone": "Europe/Amsterdam",
+    "source": "seed",
+    "population": 900000
+  },
+  {
+    "id": "seed:new-york-us",
+    "name": "Нью-Йорк",
+    "aliases": ["new york", "nyc", "нью-йорк", "нью йорк"],
+    "country": "США",
+    "region": "New York",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "timezone": "America/New_York",
+    "source": "seed",
+    "population": 8400000
+  },
+  {
+    "id": "seed:vladivostok-ru",
+    "name": "Владивосток",
+    "aliases": ["vladivostok", "владивосток"],
+    "country": "Россия",
+    "region": "Приморский край",
+    "latitude": 43.1155,
+    "longitude": 131.8855,
+    "timezone": "Asia/Vladivostok",
+    "source": "seed",
+    "population": 600000
+  },
+  {
+    "id": "seed:roshchino-vyborg-ru",
+    "name": "Рощино",
+    "aliases": ["roshchino", "рощино"],
+    "country": "Россия",
+    "region": "Выборгский район",
+    "latitude": 60.2519,
+    "longitude": 29.6085,
+    "timezone": "Europe/Moscow",
+    "source": "seed",
+    "population": 14000
+  },
+  {
+    "id": "seed:delhi-in",
+    "name": "Дели",
+    "aliases": ["delhi", "new delhi", "дели", "нью дели"],
+    "country": "Индия",
+    "region": "Delhi",
+    "latitude": 28.6139,
+    "longitude": 77.209,
+    "timezone": "Asia/Kolkata",
+    "source": "seed",
+    "population": 32000000
+  },
+  {
+    "id": "seed:london-gb",
+    "name": "Лондон",
+    "aliases": ["london", "лондон"],
+    "country": "Великобритания",
+    "region": "England",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "timezone": "Europe/London",
+    "source": "seed",
+    "population": 9000000
+  }
+]
