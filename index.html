@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="vedascope — исследование судьбы, времени и жизненных циклов через призму Джйотиш."
+      content="vedascope — платформа Джйотиш: Панчанга дня, будущие ведические калькуляторы, обучение, консультации и сообщество."
     >
-    <title>vedascope</title>
+    <title>vedascope — ведическая астрология, панчанга и сервисы Джйотиш</title>
+    <link rel="canonical" href="https://vedascope.ru/">
+    <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="vedascope">
+    <meta property="og:url" content="https://vedascope.ru/">
+    <meta property="og:title" content="vedascope — ведическая астрология и сервисы Джйотиш">
+    <meta property="og:description" content="vedascope — платформа Джйотиш: Панчанга дня, будущие ведические калькуляторы, обучение, консультации и сообщество.">
+    <meta property="og:image" content="https://vedascope.ru/assets/img/hero-observer-landscape.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -16,19 +24,33 @@
     >
     <link rel="stylesheet" href="assets/css/style.css?v=20260615-1">
     <link rel="stylesheet" href="assets/css/footer.css?v=20260615-2">
-  </head>
+  
+<style id="vedascope-hero-text-width-fix">
+  .hero p,
+  .hero .lead,
+  .hero .subtitle,
+  .hero .hero-subtitle,
+  section:first-of-type p {
+    max-width: 920px !important;
+    line-height: 1.45 !important;
+  }
+</style>
+
+</head>
   <body>
     <header class="site-header" aria-label="Главная навигация">
       <a class="brand" href="#hero" aria-label="vedascope главная">
   <img src="assets/img/logo_white.svg" alt="vedascope" class="site-logo">
 </a>
       <nav class="header-nav" aria-label="Разделы">
-        <a href="#events">События</a>
+        <a href="#hero">Главная</a>
+        <a href="/panchanga">Панчанга</a>
         <a href="#services">Сервисы</a>
-        <a href="#academy">Академия</a>
+        <a href="#academy">Обучение</a>
+        <a href="#consultations">Консультации</a>
         <a href="#community">Сообщество</a>
       </nav>
-      <a class="header-action" href="#services">Карта</a>
+      <a class="header-action" href="/panchanga">Панчанга дня</a>
     </header>
 
     <main>
@@ -36,13 +58,12 @@
         <div class="section-shell hero-shell">
           <div class="hero-copy">
             <p class="eyebrow">обсерватория древней мудрости</p>
-            <h1><span class="hero-title-line">Исследуй свою</span> <span class="hero-title-line">судьбу</span></h1>
+            <h1>Исследуй свою<br>судьбу</h1>
             <p class="hero-lead">
-              <span>Узнай, почему твоя жизнь сложилась именно так</span>
-              <span>и какие периоды ждут тебя в будущем.</span>
+              <span>vedascope — исследовательский проект для тех, кто хочет глубже понять свою судьбу с помощью Джйотиш. Здесь вы найдете сервисы для астрологов, полезные ссылки, обучающие материалы, живую базу знаний и мероприятия Джйотиш-сообщества. Присоединяйтесь.</span>
             </p>
             <div class="hero-actions" aria-label="Основные действия">
-              <a class="button button-primary" href="#services">Построить карту</a>
+              <a class="button button-primary" href="/panchanga">Построить карту</a>
               <a class="button button-secondary" href="events/">Ближайшие события</a>
             </div>
             <p class="hero-sutra">Судьба приходит по расписанию.</p>
@@ -240,8 +261,8 @@
         <div class="section-shell services-shell">
           <div class="section-heading services-heading">
             <p class="eyebrow">инструменты</p>
-            <h2>Сервисы vedascope</h2>
-            <p>Единая экосистема для построения карты, исследования времени, выбора момента и наблюдения за жизненными закономерностями.</p>
+            <h2>Сервисы и калькуляторы vedascope</h2>
+            <p>Постепенно собираем единую экосистему инструментов Джйотиш: от Панчанги дня до расчётов периодов, совместимости, мухурты и годового прогноза.</p>
           </div>
 
           <article class="service-feature">
@@ -282,14 +303,16 @@
           </article>
 
           <div class="service-tools-grid" aria-label="Инструменты vedascope">
-            <a href="#sutra" class="service-card service-card-primary"><span class="service-number">02</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><rect x="12" y="10" width="40" height="44" rx="5"/><circle cx="32" cy="25" r="7"/><path d="M20 45c2-7 7-11 12-11s10 4 12 11M18 15h8"/></svg></span><h4>Личный кабинет</h4><p>Единое пространство для хранения карт, наблюдений и результатов расчетов.</p><span class="service-card-login">Войти в кабинет <span aria-hidden="true">&#8599;</span></span></a>
-            <a href="#sutra" class="service-card"><span class="service-number">03</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M32 16v17l11 7M10 32h5M49 32h5"/></svg></span><h4>Периоды</h4><p>Какие темы судьбы становятся главными в текущий период жизни.</p></a>
-            <a href="#sutra" class="service-card"><span class="service-number">04</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="24" ry="10"/><ellipse cx="32" cy="32" rx="10" ry="24" transform="rotate(34 32 32)"/><circle cx="47" cy="24" r="3"/></svg></span><h4>Транзиты</h4><p>Как текущее движение планет влияет на события и обстоятельства.</p></a>
-            <a href="#sutra" class="service-card"><span class="service-number">05</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M32 10v44M10 32h44M19 19l26 26M45 19 19 45"/><circle cx="32" cy="10" r="3"/></svg></span><h4>Варшапхала</h4><p>Персональный прогноз на год и ключевые акценты ближайших 12 месяцев.</p></a>
-            <a href="#sutra" class="service-card"><span class="service-number">06</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M13 18h38v34H13zM13 27h38M22 12v12M42 12v12m-19 17 6 6 13-15"/></svg></span><h4>Панчанга</h4><p>Качество дня через лунные сутки, накшатру и другие факторы времени.</p></a>
-            <a href="#sutra" class="service-card"><span class="service-number">07</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M14 45c9-18 27-28 36-22 8 6 1 21-10 21-8 0-8-9-2-13"/><circle cx="14" cy="45" r="3"/><circle cx="50" cy="23" r="3"/></svg></span><h4>Прашна</h4><p>Ответ на конкретный вопрос через карту момента.</p></a>
-            <a href="#sutra" class="service-card"><span class="service-number">08</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M12 42h40M18 42c0-10 6-18 14-18s14 8 14 18M32 24V12m-8 38 8 6 8-6"/><circle cx="32" cy="10" r="4"/></svg></span><h4>Мухурта</h4><p>Подбор благоприятного времени для важных решений и начинаний.</p></a>
-            <a href="#sutra" class="service-card"><span class="service-number">09</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="24" cy="32" r="15"/><circle cx="40" cy="32" r="15"/><path d="M16 32h32"/></svg></span><h4>Совместимость</h4><p>Анализ динамики отношений, взаимопонимания и общего ритма пары.</p></a>
+            <a href="/panchanga" class="service-card service-card-primary"><span class="service-number">01</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M13 18h38v34H13zM13 27h38M22 12v12M42 12v12m-19 17 6 6 13-15"/></svg></span><h4>Панчанга</h4><p>Ведический календарь качества дня: вара, титхи, накшатра, йога, карана и карта дня.</p><span class="service-card-login">Открыть <span aria-hidden="true">&#8599;</span></span></a>
+            <a href="#services" class="service-card"><span class="service-number">02</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M32 10v44M10 32h44M19 19l26 26M45 19 19 45"/></svg></span><h4>Накшатра</h4><p>Характер Луны, врождённый ритм, склонности и качество текущего периода.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">03</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M32 16v17l11 7M10 32h5M49 32h5"/></svg></span><h4>Даша</h4><p>Периоды жизни: какие темы судьбы становятся главными сейчас и дальше.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">04</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M12 12h40v40H12zM12 12l20 20 20-20M12 52l20-20 20 20M12 32h40M32 12v40"/></svg></span><h4>Навамша</h4><p>Глубинный слой карты, зрелость планет и темы отношений.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">05</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="7"/><circle cx="18" cy="44" r="7"/><circle cx="46" cy="44" r="7"/><path d="M29 24 21 38M35 24l8 14M25 44h14"/></svg></span><h4>Караки</h4><p>Показатели сфер жизни: душа, путь, отношения, профессия и ресурсы.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">06</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M12 42h40M18 42c0-10 6-18 14-18s14 8 14 18M32 24V12m-8 38 8 6 8-6"/><circle cx="32" cy="10" r="4"/></svg></span><h4>Мухурта</h4><p>Подбор благоприятного времени для запуска, встречи, поездки или решения.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">07</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="24" cy="32" r="15"/><circle cx="40" cy="32" r="15"/><path d="M16 32h32"/></svg></span><h4>Совместимость</h4><p>Ритм пары, точки поддержки, напряжения и общие жизненные задачи.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">08</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M32 10v44M10 32h44M20 20l24 24"/></svg></span><h4>Варшапхала</h4><p>Персональный прогноз на год и ключевые акценты ближайших 12 месяцев.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">09</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M14 45c9-18 27-28 36-22 8 6 1 21-10 21-8 0-8-9-2-13"/><circle cx="14" cy="45" r="3"/><circle cx="50" cy="23" r="3"/></svg></span><h4>Прашна</h4><p>Ответ на конкретный вопрос через карту момента и состояние времени.</p><span class="service-card-login">Скоро</span></a>
+            <a href="#services" class="service-card"><span class="service-number">10</span><span class="service-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M16 48c8-20 24-30 32-30M18 20h28M18 32h20M18 44h14"/><circle cx="48" cy="18" r="4"/></svg></span><h4>Имя по накшатре</h4><p>Подбор звука и имени по лунной накшатре рождения.</p><span class="service-card-login">Скоро</span></a>
           </div>
         </div>
       </section>
@@ -317,8 +340,8 @@
         <div class="section-shell academy-shell">
           <div class="section-heading academy-heading">
             <p class="eyebrow">знание</p>
-            <h2>Академия</h2>
-            <p>Изучайте Джйотиш через статьи, видео, классические тексты, исследования и библиотеку сутр vedascope.</p>
+            <h2>Обучение и библиотека</h2>
+            <p>Раздел для статей, видео, сутр, объяснений понятий Джйотиш, классических текстов и исследовательских материалов.</p>
           </div>
           <a class="observation-feature" href="#community">
             <span class="observation-feature-index">исследовательская среда / 01</span>
@@ -362,6 +385,20 @@
               <span class="academy-card-number">09</span><span class="academy-card-symbol" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M18 12h28v40H18zM24 20h16M24 28h16M24 36h10"/><path d="M12 18v40h28"/></svg></span>
               <h3>Библиотека сутр</h3><p>Короткие формулы смысла, которые можно раскрывать слой за слоем.</p><span class="academy-card-arrow" aria-hidden="true">&#8599;</span>
             </article>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section light-section about-section" id="consultations">
+        <div class="section-shell about-shell">
+          <div>
+            <p class="eyebrow">консультации</p>
+            <h2>Личный разбор карты</h2>
+          </div>
+          <div class="about-copy">
+            <p>Когда хочется глубже разобраться в тенденциях и событиях своей жизни. На консультации мы смотрим основные темы натальной карты, дробные карты, текущий период и транзиты. Можно прийти с конкретным вопросом — про отношения, работу, переезд, обучение, деньги — или рассмотреть карту в целом.</p>
+            <p><a class="button button-primary" href="https://t.me/vedascopebot" target="_blank" rel="noopener noreferrer">Записаться в Telegram</a></p>
           </div>
         </div>
       </section>
@@ -437,8 +474,8 @@
       <section class="section light-section about-section" id="about">
         <div class="section-shell about-shell">
           <div>
-            <p class="eyebrow">о проекте</p>
-            <h2>О проекте</h2>
+            <p class="eyebrow">платформа</p>
+            <h2>Что такое vedascope</h2>
           </div>
           <div class="about-copy">
             <p>vedascope — проект об исследовании судьбы, времени и жизненных циклов через призму Джйотиш.</p>
@@ -458,11 +495,11 @@
           </div>
           <nav class="global-footer-column" aria-label="Навигация">
             <h2>Навигация</h2>
-            <a href="#events">События</a><a href="#services">Сервисы</a><a href="#academy">Академия</a><a href="#community">Сообщество</a><a href="#services">Построить карту</a>
+            <a href="#hero">Главная</a><a href="/panchanga">Панчанга</a><a href="#services">Сервисы</a><a href="#academy">Обучение</a><a href="#consultations">Консультации</a><a href="#community">Сообщество</a>
           </nav>
-          <nav class="global-footer-column" aria-label="События">
-            <h2>События</h2>
-            <a href="#events">Календарь событий</a><a href="#events">Конференции</a><a href="#events">Практики</a><a href="#events">Ретриты</a><a href="#events">Туры</a>
+          <nav class="global-footer-column" aria-label="Сервисы">
+            <h2>Сервисы</h2>
+            <a href="/panchanga">Панчанга</a><a href="#services">Накшатра</a><a href="#services">Даша</a><a href="#services">Мухурта</a><a href="#services">Совместимость</a>
           </nav>
           <div class="global-footer-column global-footer-contacts">
             <h2>Контакты</h2>
@@ -484,5 +521,19 @@
 
     <script src="assets/js/events.js?v=20260618-1"></script>
     <script src="assets/js/main.js?v=20260618-1"></script>
+
+    <script id="vedascope-scroll-top-fix">
+      (function () {
+        if ("scrollRestoration" in history) {
+          history.scrollRestoration = "manual";
+        }
+
+        window.addEventListener("load", function () {
+          if (!window.location.hash) {
+            window.scrollTo(0, 0);
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
