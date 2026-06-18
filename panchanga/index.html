@@ -240,6 +240,28 @@
       const recs = Object.fromEntries([...document.querySelectorAll("[data-rec]")].map((node) => [node.dataset.rec, node]));
       let currentChartStyle = "south";
 
+      const CITY_FALLBACKS = [
+        { keys: ["москва", "moscow"], city: "Москва", latitude: "55.7558", longitude: "37.6173", timezone: "3" },
+        { keys: ["санкт-петербург", "санкт петербург", "петербург", "spb", "saint petersburg", "st petersburg"], city: "Санкт-Петербург", latitude: "59.9386", longitude: "30.3141", timezone: "3" },
+        { keys: ["чебоксары", "cheboksary"], city: "Чебоксары", latitude: "56.1322", longitude: "47.2519", timezone: "3" },
+        { keys: ["казань", "kazan"], city: "Казань", latitude: "55.7961", longitude: "49.1064", timezone: "3" },
+        { keys: ["нижний новгород", "nizhny novgorod"], city: "Нижний Новгород", latitude: "56.3269", longitude: "44.0059", timezone: "3" },
+        { keys: ["екатеринбург", "yekaterinburg", "ekaterinburg"], city: "Екатеринбург", latitude: "56.8389", longitude: "60.6057", timezone: "5" },
+        { keys: ["новосибирск", "novosibirsk"], city: "Новосибирск", latitude: "55.0084", longitude: "82.9357", timezone: "7" },
+        { keys: ["сочи", "sochi"], city: "Сочи", latitude: "43.5855", longitude: "39.7231", timezone: "3" },
+        { keys: ["london", "лондон"], city: "London", latitude: "51.5074", longitude: "-0.1278", timezone: "1" },
+        { keys: ["delhi", "new delhi", "дели", "нью дели"], city: "Delhi", latitude: "28.6139", longitude: "77.2090", timezone: "5.5" },
+      ];
+      const CITY_NOT_FOUND_MESSAGE = "Город не найден. Попробуйте выбрать другой город или введите координаты вручную.";
+
+      function cityLookupKey(value) {
+        return normalizeCityName(value).toLowerCase().replaceAll("ё", "е");
+      }
+      function getFallbackCity(value) {
+        const key = cityLookupKey(value);
+        return CITY_FALLBACKS.find((item) => item.keys.some((alias) => cityLookupKey(alias) === key));
+      }
+
       function setDefaultDate() {
         const params = new URLSearchParams(window.location.search);
         const today = new Date();
@@ -273,11 +295,13 @@
       }
       async function resolveCityLocation(cityValue) {
         const city = normalizeCityName(cityValue) || DEFAULT_LOCATION.city;
-        if (city.toLowerCase() === lastResolvedCity.toLowerCase()) return activeLocation;
-        if (city.toLowerCase() === DEFAULT_LOCATION.city.toLowerCase()) {
-          activeLocation = { ...DEFAULT_LOCATION };
-          lastResolvedCity = DEFAULT_LOCATION.city;
-          form.city.value = DEFAULT_LOCATION.city;
+        if (cityLookupKey(city) === cityLookupKey(lastResolvedCity)) return activeLocation;
+
+        const fallbackCity = getFallbackCity(city);
+        if (fallbackCity) {
+          activeLocation = { city: fallbackCity.city, latitude: fallbackCity.latitude, longitude: fallbackCity.longitude, timezone: fallbackCity.timezone };
+          lastResolvedCity = fallbackCity.city;
+          form.city.value = fallbackCity.city;
           return activeLocation;
         }
 
@@ -290,10 +314,22 @@
         url.searchParams.set("limit", "1");
         url.searchParams.set("featuretype", "city");
         url.searchParams.set("accept-language", "ru");
-        const response = await fetch(url, { headers: { "Accept": "application/json" } });
-        if (!response.ok) throw new Error("Не удалось найти город.");
-        const places = await response.json();
-        if (!Array.isArray(places) || !places.length) throw new Error("Город не найден. Проверьте название и попробуйте ещё раз.");
+
+        let response;
+        try {
+          response = await fetch(url, { headers: { "Accept": "application/json" } });
+        } catch (error) {
+          throw new Error(CITY_NOT_FOUND_MESSAGE);
+        }
+        if (!response.ok) throw new Error(CITY_NOT_FOUND_MESSAGE);
+
+        let places;
+        try {
+          places = await response.json();
+        } catch (error) {
+          throw new Error(CITY_NOT_FOUND_MESSAGE);
+        }
+        if (!Array.isArray(places) || !places.length) throw new Error(CITY_NOT_FOUND_MESSAGE);
 
         const place = places[0];
         const latitude = Number(place.lat).toFixed(4);
@@ -306,7 +342,7 @@
         }
         const title = getPlaceTitle(place, city);
         activeLocation = { city: title, latitude, longitude, timezone };
-        lastResolvedCity = city;
+        lastResolvedCity = title;
         form.city.value = title;
         return activeLocation;
       }
