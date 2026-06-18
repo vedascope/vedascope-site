@@ -76,8 +76,15 @@
 
       .panchanga-form { display: grid; grid-template-columns: 1.05fr 0.72fr 1.35fr auto; gap: 14px; align-items: end; }
       .field { display: grid; gap: 7px; min-width: 0; }
+      .location-field { position: relative; }
       .field label { color: var(--ink-soft); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
       .field input { width: 100%; min-height: 48px; border: 1px solid rgba(31, 92, 90, 0.22); border-radius: 8px; padding: 0 13px; background: #fffdf7; color: var(--ink); }
+      .location-results { position: absolute; z-index: 12; top: calc(100% + 8px); left: 0; right: 0; display: grid; gap: 4px; max-height: 280px; overflow: auto; border: 1px solid rgba(31, 92, 90, 0.2); border-radius: 8px; padding: 6px; background: #fffdf7; box-shadow: 0 18px 42px rgba(20, 32, 30, 0.16); }
+      .location-results[hidden] { display: none; }
+      .location-option { display: grid; gap: 2px; width: 100%; border: 0; border-radius: 6px; padding: 10px 11px; color: var(--ink); background: transparent; text-align: left; cursor: pointer; }
+      .location-option:hover, .location-option.is-active { background: rgba(232, 238, 232, 0.74); }
+      .location-option strong { font-size: 0.98rem; line-height: 1.2; }
+      .location-option span { color: var(--ink-soft); font-size: 0.82rem; line-height: 1.25; }
       .form-submit { align-self: end; }
       .form-submit .button { width: 100%; white-space: nowrap; }
       .status-line { min-height: 22px; margin: 14px 0 0; color: var(--ink-soft); font-size: 0.92rem; }
@@ -182,7 +189,7 @@
             <form class="panchanga-form" data-panchanga-form>
               <div class="field"><label for="date">Дата</label><input id="date" name="date" type="date" required></div>
               <div class="field"><label for="time">Время</label><input id="time" name="time" type="time" value="09:00" required></div>
-              <div class="field"><label for="city">Город</label><input id="city" name="city" type="text" value="Москва" autocomplete="address-level2"></div>
+              <div class="field location-field"><label for="city">Город</label><input id="city" name="city" type="text" value="Москва" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="location-results"><div class="location-results" id="location-results" data-location-results role="listbox" hidden></div></div>
               <div class="form-submit"><button class="button button-primary" type="submit">Показать</button></div>
             </form>
             <p class="status-line" data-status aria-live="polite"></p>
@@ -227,40 +234,22 @@
     <footer class="global-footer"><div class="section-shell global-footer-shell"><div class="global-footer-main"><div class="global-footer-brand"><a href="/"><img src="../assets/img/logo_white.svg" alt="vedascope"></a><p>vedascope — проект об исследовании судьбы, времени и жизненных циклов через призму Джйотиш.</p></div><nav class="global-footer-column"><h2>Навигация</h2><a href="/">Главная</a><a href="/panchanga">Панчанга</a><a href="/#services">Сервисы</a><a href="/#academy">Обучение</a><a href="/#consultations">Консультации</a><a href="/#community">Сообщество</a></nav><nav class="global-footer-column"><h2>Сервисы</h2><a href="/panchanga">Панчанга дня</a><a href="/#services">Накшатра</a><a href="/#services">Даша</a><a href="/#services">Мухурта</a><a href="/#services">Совместимость</a></nav><div class="global-footer-column global-footer-contacts"><h2>Контакты</h2><a href="https://t.me/ruzhin_pro">t.me/ruzhin_pro</a><a href="mailto:mrsrg@yandex.ru">mrsrg@yandex.ru</a><p>ИП Ружин С. Г.<br>ОГРНИП 321470400068502</p></div></div><div class="global-footer-bottom"><p>© 2026 vedascope</p><nav><a href="../legal/privacy.html">Политика конфиденциальности</a><a href="../legal/personal-data.html">Политика обработки персональных данных</a><a href="../legal/consent.html">Согласие на обработку персональных данных</a></nav></div></div></footer>
 
     <script>
-      const DEFAULT_LOCATION = { city: "Москва", latitude: "55.7558", longitude: "37.6173", timezone: "3" };
+      const DEFAULT_LOCATION = { id: "seed:moscow-ru", name: "Москва", country: "Россия", region: "Москва", latitude: 55.7558, longitude: 37.6173, timezone: "Europe/Moscow", source: "seed" };
+      const LOCATION_SEARCH_MIN_LENGTH = 2;
+      const LOCATION_SEARCH_LIMIT = 8;
       let activeLocation = { ...DEFAULT_LOCATION };
-      let lastResolvedCity = DEFAULT_LOCATION.city;
+      let locationSeedCache = null;
+      let locationSearchToken = 0;
       const form = document.querySelector("[data-panchanga-form]");
       const statusLine = document.querySelector("[data-status]");
       const chartFrame = document.querySelector("[data-chart-frame]");
       const summaryList = document.querySelector("[data-summary-list]");
       const locationNote = document.querySelector("[data-location-note]");
+      const locationResults = document.querySelector("[data-location-results]");
       const fields = Object.fromEntries([...document.querySelectorAll("[data-field]")].map((node) => [node.dataset.field, node]));
       const metrics = Object.fromEntries([...document.querySelectorAll("[data-metric]")].map((node) => [node.dataset.metric, node]));
       const recs = Object.fromEntries([...document.querySelectorAll("[data-rec]")].map((node) => [node.dataset.rec, node]));
       let currentChartStyle = "south";
-
-      const CITY_FALLBACKS = [
-        { keys: ["москва", "moscow"], city: "Москва", latitude: "55.7558", longitude: "37.6173", timezone: "3" },
-        { keys: ["санкт-петербург", "санкт петербург", "петербург", "spb", "saint petersburg", "st petersburg"], city: "Санкт-Петербург", latitude: "59.9386", longitude: "30.3141", timezone: "3" },
-        { keys: ["чебоксары", "cheboksary"], city: "Чебоксары", latitude: "56.1322", longitude: "47.2519", timezone: "3" },
-        { keys: ["казань", "kazan"], city: "Казань", latitude: "55.7961", longitude: "49.1064", timezone: "3" },
-        { keys: ["нижний новгород", "nizhny novgorod"], city: "Нижний Новгород", latitude: "56.3269", longitude: "44.0059", timezone: "3" },
-        { keys: ["екатеринбург", "yekaterinburg", "ekaterinburg"], city: "Екатеринбург", latitude: "56.8389", longitude: "60.6057", timezone: "5" },
-        { keys: ["новосибирск", "novosibirsk"], city: "Новосибирск", latitude: "55.0084", longitude: "82.9357", timezone: "7" },
-        { keys: ["сочи", "sochi"], city: "Сочи", latitude: "43.5855", longitude: "39.7231", timezone: "3" },
-        { keys: ["london", "лондон"], city: "London", latitude: "51.5074", longitude: "-0.1278", timezone: "1" },
-        { keys: ["delhi", "new delhi", "дели", "нью дели"], city: "Delhi", latitude: "28.6139", longitude: "77.2090", timezone: "5.5" },
-      ];
-      const CITY_NOT_FOUND_MESSAGE = "Город не найден. Попробуйте выбрать другой город или введите координаты вручную.";
-
-      function cityLookupKey(value) {
-        return normalizeCityName(value).toLowerCase().replaceAll("ё", "е");
-      }
-      function getFallbackCity(value) {
-        const key = cityLookupKey(value);
-        return CITY_FALLBACKS.find((item) => item.keys.some((alias) => cityLookupKey(alias) === key));
-      }
 
       function setDefaultDate() {
         const params = new URLSearchParams(window.location.search);
@@ -275,81 +264,146 @@
       function normalizeCityName(value) {
         return String(value || "").trim().replace(/\s+/g, " ");
       }
-      function getPlaceTitle(place, fallback) {
-        const address = place.address || {};
-        return address.city || address.town || address.village || address.municipality || place.name || fallback || DEFAULT_LOCATION.city;
+      function locationLookupKey(value) {
+        return normalizeCityName(value).toLowerCase().replaceAll("ё", "е");
       }
-      function estimateTimezoneFromLongitude(longitude) {
-        return String(Math.max(-12, Math.min(14, Math.round(Number(longitude) / 15))));
+      function normalizeLocation(raw) {
+        if (!raw) return null;
+        const name = raw.name || raw.city;
+        const latitude = Number(raw.latitude ?? raw.lat);
+        const longitude = Number(raw.longitude ?? raw.lon ?? raw.lng);
+        if (!name || !Number.isFinite(latitude) || !Number.isFinite(longitude) || !raw.timezone) return null;
+        return { ...raw, name, city: name, latitude, longitude, timezone: String(raw.timezone) };
       }
-      async function resolveTimezone(latitude, longitude) {
-        const url = new URL("https://timeapi.io/api/TimeZone/coordinate");
-        url.searchParams.set("latitude", latitude);
-        url.searchParams.set("longitude", longitude);
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Timezone lookup failed");
+      function locationSearchText(location) {
+        return [location.name, location.country, location.region, ...(location.aliases || [])].filter(Boolean).map(locationLookupKey).join(" ");
+      }
+      function scoreLocation(location, query) {
+        const key = locationLookupKey(query);
+        const name = locationLookupKey(location.name);
+        const aliases = (location.aliases || []).map(locationLookupKey);
+        if (name === key || aliases.includes(key)) return 0;
+        if (name.startsWith(key) || aliases.some((alias) => alias.startsWith(key))) return 1;
+        if (locationSearchText(location).includes(key)) return 2;
+        return 9;
+      }
+      function filterSeedLocations(query, locations) {
+        const key = locationLookupKey(query);
+        if (!key) return [];
+        return locations
+          .map(normalizeLocation)
+          .filter(Boolean)
+          .filter((location) => locationSearchText(location).includes(key))
+          .sort((first, second) => scoreLocation(first, query) - scoreLocation(second, query) || (second.population || 0) - (first.population || 0))
+          .slice(0, LOCATION_SEARCH_LIMIT);
+      }
+      async function loadLocationSeed() {
+        if (locationSeedCache) return locationSeedCache;
+        const response = await fetch("/data/locations.seed.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("Location seed request failed");
         const data = await response.json();
-        const seconds = data.currentUtcOffset && data.currentUtcOffset.seconds;
-        if (typeof seconds !== "number") throw new Error("Timezone response has no offset");
-        return String(seconds / 3600);
+        locationSeedCache = Array.isArray(data) ? data : [];
+        return locationSeedCache;
+      }
+      async function searchLocations(query) {
+        const city = normalizeCityName(query);
+        if (city.length < LOCATION_SEARCH_MIN_LENGTH) return [];
+        try {
+          const response = await fetch(`/api/locations/search?q=${encodeURIComponent(city)}`, { headers: { "Accept": "application/json" }, cache: "no-store" });
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data)) return data.map(normalizeLocation).filter(Boolean).slice(0, LOCATION_SEARCH_LIMIT);
+          }
+        } catch (error) {
+          // The production backend does not expose this endpoint yet; the seed file keeps the page usable.
+        }
+        return filterSeedLocations(city, await loadLocationSeed());
+      }
+      function hideLocationResults() {
+        locationResults.hidden = true;
+        locationResults.replaceChildren();
+        form.city.setAttribute("aria-expanded", "false");
+      }
+      function renderLocationResults(locations) {
+        locationResults.replaceChildren(...locations.map((location) => {
+          const placeText = [location.country, location.region].filter(Boolean).join(", ");
+          const metaText = [placeText, location.timezone].filter(Boolean).join(" · ");
+          const button = el("button", { class: "location-option", type: "button", role: "option" }, [
+            el("strong", {}, [location.name]),
+            el("span", {}, [metaText])
+          ]);
+          button.addEventListener("mousedown", (event) => event.preventDefault());
+          button.addEventListener("click", () => selectLocation(location, true));
+          return button;
+        }));
+        locationResults.hidden = !locations.length;
+        form.city.setAttribute("aria-expanded", locations.length ? "true" : "false");
+      }
+      function selectLocation(location, submitAfterSelect = false) {
+        const normalized = normalizeLocation(location);
+        if (!normalized) return;
+        activeLocation = normalized;
+        form.city.value = normalized.name;
+        hideLocationResults();
+        if (submitAfterSelect) loadPanchanga(true);
       }
       async function resolveCityLocation(cityValue) {
-        const city = normalizeCityName(cityValue) || DEFAULT_LOCATION.city;
-        if (cityLookupKey(city) === cityLookupKey(lastResolvedCity)) return activeLocation;
+        const city = normalizeCityName(cityValue) || DEFAULT_LOCATION.name;
+        if (locationLookupKey(city) === locationLookupKey(activeLocation.name)) return activeLocation;
 
-        const fallbackCity = getFallbackCity(city);
-        if (fallbackCity) {
-          activeLocation = { city: fallbackCity.city, latitude: fallbackCity.latitude, longitude: fallbackCity.longitude, timezone: fallbackCity.timezone };
-          lastResolvedCity = fallbackCity.city;
-          form.city.value = fallbackCity.city;
-          return activeLocation;
-        }
-
-        statusLine.classList.remove("is-error", "is-ready");
-        statusLine.textContent = "Уточняю город...";
-        const url = new URL("https://nominatim.openstreetmap.org/search");
-        url.searchParams.set("q", city);
-        url.searchParams.set("format", "jsonv2");
-        url.searchParams.set("addressdetails", "1");
-        url.searchParams.set("limit", "1");
-        url.searchParams.set("featuretype", "city");
-        url.searchParams.set("accept-language", "ru");
-
-        let response;
-        try {
-          response = await fetch(url, { headers: { "Accept": "application/json" } });
-        } catch (error) {
-          throw new Error(CITY_NOT_FOUND_MESSAGE);
-        }
-        if (!response.ok) throw new Error(CITY_NOT_FOUND_MESSAGE);
-
-        let places;
-        try {
-          places = await response.json();
-        } catch (error) {
-          throw new Error(CITY_NOT_FOUND_MESSAGE);
-        }
-        if (!Array.isArray(places) || !places.length) throw new Error(CITY_NOT_FOUND_MESSAGE);
-
-        const place = places[0];
-        const latitude = Number(place.lat).toFixed(4);
-        const longitude = Number(place.lon).toFixed(4);
-        let timezone = estimateTimezoneFromLongitude(longitude);
-        try {
-          timezone = await resolveTimezone(latitude, longitude);
-        } catch (error) {
-          timezone = estimateTimezoneFromLongitude(longitude);
-        }
-        const title = getPlaceTitle(place, city);
-        activeLocation = { city: title, latitude, longitude, timezone };
-        lastResolvedCity = title;
-        form.city.value = title;
+        const locations = await searchLocations(city);
+        const exact = locations.find((location) => locationLookupKey(location.name) === locationLookupKey(city) || (location.aliases || []).some((alias) => locationLookupKey(alias) === locationLookupKey(city)));
+        if (!exact) throw new Error("Выберите город из списка, чтобы расчет получил координаты и timezone.");
+        selectLocation(exact);
         return activeLocation;
+      }
+      function getTimezoneOffsetHours(timeZone, dateValue, timeValue) {
+        const [year, month, day] = dateValue.split("-").map(Number);
+        const [hour, minute] = timeValue.split(":").map(Number);
+        const utcGuess = new Date(Date.UTC(year, month - 1, day, hour || 0, minute || 0, 0));
+        try {
+          const parts = new Intl.DateTimeFormat("en-US", {
+            timeZone,
+            hour12: false,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          }).formatToParts(utcGuess).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {});
+          const asUtc = Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day), Number(parts.hour), Number(parts.minute), Number(parts.second));
+          return (asUtc - utcGuess.getTime()) / 3600000;
+        } catch (error) {
+          return Math.max(-12, Math.min(14, Math.round(Number(activeLocation.longitude) / 15)));
+        }
       }
       function queryFromForm(location = activeLocation) {
         const [year, month, day] = form.date.value.split("-");
         const [hour, minute] = form.time.value.split(":");
-        return new URLSearchParams({ year, month, day, hour: hour || "9", minute: minute || "0", timezone: location.timezone, latitude: location.latitude, longitude: location.longitude, city: location.city, chart_style: currentChartStyle });
+        const date = form.date.value;
+        const time = `${hour || "09"}:${minute || "00"}`;
+        const offset = getTimezoneOffsetHours(location.timezone, date, time);
+        return new URLSearchParams({
+          date,
+          time,
+          year,
+          month,
+          day,
+          hour: hour || "9",
+          minute: minute || "0",
+          tz: location.timezone,
+          timezone: String(offset),
+          lat: String(location.latitude),
+          lon: String(location.longitude),
+          latitude: String(location.latitude),
+          longitude: String(location.longitude),
+          location_id: location.id || "",
+          city: location.name,
+          country: location.country || "",
+          region: location.region || "",
+          chart_style: currentChartStyle
+        });
       }
       function visibleQuery(params) {
         return new URLSearchParams({ year: params.get("year"), month: params.get("month"), day: params.get("day"), hour: params.get("hour"), minute: params.get("minute"), city: params.get("city") });
@@ -462,9 +516,9 @@
           const dataResponse = await fetch(`/api/panchanga?${params.toString()}`);
           if (!dataResponse.ok) throw new Error("Не удалось получить расчёт панчанги.");
           const data = await dataResponse.json();
-          const timezoneNumber = Number(location.timezone);
-          const timezoneText = `${timezoneNumber >= 0 ? "+" : ""}${timezoneNumber}`;
-          locationNote.textContent = `${location.city} · UTC${timezoneText}`;
+          const offsetNumber = Number(params.get("timezone"));
+          const offsetText = `${offsetNumber >= 0 ? "+" : ""}${offsetNumber}`;
+          locationNote.textContent = `${location.name} · ${location.timezone} · UTC${offsetText}`;
           renderAll(data);
           await loadCharts(params);
           statusLine.textContent = "";
@@ -476,6 +530,25 @@
         }
       }
       function shiftDate(days) { const date = new Date(`${form.date.value}T12:00:00`); date.setDate(date.getDate() + days); form.date.value = date.toISOString().slice(0, 10); loadPanchanga(true); }
+      form.city.addEventListener("input", async () => {
+        const query = normalizeCityName(form.city.value);
+        if (query.length < LOCATION_SEARCH_MIN_LENGTH) {
+          hideLocationResults();
+          return;
+        }
+        const token = ++locationSearchToken;
+        const locations = await searchLocations(query).catch(() => []);
+        if (token !== locationSearchToken) return;
+        renderLocationResults(locations);
+      });
+      form.city.addEventListener("focus", async () => {
+        const query = normalizeCityName(form.city.value);
+        if (query.length >= LOCATION_SEARCH_MIN_LENGTH) renderLocationResults(await searchLocations(query).catch(() => []));
+      });
+      form.city.addEventListener("blur", () => setTimeout(hideLocationResults, 140));
+      form.city.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") hideLocationResults();
+      });
       form.addEventListener("submit", (event) => { event.preventDefault(); loadPanchanga(true); });
       document.querySelectorAll("[data-day-shift]").forEach((button) => button.addEventListener("click", () => shiftDate(Number(button.dataset.dayShift))));
       setDefaultDate();
