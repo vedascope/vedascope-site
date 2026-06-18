@@ -22,7 +22,7 @@ window.VEDASCOPE_EVENTS = [
     guest: "Профессор Винай Кумар Пандей",
     guestMeta: "Бенаресский университет, Индия",
     links: {
-      details: "https://vedascope.ru/moskva-konferentsiya-2026",
+      details: "events/moskva-konferentsiya-2026/",
       contact: "https://t.me/ruzhin_pro",
     },
     contactLabel: "Записаться в Telegram",
@@ -43,7 +43,11 @@ window.VEDASCOPE_EVENTS = [
     contextLabel: "Онлайн / Москва · Объяснение · Ответы на вопросы",
     description:
       "Короткая встреча по одной теме Джйотиш с объяснением, примерами и ответами на вопросы.",
-    links: {},
+    links: {
+      details: "events/seminar-july-2026/",
+      contact: "https://t.me/ruzhin_pro",
+    },
+    detailsLabel: "Подробнее",
     calendarFile: "assets/calendar/seminar-july-2026.ics",
   },
   {
@@ -64,7 +68,10 @@ window.VEDASCOPE_EVENTS = [
     guest: "Профессор Винай Кумар Пандей",
     guestMeta: "Бенаресский университет, Индия",
     venue: "Отель «Агни», Невский проспект, 90–92Б, этаж 2",
-    links: { contact: "mailto:info@indubala.ru" },
+    links: {
+      details: "events/tajny-navamshi-spb-2026/",
+      contact: "mailto:info@indubala.ru",
+    },
     detailsLabel: "Подробнее",
     calendarFile: "assets/calendar/navamsha-seminar-spb-2026.ics",
   },
@@ -83,7 +90,11 @@ window.VEDASCOPE_EVENTS = [
     contextLabel: "Онлайн · Разборы карт · Жизненные периоды",
     description:
       "Практическая встреча с разборами карт, вопросов участников и жизненных периодов.",
-    links: {},
+    links: {
+      details: "events/jyotish-practice-august-2026/",
+      contact: "https://t.me/ruzhin_pro",
+    },
+    detailsLabel: "Подробнее",
     calendarFile: "assets/calendar/jyotish-practice-august-2026.ics",
   },
   {
@@ -101,7 +112,11 @@ window.VEDASCOPE_EVENTS = [
     contextLabel: "Природа · Джйотиш · Практики внимания",
     description:
       "Джйотиш, практики внимания, восстановление ритма и спокойная работа с жизненными периодами.",
-    links: {},
+    links: {
+      details: "events/jyotish-weekend-september-2026/",
+      contact: "https://t.me/ruzhin_pro",
+    },
+    detailsLabel: "Подробнее",
     calendarFile: "assets/calendar/jyotish-weekend-september-2026.ics",
   },
   {

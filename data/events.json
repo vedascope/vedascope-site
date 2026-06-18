@@ -1,0 +1,297 @@
+[
+  {
+    "id": "conference-2026",
+    "slug": "moskva-konferentsiya-2026",
+    "title": "7-я Международная конференция по Джйотиш",
+    "subtitle": "30 лет школе Индубалы",
+    "type": "conference",
+    "typeLabel": "Конференция",
+    "date": "21–22 июня 2026",
+    "time": "Время уточняется",
+    "startDate": "2026-06-21",
+    "endDate": "2026-06-22",
+    "dateLabel": "21–22 июня 2026",
+    "city": "Москва",
+    "location": "Москва",
+    "venue": "Место уточняется",
+    "format": "hybrid",
+    "formatLabel": "Очно + онлайн",
+    "short_description": "30 лет школе Индубалы. Два дня докладов, исследований, живого общения и практики Джйотиш.",
+    "description": "30 лет школе Индубалы. Два дня докладов, исследований, живого общения и практики Джйотиш.",
+    "full_description": [
+      "Конференция объединяет доклады, исследования, живое общение и практику Джйотиш.",
+      "Это встреча для тех, кто изучает ведическую астрологию, работает с картами и хочет быть внутри профессионального сообщества."
+    ],
+    "program": [
+      "Доклады и исследовательские выступления",
+      "Практика Джйотиш и обсуждение подходов",
+      "Живое общение участников сообщества"
+    ],
+    "speakers": [
+      {
+        "name": "Профессор Винай Кумар Пандей",
+        "role": "Специальный гость",
+        "description": "Бенаресский университет, Индия"
+      }
+    ],
+    "guest": "Профессор Винай Кумар Пандей",
+    "guestMeta": "Бенаресский университет, Индия",
+    "price": "Уточняется",
+    "cta_text": "Записаться в Telegram",
+    "cta_url": "https://t.me/ruzhin_pro",
+    "contactLabel": "Записаться в Telegram",
+    "detailsLabel": "Подробнее",
+    "status": "upcoming",
+    "featured": true,
+    "image": "assets/events/backgrounds/event-bg-01.jpg",
+    "calendarFile": "assets/calendar/conference-2026.ics",
+    "tags": ["conference", "online", "offline"],
+    "contextLabel": "Москва + онлайн · Доклады · Практика Джйотиш",
+    "links": {
+      "details": "events/moskva-konferentsiya-2026/",
+      "contact": "https://t.me/ruzhin_pro"
+    }
+  },
+  {
+    "id": "navamsha-seminar-spb-2026",
+    "slug": "tajny-navamshi-spb-2026",
+    "title": "Тайны навамши",
+    "subtitle": "Семинар о карте делений D9",
+    "type": "seminar",
+    "typeLabel": "Семинар",
+    "date": "27 июня 2026",
+    "time": "11:00–17:00",
+    "startDate": "2026-06-27",
+    "endDate": "2026-06-27",
+    "dateLabel": "27 июня 2026 · 11:00–17:00",
+    "city": "Санкт-Петербург",
+    "location": "Санкт-Петербург",
+    "venue": "Отель «Агни», Невский проспект, 90–92Б, этаж 2",
+    "format": "hybrid",
+    "formatLabel": "Очно + онлайн",
+    "short_description": "Семинар профессора Виная Кумара Пандея о значении навамши и синтезе натальной карты с картами делений.",
+    "description": "Семинар профессора Виная Кумара Пандея о значении навамши и синтезе натальной карты с картами делений для более точной интерпретации гороскопа.",
+    "full_description": [
+      "Семинар посвящён значению навамши и синтезу натальной карты с картами делений.",
+      "Подойдёт практикующим и изучающим Джйотиш, которым важно точнее видеть внутреннюю структуру карты."
+    ],
+    "program": [
+      "Значение навамши в анализе гороскопа",
+      "Синтез натальной карты с картами делений",
+      "Практические акценты для интерпретации"
+    ],
+    "speakers": [
+      {
+        "name": "Профессор Винай Кумар Пандей",
+        "role": "Ведущий семинара",
+        "description": "Бенаресский университет, Индия"
+      }
+    ],
+    "guest": "Профессор Винай Кумар Пандей",
+    "guestMeta": "Бенаресский университет, Индия",
+    "price": "Уточняется",
+    "cta_text": "Задать вопрос",
+    "cta_url": "mailto:info@indubala.ru",
+    "detailsLabel": "Подробнее",
+    "status": "upcoming",
+    "featured": true,
+    "image": "assets/events/backgrounds/event-bg-03.jpg",
+    "calendarFile": "assets/calendar/navamsha-seminar-spb-2026.ics",
+    "tags": ["seminar", "online", "offline"],
+    "contextLabel": "Санкт-Петербург · Навамша · Карты делений",
+    "links": {
+      "details": "events/tajny-navamshi-spb-2026/",
+      "contact": "mailto:info@indubala.ru"
+    }
+  },
+  {
+    "id": "seminar-july-2026",
+    "slug": "seminar-july-2026",
+    "title": "Семинар",
+    "subtitle": "Тематическая встреча по Джйотиш",
+    "type": "seminar",
+    "typeLabel": "Семинар",
+    "date": "18 июля 2026",
+    "time": "Время уточняется",
+    "startDate": "2026-07-18",
+    "endDate": "2026-07-18",
+    "dateLabel": "18 июля 2026",
+    "city": "Онлайн / Москва",
+    "location": "Онлайн / Москва",
+    "venue": "Площадка уточняется",
+    "format": "online",
+    "formatLabel": "Онлайн",
+    "short_description": "Короткая встреча по одной теме Джйотиш с объяснением, примерами и ответами на вопросы.",
+    "description": "Короткая встреча по одной теме Джйотиш с объяснением, примерами и ответами на вопросы.",
+    "full_description": [
+      "Семинар строится вокруг одной темы Джйотиш и помогает разобрать её через объяснение и примеры.",
+      "Формат подойдёт тем, кто хочет спокойно углубиться в конкретный вопрос и задать свои вопросы."
+    ],
+    "program": [
+      "Разбор одной темы Джйотиш",
+      "Практические примеры",
+      "Ответы на вопросы участников"
+    ],
+    "speakers": [],
+    "price": "Уточняется",
+    "cta_text": "Задать вопрос",
+    "cta_url": "https://t.me/ruzhin_pro",
+    "detailsLabel": "Подробнее",
+    "status": "upcoming",
+    "featured": true,
+    "image": "assets/events/backgrounds/event-bg-02.jpg",
+    "calendarFile": "assets/calendar/seminar-july-2026.ics",
+    "tags": ["seminar", "online"],
+    "contextLabel": "Онлайн / Москва · Объяснение · Ответы на вопросы",
+    "links": {
+      "details": "events/seminar-july-2026/",
+      "contact": "https://t.me/ruzhin_pro"
+    }
+  },
+  {
+    "id": "jyotish-practice-august-2026",
+    "slug": "jyotish-practice-august-2026",
+    "title": "Джйотиш практика",
+    "subtitle": "Разборы карт и жизненных периодов",
+    "type": "practice",
+    "typeLabel": "Практика",
+    "date": "22 августа 2026",
+    "time": "Время уточняется",
+    "startDate": "2026-08-22",
+    "endDate": "2026-08-22",
+    "dateLabel": "22 августа 2026",
+    "city": "Онлайн",
+    "location": "Онлайн",
+    "venue": "Онлайн",
+    "format": "online",
+    "formatLabel": "Онлайн",
+    "short_description": "Практическая встреча с разборами карт, вопросов участников и жизненных периодов.",
+    "description": "Практическая встреча с разборами карт, вопросов участников и жизненных периодов.",
+    "full_description": [
+      "Практика посвящена живой работе с картами, вопросами участников и жизненными периодами.",
+      "Формат рассчитан на тех, кто хочет видеть, как принципы Джйотиш применяются в реальных разборах."
+    ],
+    "program": [
+      "Разборы карт участников",
+      "Вопросы по жизненным периодам",
+      "Практические наблюдения и обсуждение"
+    ],
+    "speakers": [],
+    "price": "Уточняется",
+    "cta_text": "Задать вопрос",
+    "cta_url": "https://t.me/ruzhin_pro",
+    "detailsLabel": "Подробнее",
+    "status": "upcoming",
+    "featured": true,
+    "image": "assets/events/backgrounds/event-bg-04.jpg",
+    "calendarFile": "assets/calendar/jyotish-practice-august-2026.ics",
+    "tags": ["practice", "online"],
+    "contextLabel": "Онлайн · Разборы карт · Жизненные периоды",
+    "links": {
+      "details": "events/jyotish-practice-august-2026/",
+      "contact": "https://t.me/ruzhin_pro"
+    }
+  },
+  {
+    "id": "jyotish-weekend-september-2026",
+    "slug": "jyotish-weekend-september-2026",
+    "title": "Джйотиш-выходные",
+    "subtitle": "Ретрит на природе",
+    "type": "retreat",
+    "typeLabel": "Ретрит",
+    "date": "19–20 сентября 2026",
+    "time": "Время уточняется",
+    "startDate": "2026-09-19",
+    "endDate": "2026-09-20",
+    "dateLabel": "19–20 сентября 2026",
+    "city": "Ретрит на природе",
+    "location": "Ретрит на природе",
+    "venue": "Место уточняется",
+    "format": "offline",
+    "formatLabel": "Офлайн",
+    "short_description": "Джйотиш, практики внимания, восстановление ритма и спокойная работа с жизненными периодами.",
+    "description": "Джйотиш, практики внимания, восстановление ритма и спокойная работа с жизненными периодами.",
+    "full_description": [
+      "Джйотиш-выходные соединяют практику внимания, восстановление ритма и спокойное исследование жизненных периодов.",
+      "Это камерный формат для участников, которым важны живое общение, природа и мягкая практика."
+    ],
+    "program": [
+      "Практики внимания",
+      "Работа с жизненными периодами",
+      "Обсуждения и восстановление ритма"
+    ],
+    "speakers": [],
+    "price": "Уточняется",
+    "cta_text": "Задать вопрос",
+    "cta_url": "https://t.me/ruzhin_pro",
+    "detailsLabel": "Подробнее",
+    "status": "upcoming",
+    "featured": true,
+    "image": "assets/events/backgrounds/event-bg-05.jpg",
+    "calendarFile": "assets/calendar/jyotish-weekend-september-2026.ics",
+    "tags": ["retreat", "offline"],
+    "contextLabel": "Природа · Джйотиш · Практики внимания",
+    "links": {
+      "details": "events/jyotish-weekend-september-2026/",
+      "contact": "https://t.me/ruzhin_pro"
+    }
+  },
+  {
+    "id": "india-tour-2026",
+    "slug": "india-tour-2026",
+    "title": "Сакральный тур по Южной Индии",
+    "subtitle": "Места силы, храмы девяти планет и Нади Шастра",
+    "type": "tour",
+    "typeLabel": "Тур",
+    "date": "5–15 декабря 2026",
+    "time": "11 дней",
+    "startDate": "2026-12-05",
+    "endDate": "2026-12-15",
+    "dateLabel": "5–15 декабря 2026",
+    "city": "Южная Индия",
+    "location": "Южная Индия",
+    "venue": "Южная Индия",
+    "format": "offline",
+    "formatLabel": "Офлайн",
+    "short_description": "11 дней путешествия по местам силы Южной Индии, храмам девяти планет, священной горе Аруначала, Ауровилю и библиотеке Нади Шастра.",
+    "description": "11 дней путешествия по местам силы Южной Индии, храмам девяти планет, священной горе Аруначала, Ауровилю и библиотеке Нади Шастра.",
+    "full_description": [
+      "Живой авторский тур с Марией Кувалдиной и Анастасией Токий.",
+      "За 11 дней путешествия участники посетят древние города, священные храмы, места силы и центры духовной традиции Южной Индии."
+    ],
+    "program": [
+      "Махабалипурам",
+      "Кумбаконам и храмы девяти планет",
+      "Тируваннамалай, Аруначала и ашрам Раманы Махарши",
+      "Ауровиль и Матримандир",
+      "Библиотека Нади Шастра"
+    ],
+    "speakers": [
+      {
+        "name": "Мария Кувалдина",
+        "role": "Организатор авторских туров",
+        "description": "Преподаватель йоги и ведический астролог."
+      },
+      {
+        "name": "Анастасия Токий",
+        "role": "Организатор мероприятий",
+        "description": "Проводник игры «Лила», консультант по психологии и астрологии."
+      }
+    ],
+    "price": "158 500 ₽",
+    "cta_text": "Забронировать место",
+    "cta_url": "https://t.me/ruzhin_pro",
+    "contactLabel": "Забронировать место",
+    "detailsLabel": "Подробнее",
+    "status": "upcoming",
+    "featured": true,
+    "image": "assets/events/backgrounds/event-bg-06.jpg",
+    "calendarFile": "assets/calendar/india-tour-2026.ics",
+    "tags": ["tour", "india", "offline", "travel", "jyotish"],
+    "contextLabel": "Южная Индия · Места силы · Джйотиш · Путешествие",
+    "links": {
+      "details": "events/india-tour-2026/",
+      "contact": "https://t.me/ruzhin_pro"
+    }
+  }
+]

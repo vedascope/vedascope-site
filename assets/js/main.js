@@ -1,7 +1,19 @@
 const eventsRoot = document.querySelector("[data-events-root]");
 
-if (eventsRoot && Array.isArray(window.VEDASCOPE_EVENTS)) {
-  const vedascopeEvents = window.VEDASCOPE_EVENTS;
+const loadVedascopeEvents = async () => {
+  if (!eventsRoot) return [];
+  try {
+    const response = await fetch("data/events.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Events data request failed");
+    return await response.json();
+  } catch (error) {
+    return Array.isArray(window.VEDASCOPE_EVENTS) ? window.VEDASCOPE_EVENTS : [];
+  }
+};
+
+const initVedascopeEvents = async () => {
+  const vedascopeEvents = await loadVedascopeEvents();
+  if (!eventsRoot || !Array.isArray(vedascopeEvents) || !vedascopeEvents.length) return;
   const eventBackgrounds = Array.isArray(window.VEDASCOPE_EVENT_BACKGROUNDS)
     ? window.VEDASCOPE_EVENT_BACKGROUNDS
     : [];
@@ -398,7 +410,9 @@ if (eventsRoot && Array.isArray(window.VEDASCOPE_EVENTS)) {
   window.addEventListener("resize", updateMonthScrollControls);
 
   updateEventsInterface({ scrollMonth: true });
-}
+};
+
+initVedascopeEvents();
 
 const sutraToggle = document.querySelector("[data-sutra-toggle]");
 const sutraMeaning = document.querySelector("[data-sutra-meaning]");
