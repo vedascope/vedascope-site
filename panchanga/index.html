@@ -494,29 +494,34 @@
           });
         });
       }
+      async function fetchChartSvg(params, style) {
+        const chartParams = new URLSearchParams(params);
+        chartParams.set("chart_style", style);
+
+        const response = await fetch(`/api/chart/svg?${chartParams.toString()}`);
+        if (!response.ok) throw new Error(`Не удалось загрузить ${style === "north" ? "северную" : "южную"} карту.`);
+
+        const svgText = await response.text();
+        const doc = new DOMParser().parseFromString(svgText, "image/svg+xml");
+        const svg = doc.querySelector("svg");
+        if (!svg) throw new Error(`В ответе ${style} карты нет SVG.`);
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "chart-svg";
+        wrapper.dataset.chartStyle = style;
+        if (style !== currentChartStyle) wrapper.classList.add("is-hidden");
+        wrapper.appendChild(document.importNode(svg, true));
+
+        return wrapper;
+      }
+
       async function loadCharts(params) {
-        const fullUrl = `/api/full/html?${params.toString()}`;
-        const response = await fetch(fullUrl);
-        if (!response.ok) throw new Error("Не удалось загрузить карту дня.");
+        const chartNodes = await Promise.all([
+          fetchChartSvg(params, "south"),
+          fetchChartSvg(params, "north"),
+        ]);
 
-        const html = await response.text();
-        const doc = new DOMParser().parseFromString(html, "text/html");
-
-        let chartNodes = [...doc.querySelectorAll("[data-chart-style]")];
-
-        if (!chartNodes.length) {
-          const svg = doc.querySelector("svg");
-          if (svg) {
-            const wrapper = document.createElement("div");
-            wrapper.className = "chart-svg";
-            wrapper.dataset.chartStyle = "south";
-            wrapper.appendChild(document.importNode(svg, true));
-            chartNodes = [wrapper];
-          }
-        }
-
-        if (!chartNodes.length) throw new Error("В ответе карты нет SVG.");
-        chartFrame.replaceChildren(...chartNodes.map((node) => document.importNode(node, true)));
+        chartFrame.replaceChildren(...chartNodes);
         activateChartControls();
       }
       async function loadPanchanga(pushState = false) {
