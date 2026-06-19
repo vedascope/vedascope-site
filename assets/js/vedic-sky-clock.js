@@ -24,8 +24,11 @@
   const state = {
     grahas: [],
     activeKey: null,
-    response: null
+    response: null,
+    liveMode: true,
+    liveTimer: null
   };
+  const LIVE_REFRESH_MS = 60000;
 
   function longitudeToAngle(longitude) {
     return Number(longitude) % 360;
@@ -90,6 +93,18 @@
     return `${response.input.date} · ${response.input.time} · ${response.input.timezone}`;
   }
 
+  function formatDisplayDate(dateValue) {
+    const [year, month, day] = String(dateValue || "").split("-");
+    if (!year || !month || !day) return "—";
+    return `${day}.${month}.${year}`;
+  }
+
+  function updatePublicTime(response) {
+    if (!response?.input) return;
+    document.querySelector("[data-sky-title]").textContent = `Живая карта неба на ${formatDisplayDate(response.input.date)}`;
+    document.querySelector("[data-sky-updated]").textContent = `Обновлено: ${response.input.time}`;
+  }
+
   function getApiBase() {
     return location.hostname === "localhost" || location.hostname === "127.0.0.1"
       ? "https://vedascope.ru"
@@ -100,6 +115,10 @@
     const now = new Date();
     form.date.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     form.time.value = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  }
+
+  function syncLiveDateTime(form) {
+    setDefaultDateTime(form);
   }
 
   function applyLocation(form) {
@@ -284,10 +303,12 @@
     status.classList.toggle("is-error", isError);
   }
 
-  async function updateClock(form) {
+  async function updateClock(form, { live = state.liveMode } = {}) {
+    if (live) syncLiveDateTime(form);
     const locationPreset = applyLocation(form);
     document.querySelector("[data-sky-location]").textContent = locationPreset.name;
     setStatus("Загружаю положения.");
+    const previousKey = state.activeKey;
     const response = await fetchGrahas({
       date: form.date.value,
       time: form.time.value,
@@ -297,11 +318,26 @@
     });
     state.response = response;
     state.grahas = response.grahas || [];
-    state.activeKey = state.grahas[0]?.key || null;
+    state.activeKey = state.grahas.some((graha) => graha.key === previousKey) ? previousKey : state.grahas[0]?.key || null;
     document.querySelector("[data-sky-datetime]").textContent = formatDateTime(response);
+    updatePublicTime(response);
     renderClock();
-    renderDetail(state.grahas[0]);
+    renderDetail(state.grahas.find((graha) => graha.key === state.activeKey));
     setStatus("");
+  }
+
+  function startLiveMode(form) {
+    state.liveMode = true;
+    window.clearInterval(state.liveTimer);
+    updateClock(form, { live: true }).catch((error) => setStatus(error.message || "Не удалось загрузить Sky Clock.", true));
+    state.liveTimer = window.setInterval(() => {
+      if (!state.liveMode) return;
+      updateClock(form, { live: true }).catch((error) => setStatus(error.message || "Не удалось обновить Sky Clock.", true));
+    }, LIVE_REFRESH_MS);
+  }
+
+  function enterManualMode() {
+    state.liveMode = false;
   }
 
   function init() {
@@ -309,12 +345,20 @@
     if (!form) return;
     setDefaultDateTime(form);
     applyLocation(form);
-    form.location.addEventListener("change", () => applyLocation(form));
+    ["date", "time"].forEach((fieldName) => {
+      form[fieldName].addEventListener("input", enterManualMode);
+    });
+    form.location.addEventListener("change", () => {
+      enterManualMode();
+      applyLocation(form);
+    });
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      updateClock(form).catch((error) => setStatus(error.message || "Не удалось обновить Sky Clock.", true));
+      enterManualMode();
+      updateClock(form, { live: false }).catch((error) => setStatus(error.message || "Не удалось обновить Sky Clock.", true));
     });
-    updateClock(form).catch((error) => setStatus(error.message || "Не удалось загрузить Sky Clock.", true));
+    document.querySelector("[data-sky-live]").addEventListener("click", () => startLiveMode(form));
+    startLiveMode(form);
   }
 
   window.VedicSkyClock = {

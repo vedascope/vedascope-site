@@ -37,34 +37,39 @@
         <div class="sky-shell">
           <div class="sky-heading">
             <p class="eyebrow">vedascope</p>
-            <h1 id="sky-title">Vedic Sky Clock</h1>
+            <h1 id="sky-title" data-sky-title>Живая карта неба</h1>
+            <p class="sky-updated" data-sky-updated>Обновлено: —</p>
           </div>
 
-          <form class="sky-controls" data-sky-form>
-            <div class="sky-field">
-              <label for="sky-date">Дата</label>
-              <input id="sky-date" name="date" type="date" required>
-            </div>
-            <div class="sky-field">
-              <label for="sky-time">Время</label>
-              <input id="sky-time" name="time" type="time" required>
-            </div>
-            <div class="sky-field sky-field-location">
-              <label for="sky-location">Локация</label>
-              <select id="sky-location" name="location">
-                <option value="amsterdam">Амстердам</option>
-                <option value="moscow">Москва</option>
-                <option value="new-york">Нью-Йорк</option>
-                <option value="vladivostok">Владивосток</option>
-                <option value="london">Лондон</option>
-                <option value="delhi">Дели</option>
-              </select>
-            </div>
-            <input name="lat" type="hidden">
-            <input name="lon" type="hidden">
-            <input name="tz" type="hidden">
-            <button class="sky-button" type="submit">Обновить</button>
-          </form>
+          <details class="sky-settings" data-sky-settings>
+            <summary>Настроить дату и место</summary>
+            <form class="sky-controls" data-sky-form>
+              <div class="sky-field">
+                <label for="sky-date">Дата</label>
+                <input id="sky-date" name="date" type="date" required>
+              </div>
+              <div class="sky-field">
+                <label for="sky-time">Время</label>
+                <input id="sky-time" name="time" type="time" required>
+              </div>
+              <div class="sky-field sky-field-location">
+                <label for="sky-location">Локация</label>
+                <select id="sky-location" name="location">
+                  <option value="amsterdam">Амстердам</option>
+                  <option value="moscow">Москва</option>
+                  <option value="new-york">Нью-Йорк</option>
+                  <option value="vladivostok">Владивосток</option>
+                  <option value="london">Лондон</option>
+                  <option value="delhi">Дели</option>
+                </select>
+              </div>
+              <input name="lat" type="hidden">
+              <input name="lon" type="hidden">
+              <input name="tz" type="hidden">
+              <button class="sky-button" type="submit">Обновить</button>
+              <button class="sky-button sky-button-quiet" type="button" data-sky-live>Вернуться к текущему моменту</button>
+            </form>
+          </details>
 
           <section class="sky-stage" aria-label="Vedic Sky Clock">
             <div class="sky-clock-frame">
@@ -80,7 +85,7 @@
               </div>
               <div>
                 <span class="sky-readout-kicker">Время</span>
-                <strong data-sky-datetime>—</strong>
+                <strong data-sky-datetime>Текущий момент</strong>
               </div>
               <div class="sky-graha-detail" data-sky-detail>
                 <span class="sky-readout-kicker">Граха</span>
