@@ -1,34 +1,35 @@
 (() => {
   const SVG_NS = "http://www.w3.org/2000/svg";
-  const SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+  const ZODIAC_VISUAL_OFFSET_DEG = -30;
+  const SIGN_NAMES = ["Овен ♈", "Телец ♉", "Близнецы ♊", "Рак ♋", "Лев ♌", "Дева ♍", "Весы ♎", "Скорпион ♏", "Стрелец ♐", "Козерог ♑", "Водолей ♒", "Рыбы ♓"];
   const NAKSHATRA_NAMES = [
-    "Ashwini",
-    "Bharani",
-    "Krittika",
-    "Rohini",
-    "Mrigashira",
-    "Ardra",
-    "Punarvasu",
-    "Pushya",
-    "Ashlesha",
-    "Magha",
-    "Purva Phalguni",
-    "Uttara Phalguni",
-    "Hasta",
-    "Chitra",
-    "Swati",
-    "Vishakha",
-    "Anuradha",
-    "Jyeshtha",
-    "Mula",
-    "Purva Ashadha",
-    "Uttara Ashadha",
-    "Shravana",
-    "Dhanishta",
-    "Shatabhisha",
-    "Purva Bhadrapada",
-    "Uttara Bhadrapada",
-    "Revati"
+    "Ашвини",
+    "Бхарани",
+    "Криттика",
+    "Рохини",
+    "Мригашира",
+    "Ардра",
+    "Пунарвасу",
+    "Пушья",
+    "Ашлеша",
+    "Магха",
+    "Пурва Пхалгуни",
+    "Уттара Пхалгуни",
+    "Хаста",
+    "Читра",
+    "Свати",
+    "Вишакха",
+    "Анурадха",
+    "Джйештха",
+    "Мула",
+    "Пурва Ашадха",
+    "Уттара Ашадха",
+    "Шравана",
+    "Дхаништха",
+    "Шатабхиша",
+    "Пурва Бхадрапада",
+    "Уттара Бхадрапада",
+    "Ревати"
   ];
   const LOCATION_PRESETS = {
     amsterdam: { name: "Амстердам", lat: 52.3676, lon: 4.9041, tz: "Europe/Amsterdam" },
@@ -55,7 +56,15 @@
     activeKey: null,
     response: null,
     liveMode: true,
-    liveTimer: null
+    liveTimer: null,
+    view: {
+      rotateX: 0,
+      rotateY: 0,
+      zoom: 1,
+      pointerId: null,
+      dragMoved: false,
+      suppressClick: false
+    }
   };
   const LIVE_REFRESH_MS = 60000;
 
@@ -84,9 +93,9 @@
   }
 
   function describeGrahaPosition(graha) {
-    const signName = SIGN_NAMES[graha.signIndex] || `Sign ${graha.signIndex + 1}`;
-    const nakshatraName = NAKSHATRA_NAMES[graha.nakshatraIndex] || `Nakshatra ${graha.nakshatraNumber}`;
-    return `${graha.name}: ${formatDegree(graha.longitude)} · ${signName} ${formatDegree(graha.degreeInSign)} · ${nakshatraName} (${graha.nakshatraNumber}) · Pada ${graha.padaInNakshatra}`;
+    const signName = SIGN_NAMES[graha.signIndex] || `Знак ${graha.signIndex + 1}`;
+    const nakshatraName = NAKSHATRA_NAMES[graha.nakshatraIndex] || `Накшатра ${graha.nakshatraNumber}`;
+    return `${graha.name}: ${formatDegree(graha.longitude)} · ${signName} ${formatDegree(graha.degreeInSign)} · Накшатра: ${nakshatraName} (${graha.nakshatraNumber}) · Пада: ${graha.padaInNakshatra}`;
   }
 
   function createSvgElement(tag, attrs = {}) {
@@ -136,7 +145,7 @@
   }
 
   function getNakshatraLabel(graha) {
-    return `${NAKSHATRA_NAMES[graha.nakshatraIndex] || "Nakshatra"} (${graha.nakshatraNumber})`;
+    return `${NAKSHATRA_NAMES[graha.nakshatraIndex] || "Накшатра"} (${graha.nakshatraNumber})`;
   }
 
   function getApiBase() {
@@ -203,6 +212,19 @@
     for (let i = 0; i < 108; i += 1) svg.appendChild(lineAt(cx, cy, padaInner, padaOuter, i * (360 / 108), "sky-grid-line"));
     for (let i = 0; i < 27; i += 1) svg.appendChild(lineAt(cx, cy, beltOuter, nakOuter, i * (360 / 27), "sky-grid-line"));
     for (let i = 0; i < 12; i += 1) svg.appendChild(lineAt(cx, cy, beltInner, beltOuter, i * 30, "sky-grid-line sky-grid-line--sign"));
+
+    for (let i = 0; i < SIGN_NAMES.length; i += 1) {
+      const angle = (i + 0.5) * 30;
+      const position = polarToCartesian(cx, cy, 328, angle);
+      const label = createSvgElement("text", {
+        x: position.x,
+        y: position.y,
+        class: "sky-sign-label",
+        transform: `rotate(${angle > 90 && angle < 270 ? angle + 180 : angle} ${position.x} ${position.y})`
+      });
+      label.textContent = SIGN_NAMES[i];
+      svg.appendChild(label);
+    }
 
     for (let i = 0; i < NAKSHATRA_NAMES.length; i += 1) {
       const angle = (i + 0.5) * (360 / 27);
@@ -321,9 +343,18 @@
   function renderClock() {
     const svg = document.querySelector("[data-sky-svg]");
     svg.replaceChildren();
-    renderStaticGeometry(svg);
-    renderHighlights(svg, state.grahas);
-    renderGrahas(svg, state.grahas);
+    const title = createSvgElement("title", { id: "sky-svg-title" });
+    const description = createSvgElement("desc", { id: "sky-svg-description" });
+    const plane = createSvgElement("g", {
+      "data-sky-plane": "",
+      transform: `rotate(${ZODIAC_VISUAL_OFFSET_DEG} 500 500)`
+    });
+    title.textContent = "Vedic Sky Clock";
+    description.textContent = "Положение грах по сидерической долготе в знаках, накшатрах и падах.";
+    renderStaticGeometry(plane);
+    renderHighlights(plane, state.grahas);
+    renderGrahas(plane, state.grahas);
+    svg.append(title, description, plane);
   }
 
   function selectGraha(key) {
@@ -347,10 +378,11 @@
     if (!tooltip || !frame || !svg) return;
 
     const frameRect = frame.getBoundingClientRect();
-    const svgRect = svg.getBoundingClientRect();
-    const point = polarToCartesian(500, 500, 374, longitudeToAngle(graha.longitude));
-    const x = svgRect.left - frameRect.left + (point.x / 1000) * svgRect.width;
-    const y = svgRect.top - frameRect.top + (point.y / 1000) * svgRect.height;
+    const marker = [...svg.querySelectorAll("[data-graha-key]")].find((node) => node.dataset.grahaKey === graha.key);
+    if (!marker) return;
+    const markerRect = marker.getBoundingClientRect();
+    const x = markerRect.left - frameRect.left + markerRect.width / 2;
+    const y = markerRect.top - frameRect.top + markerRect.height / 2;
     const clampedX = Math.min(Math.max(x, 120), frameRect.width - 120);
     const clampedY = Math.min(Math.max(y, 112), frameRect.height - 18);
 
@@ -369,8 +401,8 @@
       <strong>${graha.name}</strong>
       <p>${formatDegree(graha.longitude)}</p>
       <p>${SIGN_NAMES[graha.signIndex]} · ${formatDegree(graha.degreeInSign)}</p>
-      <p>${getNakshatraLabel(graha)}</p>
-      <p>Pada ${graha.padaInNakshatra}</p>
+      <p>Накшатра: ${getNakshatraLabel(graha)}</p>
+      <p>Пада: ${graha.padaInNakshatra}</p>
     `;
     tooltip.hidden = false;
     positionTooltip(graha);
@@ -419,6 +451,99 @@
     state.liveMode = false;
   }
 
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function applyViewTransform() {
+    const svg = document.querySelector("[data-sky-svg]");
+    if (!svg) return;
+    svg.style.transform = `rotateX(${state.view.rotateX}deg) rotateY(${state.view.rotateY}deg) scale(${state.view.zoom})`;
+  }
+
+  function refreshActiveTooltipPosition() {
+    if (!state.activeKey) return;
+    window.requestAnimationFrame(() => renderTooltip(state.grahas.find((graha) => graha.key === state.activeKey)));
+  }
+
+  function setZoom(nextZoom) {
+    state.view.zoom = clamp(nextZoom, 0.75, 1.6);
+    applyViewTransform();
+    refreshActiveTooltipPosition();
+  }
+
+  function resetView() {
+    state.view.rotateX = 0;
+    state.view.rotateY = 0;
+    state.view.zoom = 1;
+    applyViewTransform();
+    refreshActiveTooltipPosition();
+  }
+
+  function dismissTooltipDuringDrag() {
+    const tooltip = document.querySelector("[data-sky-tooltip]");
+    if (tooltip) tooltip.hidden = true;
+    state.activeKey = null;
+    document.querySelectorAll(".sky-graha.is-active").forEach((node) => node.classList.remove("is-active"));
+  }
+
+  function initViewControls() {
+    const svg = document.querySelector("[data-sky-svg]");
+    const zoomIn = document.querySelector("[data-sky-zoom-in]");
+    const zoomOut = document.querySelector("[data-sky-zoom-out]");
+    const reset = document.querySelector("[data-sky-view-reset]");
+    if (!svg || !zoomIn || !zoomOut || !reset) return;
+
+    applyViewTransform();
+    zoomIn.addEventListener("click", () => setZoom(state.view.zoom + 0.1));
+    zoomOut.addEventListener("click", () => setZoom(state.view.zoom - 0.1));
+    reset.addEventListener("click", resetView);
+
+    svg.addEventListener("pointerdown", (event) => {
+      if (!event.isPrimary || event.button !== 0) return;
+      state.view.pointerId = event.pointerId;
+      state.view.startX = event.clientX;
+      state.view.startY = event.clientY;
+      state.view.startRotateX = state.view.rotateX;
+      state.view.startRotateY = state.view.rotateY;
+      state.view.dragMoved = false;
+      svg.setPointerCapture(event.pointerId);
+      svg.classList.add("is-dragging");
+    });
+
+    svg.addEventListener("pointermove", (event) => {
+      if (event.pointerId !== state.view.pointerId) return;
+      const deltaX = event.clientX - state.view.startX;
+      const deltaY = event.clientY - state.view.startY;
+      if (!state.view.dragMoved && Math.hypot(deltaX, deltaY) < 4) return;
+      if (!state.view.dragMoved) dismissTooltipDuringDrag();
+      state.view.dragMoved = true;
+      state.view.rotateX = clamp(state.view.startRotateX - deltaY * 0.22, -65, 65);
+      state.view.rotateY = state.view.startRotateY + deltaX * 0.28;
+      applyViewTransform();
+      event.preventDefault();
+    });
+
+    const finishDrag = (event) => {
+      if (event.pointerId !== state.view.pointerId) return;
+      state.view.suppressClick = state.view.dragMoved;
+      state.view.pointerId = null;
+      svg.classList.remove("is-dragging");
+      if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
+    };
+    svg.addEventListener("pointerup", finishDrag);
+    svg.addEventListener("pointercancel", (event) => {
+      finishDrag(event);
+      state.view.suppressClick = false;
+    });
+    svg.addEventListener("click", (event) => {
+      if (!state.view.suppressClick) return;
+      state.view.suppressClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+    }, true);
+  }
+
   function init() {
     const form = document.querySelector("[data-sky-form]");
     if (!form) return;
@@ -437,6 +562,7 @@
       updateClock(form, { live: false }).catch((error) => setStatus(error.message || "Не удалось обновить Sky Clock.", true));
     });
     document.querySelector("[data-sky-live]").addEventListener("click", () => startLiveMode(form));
+    initViewControls();
     document.addEventListener("click", (event) => {
       if (event.target.closest(".sky-graha") || event.target.closest("[data-sky-tooltip]")) return;
       if (state.activeKey) hideTooltip();

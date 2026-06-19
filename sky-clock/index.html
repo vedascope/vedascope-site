@@ -73,10 +73,17 @@
 
           <section class="sky-stage" aria-label="Vedic Sky Clock">
             <div class="sky-clock-frame">
-              <svg class="sky-clock-svg" data-sky-svg viewBox="0 0 1000 1000" role="img" aria-labelledby="sky-svg-title sky-svg-description">
-                <title id="sky-svg-title">Vedic Sky Clock</title>
-                <desc id="sky-svg-description">Положение грах по сидерической долготе в знаках, накшатрах и падах.</desc>
-              </svg>
+              <div class="sky-view-controls" aria-label="Управление видом Sky Clock">
+                <button type="button" data-sky-zoom-in aria-label="Увеличить">+</button>
+                <button type="button" data-sky-zoom-out aria-label="Уменьшить">−</button>
+                <button class="sky-view-reset" type="button" data-sky-view-reset>Вернуть вид</button>
+              </div>
+              <div class="sky-clock-viewport">
+                <svg class="sky-clock-svg" data-sky-svg viewBox="0 0 1000 1000" role="img" aria-labelledby="sky-svg-title sky-svg-description">
+                  <title id="sky-svg-title">Vedic Sky Clock</title>
+                  <desc id="sky-svg-description">Положение грах по сидерической долготе в знаках, накшатрах и падах.</desc>
+                </svg>
+              </div>
               <div class="sky-tooltip" data-sky-tooltip hidden></div>
             </div>
           </section>
