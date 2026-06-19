@@ -77,24 +77,10 @@
                 <title id="sky-svg-title">Vedic Sky Clock</title>
                 <desc id="sky-svg-description">Положение грах по сидерической долготе в знаках, накшатрах и падах.</desc>
               </svg>
+              <div class="sky-tooltip" data-sky-tooltip hidden></div>
             </div>
-            <aside class="sky-readout" aria-live="polite">
-              <div>
-                <span class="sky-readout-kicker">Локация</span>
-                <strong data-sky-location>Амстердам</strong>
-              </div>
-              <div>
-                <span class="sky-readout-kicker">Время</span>
-                <strong data-sky-datetime>Текущий момент</strong>
-              </div>
-              <div class="sky-graha-detail" data-sky-detail>
-                <span class="sky-readout-kicker">Граха</span>
-                <strong>—</strong>
-                <p>Выберите точку на колесе.</p>
-              </div>
-              <p class="sky-status" data-sky-status></p>
-            </aside>
           </section>
+          <p class="sky-status" data-sky-status aria-live="polite"></p>
         </div>
       </section>
     </main>
