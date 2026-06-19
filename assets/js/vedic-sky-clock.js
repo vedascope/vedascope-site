@@ -63,7 +63,8 @@
       zoom: 1,
       pointerId: null,
       dragMoved: false,
-      suppressClick: false
+      pressedGrahaKey: null,
+      ignoreNextClick: false
     }
   };
   const LIVE_REFRESH_MS = 60000;
@@ -183,23 +184,46 @@
     const cx = 500;
     const cy = 500;
     const beltInner = 300;
-    const beltOuter = 442;
-    const nakInner = 444;
-    const nakOuter = 474;
-    const padaInner = 476;
-    const padaOuter = 492;
+    const beltOuter = 410;
+    const nakInner = 412;
+    const nakOuter = 462;
+    const padaInner = 464;
+    const padaOuter = 496;
 
     const defs = createSvgElement("defs");
-    const earthGradient = createSvgElement("radialGradient", { id: "earthGradient", cx: "38%", cy: "34%" });
+    const earthGradient = createSvgElement("radialGradient", { id: "earthGradient", cx: "34%", cy: "28%", r: "72%", fx: "28%", fy: "22%" });
     earthGradient.append(
-      createSvgElement("stop", { offset: "0%", "stop-color": "#d7efe4" }),
-      createSvgElement("stop", { offset: "48%", "stop-color": "#315e67" }),
-      createSvgElement("stop", { offset: "100%", "stop-color": "#0a1b22" })
+      createSvgElement("stop", { offset: "0%", "stop-color": "#edfdf5" }),
+      createSvgElement("stop", { offset: "30%", "stop-color": "#6ca1a0" }),
+      createSvgElement("stop", { offset: "68%", "stop-color": "#24505b" }),
+      createSvgElement("stop", { offset: "100%", "stop-color": "#061017" })
     );
+    const earthHighlight = createSvgElement("radialGradient", { id: "earthHighlight", cx: "50%", cy: "50%", r: "50%" });
+    earthHighlight.append(
+      createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff", "stop-opacity": "0.58" }),
+      createSvgElement("stop", { offset: "55%", "stop-color": "#d9fff3", "stop-opacity": "0.16" }),
+      createSvgElement("stop", { offset: "100%", "stop-color": "#d9fff3", "stop-opacity": "0" })
+    );
+    const earthDepth = createSvgElement("filter", { id: "earthDepth", x: "-40%", y: "-40%", width: "180%", height: "190%" });
+    earthDepth.append(createSvgElement("feDropShadow", { dx: "0", dy: "10", stdDeviation: "9", "flood-color": "#000000", "flood-opacity": "0.62" }));
+    const earthAtmosphereGlow = createSvgElement("filter", { id: "earthAtmosphereGlow", x: "-50%", y: "-50%", width: "200%", height: "200%" });
+    earthAtmosphereGlow.append(createSvgElement("feGaussianBlur", { stdDeviation: "5" }));
+    const grahaOrbDepth = createSvgElement("filter", { id: "grahaOrbDepth", x: "-70%", y: "-70%", width: "240%", height: "260%" });
+    grahaOrbDepth.append(createSvgElement("feDropShadow", { dx: "0", dy: "5", stdDeviation: "4", "flood-color": "#000000", "flood-opacity": "0.7" }));
     const glow = createSvgElement("filter", { id: "grahaGlow", x: "-70%", y: "-70%", width: "240%", height: "240%" });
     glow.append(createSvgElement("feGaussianBlur", { stdDeviation: "5", result: "blur" }), createSvgElement("feMerge"));
     glow.querySelector("feMerge").append(createSvgElement("feMergeNode", { in: "blur" }), createSvgElement("feMergeNode", { in: "SourceGraphic" }));
-    defs.append(earthGradient, glow);
+    Object.entries(GRAHA_STYLES).forEach(([key, style]) => {
+      const gradient = createSvgElement("radialGradient", { id: `grahaGradient-${key}`, cx: "34%", cy: "28%", r: "72%", fx: "27%", fy: "22%" });
+      gradient.append(
+        createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff", "stop-opacity": "0.9" }),
+        createSvgElement("stop", { offset: "24%", "stop-color": style.color }),
+        createSvgElement("stop", { offset: "72%", "stop-color": style.color }),
+        createSvgElement("stop", { offset: "100%", "stop-color": "#05070a", "stop-opacity": "0.82" })
+      );
+      defs.appendChild(gradient);
+    });
+    defs.append(earthGradient, earthHighlight, earthDepth, earthAtmosphereGlow, grahaOrbDepth, glow);
     svg.appendChild(defs);
 
     svg.append(
@@ -228,7 +252,7 @@
 
     for (let i = 0; i < NAKSHATRA_NAMES.length; i += 1) {
       const angle = (i + 0.5) * (360 / 27);
-      const position = polarToCartesian(cx, cy, 452, angle);
+      const position = polarToCartesian(cx, cy, 435, angle);
       const label = createSvgElement("text", {
         x: position.x,
         y: position.y,
@@ -241,7 +265,10 @@
 
     const earth = createSvgElement("g", { "aria-hidden": "true" });
     earth.append(
+      createSvgElement("ellipse", { cx, cy: cy + 84, rx: 86, ry: 22, class: "sky-earth-shadow" }),
+      createSvgElement("circle", { cx, cy, r: 116, class: "sky-earth-atmosphere" }),
       createSvgElement("circle", { cx, cy, r: 108, class: "sky-earth" }),
+      createSvgElement("circle", { cx: cx - 35, cy: cy - 39, r: 43, class: "sky-earth-highlight" }),
       createSvgElement("ellipse", { cx, cy, rx: 88, ry: 34, class: "sky-earth-line" }),
       createSvgElement("ellipse", { cx, cy, rx: 38, ry: 104, class: "sky-earth-line" }),
       createSvgElement("line", { x1: cx - 96, y1: cy, x2: cx + 96, y2: cy, class: "sky-earth-line" })
@@ -274,16 +301,16 @@
       const padaOffset = padaPeers.findIndex((item) => item.key === graha.key) * 3;
 
       svg.appendChild(createSvgElement("path", {
-        d: describeArc(cx, cy, 459 + nakOffset, nakStart, nakEnd),
+        d: describeArc(cx, cy, 437 + nakOffset, nakStart, nakEnd),
         class: "sky-nak-highlight",
         stroke: style.color,
-        "stroke-width": 5
+        "stroke-width": 12
       }));
       svg.appendChild(createSvgElement("path", {
-        d: describeArc(cx, cy, 484 + padaOffset, padaStart, padaEnd),
+        d: describeArc(cx, cy, 480 + padaOffset, padaStart, padaEnd),
         class: "sky-pada-highlight",
         stroke: style.color,
-        "stroke-width": 4
+        "stroke-width": 9
       }));
     });
   }
@@ -304,10 +331,29 @@
       group.appendChild(createSvgElement("circle", {
         cx: position.x,
         cy: position.y,
+        r: 34,
+        class: "sky-graha-hit"
+      }));
+      group.appendChild(createSvgElement("ellipse", {
+        cx: position.x + 4,
+        cy: position.y + 17,
+        rx: 18,
+        ry: 7,
+        class: "sky-graha-shadow"
+      }));
+      group.appendChild(createSvgElement("circle", {
+        cx: position.x,
+        cy: position.y,
         r: 20,
-        fill: style.color,
+        fill: `url(#grahaGradient-${graha.key})`,
         class: "sky-graha-marker",
         filter: style.glow ? "url(#grahaGlow)" : ""
+      }));
+      group.appendChild(createSvgElement("circle", {
+        cx: position.x - 6,
+        cy: position.y - 7,
+        r: 5.5,
+        class: "sky-graha-shine"
       }));
       if (style.ring) {
         group.appendChild(createSvgElement("ellipse", {
@@ -327,6 +373,7 @@
       text.textContent = style.label;
       group.appendChild(text);
       group.addEventListener("click", (event) => {
+        if (state.view.dragMoved) return;
         event.stopPropagation();
         selectGraha(graha.key);
       });
@@ -487,61 +534,88 @@
     document.querySelectorAll(".sky-graha.is-active").forEach((node) => node.classList.remove("is-active"));
   }
 
+  function getGrahaKeyAtPoint(clientX, clientY) {
+    let nearest = null;
+    document.querySelectorAll("[data-graha-key]").forEach((node) => {
+      const rect = node.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const normalizedX = (clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+      const normalizedY = (clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+      const distance = normalizedX ** 2 + normalizedY ** 2;
+      if (distance <= 1 && (!nearest || distance < nearest.distance)) {
+        nearest = { key: node.dataset.grahaKey, distance };
+      }
+    });
+    return nearest?.key || null;
+  }
+
   function initViewControls() {
+    const surface = document.querySelector(".sky-clock-viewport");
     const svg = document.querySelector("[data-sky-svg]");
     const zoomIn = document.querySelector("[data-sky-zoom-in]");
     const zoomOut = document.querySelector("[data-sky-zoom-out]");
     const reset = document.querySelector("[data-sky-view-reset]");
-    if (!svg || !zoomIn || !zoomOut || !reset) return;
+    if (!surface || !svg || !zoomIn || !zoomOut || !reset) return;
 
     applyViewTransform();
     zoomIn.addEventListener("click", () => setZoom(state.view.zoom + 0.1));
     zoomOut.addEventListener("click", () => setZoom(state.view.zoom - 0.1));
     reset.addEventListener("click", resetView);
 
-    svg.addEventListener("pointerdown", (event) => {
-      if (!event.isPrimary || event.button !== 0) return;
+    surface.addEventListener("pointerdown", (event) => {
+      if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+      state.view.ignoreNextClick = false;
       state.view.pointerId = event.pointerId;
       state.view.startX = event.clientX;
       state.view.startY = event.clientY;
       state.view.startRotateX = state.view.rotateX;
       state.view.startRotateY = state.view.rotateY;
       state.view.dragMoved = false;
-      svg.setPointerCapture(event.pointerId);
-      svg.classList.add("is-dragging");
+      state.view.pressedGrahaKey = event.target.closest?.("[data-graha-key]")?.dataset.grahaKey
+        || getGrahaKeyAtPoint(event.clientX, event.clientY);
+      surface.setPointerCapture(event.pointerId);
+      surface.classList.add("is-dragging");
     });
 
-    svg.addEventListener("pointermove", (event) => {
+    surface.addEventListener("pointermove", (event) => {
       if (event.pointerId !== state.view.pointerId) return;
       const deltaX = event.clientX - state.view.startX;
       const deltaY = event.clientY - state.view.startY;
-      if (!state.view.dragMoved && Math.hypot(deltaX, deltaY) < 4) return;
+      if (!state.view.dragMoved && Math.hypot(deltaX, deltaY) <= 5) return;
       if (!state.view.dragMoved) dismissTooltipDuringDrag();
       state.view.dragMoved = true;
-      state.view.rotateX = clamp(state.view.startRotateX - deltaY * 0.22, -65, 65);
-      state.view.rotateY = state.view.startRotateY + deltaX * 0.28;
+      state.view.rotateX = clamp(state.view.startRotateX + deltaY * 0.2, -65, 65);
+      state.view.rotateY = clamp(state.view.startRotateY + deltaX * 0.2, -45, 45);
       applyViewTransform();
       event.preventDefault();
     });
 
-    const finishDrag = (event) => {
+    const finishDrag = (event, cancelled = false) => {
       if (event.pointerId !== state.view.pointerId) return;
-      state.view.suppressClick = state.view.dragMoved;
+      const shouldSelectGraha = !cancelled && !state.view.dragMoved && state.view.pressedGrahaKey;
+      state.view.ignoreNextClick = !cancelled && Boolean(state.view.dragMoved || shouldSelectGraha);
       state.view.pointerId = null;
-      svg.classList.remove("is-dragging");
-      if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
+      state.view.pressedGrahaKey = null;
+      surface.classList.remove("is-dragging");
+      if (surface.hasPointerCapture(event.pointerId)) surface.releasePointerCapture(event.pointerId);
+      if (shouldSelectGraha) selectGraha(shouldSelectGraha);
     };
-    svg.addEventListener("pointerup", finishDrag);
-    svg.addEventListener("pointercancel", (event) => {
-      finishDrag(event);
-      state.view.suppressClick = false;
+    surface.addEventListener("pointerup", finishDrag);
+    surface.addEventListener("pointercancel", (event) => {
+      finishDrag(event, true);
     });
-    svg.addEventListener("click", (event) => {
-      if (!state.view.suppressClick) return;
-      state.view.suppressClick = false;
+    surface.addEventListener("click", (event) => {
+      if (!state.view.ignoreNextClick) return;
+      state.view.ignoreNextClick = false;
       event.preventDefault();
       event.stopPropagation();
     }, true);
+    surface.addEventListener("lostpointercapture", () => {
+      if (state.view.pointerId === null) return;
+      state.view.pointerId = null;
+      state.view.pressedGrahaKey = null;
+      surface.classList.remove("is-dragging");
+    });
   }
 
   function init() {

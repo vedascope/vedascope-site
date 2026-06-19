@@ -59,9 +59,10 @@ h1 { max-width: 100%; margin: 0; font-family: Literata, Georgia, serif; font-siz
   radial-gradient(circle at 50% 50%, rgba(31, 92, 90, 0.16), transparent 50%);
   filter: drop-shadow(0 34px 100px rgba(0, 0, 0, 0.34));
 }
-.sky-clock-viewport { width: min(100%, 880px); transform-style: preserve-3d; }
-.sky-clock-svg { display: block; width: 100%; height: auto; aspect-ratio: 1; cursor: grab; touch-action: none; user-select: none; transform-origin: 50% 50%; transform-style: preserve-3d; will-change: transform; }
-.sky-clock-svg.is-dragging { cursor: grabbing; }
+.sky-clock-viewport { width: min(100%, 880px); cursor: grab; touch-action: none; user-select: none; transform-style: preserve-3d; }
+.sky-clock-viewport.is-dragging { cursor: grabbing; }
+.sky-clock-svg { display: block; width: 100%; height: auto; aspect-ratio: 1; transform-origin: 50% 50%; transform-style: preserve-3d; transition: transform 180ms ease-out; will-change: transform; }
+.sky-clock-viewport.is-dragging .sky-clock-svg { transition: none; }
 .sky-view-controls { position: absolute; z-index: 8; top: 14px; right: 14px; display: flex; gap: 6px; padding: 5px; border: 1px solid rgba(247, 242, 231, 0.13); border-radius: 999px; background: rgba(3, 6, 8, 0.68); box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22); backdrop-filter: blur(14px); }
 .sky-view-controls button { min-width: 34px; height: 34px; border: 1px solid rgba(247, 242, 231, 0.15); border-radius: 999px; padding: 0 10px; color: var(--sky-ink); background: rgba(247, 242, 231, 0.07); cursor: pointer; font-weight: 700; line-height: 1; }
 .sky-view-controls button:hover { border-color: rgba(197, 148, 79, 0.62); background: rgba(197, 148, 79, 0.13); }
@@ -73,14 +74,20 @@ h1 { max-width: 100%; margin: 0; font-family: Literata, Georgia, serif; font-siz
 .sky-grid-line { stroke: var(--sky-line-soft); stroke-width: 1; vector-effect: non-scaling-stroke; }
 .sky-grid-line--sign { stroke: rgba(247, 242, 231, 0.2); stroke-width: 1.15; }
 .sky-belt-edge { fill: none; stroke: rgba(247, 242, 231, 0.16); stroke-width: 1.15; }
-.sky-earth { fill: url("#earthGradient"); stroke: rgba(247, 242, 231, 0.24); stroke-width: 1.4; }
+.sky-earth-shadow { fill: rgba(0, 0, 0, 0.42); filter: blur(9px); pointer-events: none; }
+.sky-earth-atmosphere { fill: none; stroke: rgba(121, 202, 214, 0.32); stroke-width: 8; filter: url("#earthAtmosphereGlow"); pointer-events: none; }
+.sky-earth { fill: url("#earthGradient"); stroke: rgba(218, 245, 239, 0.42); stroke-width: 1.8; filter: url("#earthDepth"); }
+.sky-earth-highlight { fill: url("#earthHighlight"); opacity: 0.82; pointer-events: none; }
 .sky-earth-line { fill: none; stroke: rgba(247, 242, 231, 0.18); stroke-width: 1; }
-.sky-nak-highlight { fill: none; stroke-linecap: butt; opacity: 0.58; }
-.sky-pada-highlight { fill: none; stroke-linecap: butt; opacity: 0.86; }
+.sky-nak-highlight { fill: none; stroke-linecap: butt; opacity: 0.78; filter: drop-shadow(0 0 3px currentColor); }
+.sky-pada-highlight { fill: none; stroke-linecap: butt; opacity: 1; filter: drop-shadow(0 0 2px currentColor); }
 .sky-sign-label { fill: rgba(247, 242, 231, 0.82); font-family: Literata, Georgia, serif; font-size: 15px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
-.sky-nak-label { fill: rgba(247, 242, 231, 0.54); font-family: Inter, sans-serif; font-size: 10px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+.sky-nak-label { fill: rgba(247, 242, 231, 0.76); stroke: rgba(3, 6, 8, 0.72); stroke-width: 2px; paint-order: stroke fill; font-family: Inter, sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 0.01em; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
 .sky-graha { cursor: pointer; }
-.sky-graha-marker { stroke: rgba(247, 242, 231, 0.72); stroke-width: 1.3; }
+.sky-graha-hit { fill: transparent; stroke: none; pointer-events: all; }
+.sky-graha-shadow { fill: rgba(0, 0, 0, 0.48); filter: blur(4px); pointer-events: none; }
+.sky-graha-marker { stroke: rgba(247, 242, 231, 0.72); stroke-width: 1.3; filter: url("#grahaOrbDepth"); }
+.sky-graha-shine { fill: rgba(255, 255, 255, 0.34); filter: blur(0.4px); pointer-events: none; }
 .sky-graha-label { fill: #070b0e; font-family: Inter, sans-serif; font-size: 20px; font-weight: 800; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
 .sky-graha-label.is-light { fill: #f7f2e7; }
 .sky-graha.is-active .sky-graha-marker { stroke: #f7f2e7; stroke-width: 2.4; }
@@ -94,7 +101,7 @@ h1 { max-width: 100%; margin: 0; font-family: Literata, Georgia, serif; font-siz
   .sky-controls { grid-template-columns: 1fr; }
   .sky-button { width: 100%; }
   .sky-clock-frame { min-height: auto; }
-  .sky-nak-label { display: none; }
+  .sky-nak-label { font-size: 10.5px; }
 }
 @media (max-width: 560px) {
   .site-header { min-height: 66px; padding-inline: 16px; }
