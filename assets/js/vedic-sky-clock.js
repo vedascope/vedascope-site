@@ -50,6 +50,17 @@
     rahu: { color: "#8a6446", label: "Ra", light: true },
     ketu: { color: "#101014", label: "Ke", light: true }
   };
+  const GRAHA_NAMES_RU = {
+    sun: "Солнце",
+    moon: "Луна",
+    mars: "Марс",
+    mercury: "Меркурий",
+    jupiter: "Юпитер",
+    venus: "Венера",
+    saturn: "Сатурн",
+    rahu: "Раху",
+    ketu: "Кету"
+  };
 
   const state = {
     grahas: [],
@@ -60,11 +71,13 @@
     view: {
       rotateX: 0,
       rotateY: 0,
+      rotateZ: 0,
       zoom: 1,
       pointerId: null,
       dragMoved: false,
       pressedGrahaKey: null,
-      ignoreNextClick: false
+      ignoreNextClick: false,
+      hasSettled: false
     }
   };
   const LIVE_REFRESH_MS = 60000;
@@ -149,10 +162,12 @@
     return `${NAKSHATRA_NAMES[graha.nakshatraIndex] || "Накшатра"} (${graha.nakshatraNumber})`;
   }
 
+  function getGrahaDisplayName(graha) {
+    return GRAHA_NAMES_RU[graha?.key] || graha?.name || "";
+  }
+
   function getApiBase() {
-    return location.hostname === "localhost" || location.hostname === "127.0.0.1"
-      ? "https://vedascope.ru"
-      : "";
+    return "";
   }
 
   function setDefaultDateTime(form) {
@@ -191,39 +206,47 @@
     const padaOuter = 496;
 
     const defs = createSvgElement("defs");
-    const earthGradient = createSvgElement("radialGradient", { id: "earthGradient", cx: "34%", cy: "28%", r: "72%", fx: "28%", fy: "22%" });
+    const earthGradient = createSvgElement("radialGradient", { id: "earthGradient", cx: "32%", cy: "26%", r: "78%", fx: "24%", fy: "18%" });
     earthGradient.append(
-      createSvgElement("stop", { offset: "0%", "stop-color": "#edfdf5" }),
-      createSvgElement("stop", { offset: "30%", "stop-color": "#6ca1a0" }),
-      createSvgElement("stop", { offset: "68%", "stop-color": "#24505b" }),
-      createSvgElement("stop", { offset: "100%", "stop-color": "#061017" })
+      createSvgElement("stop", { offset: "0%", "stop-color": "#f8fff5" }),
+      createSvgElement("stop", { offset: "22%", "stop-color": "#87bfa8" }),
+      createSvgElement("stop", { offset: "48%", "stop-color": "#236b76" }),
+      createSvgElement("stop", { offset: "76%", "stop-color": "#0b2738" }),
+      createSvgElement("stop", { offset: "100%", "stop-color": "#010408" })
     );
     const earthHighlight = createSvgElement("radialGradient", { id: "earthHighlight", cx: "50%", cy: "50%", r: "50%" });
     earthHighlight.append(
-      createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff", "stop-opacity": "0.58" }),
-      createSvgElement("stop", { offset: "55%", "stop-color": "#d9fff3", "stop-opacity": "0.16" }),
+      createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff", "stop-opacity": "0.7" }),
+      createSvgElement("stop", { offset: "48%", "stop-color": "#d9fff3", "stop-opacity": "0.18" }),
       createSvgElement("stop", { offset: "100%", "stop-color": "#d9fff3", "stop-opacity": "0" })
     );
+    const grahaTerminator = createSvgElement("radialGradient", { id: "grahaTerminator", cx: "68%", cy: "72%", r: "74%" });
+    grahaTerminator.append(
+      createSvgElement("stop", { offset: "0%", "stop-color": "#05070a", "stop-opacity": "0" }),
+      createSvgElement("stop", { offset: "62%", "stop-color": "#05070a", "stop-opacity": "0.04" }),
+      createSvgElement("stop", { offset: "100%", "stop-color": "#05070a", "stop-opacity": "0.44" })
+    );
     const earthDepth = createSvgElement("filter", { id: "earthDepth", x: "-40%", y: "-40%", width: "180%", height: "190%" });
-    earthDepth.append(createSvgElement("feDropShadow", { dx: "0", dy: "10", stdDeviation: "9", "flood-color": "#000000", "flood-opacity": "0.62" }));
+    earthDepth.append(createSvgElement("feDropShadow", { dx: "0", dy: "13", stdDeviation: "11", "flood-color": "#000000", "flood-opacity": "0.7" }));
     const earthAtmosphereGlow = createSvgElement("filter", { id: "earthAtmosphereGlow", x: "-50%", y: "-50%", width: "200%", height: "200%" });
     earthAtmosphereGlow.append(createSvgElement("feGaussianBlur", { stdDeviation: "5" }));
     const grahaOrbDepth = createSvgElement("filter", { id: "grahaOrbDepth", x: "-70%", y: "-70%", width: "240%", height: "260%" });
-    grahaOrbDepth.append(createSvgElement("feDropShadow", { dx: "0", dy: "5", stdDeviation: "4", "flood-color": "#000000", "flood-opacity": "0.7" }));
+    grahaOrbDepth.append(createSvgElement("feDropShadow", { dx: "0", dy: "6", stdDeviation: "4.5", "flood-color": "#000000", "flood-opacity": "0.76" }));
     const glow = createSvgElement("filter", { id: "grahaGlow", x: "-70%", y: "-70%", width: "240%", height: "240%" });
     glow.append(createSvgElement("feGaussianBlur", { stdDeviation: "5", result: "blur" }), createSvgElement("feMerge"));
     glow.querySelector("feMerge").append(createSvgElement("feMergeNode", { in: "blur" }), createSvgElement("feMergeNode", { in: "SourceGraphic" }));
     Object.entries(GRAHA_STYLES).forEach(([key, style]) => {
-      const gradient = createSvgElement("radialGradient", { id: `grahaGradient-${key}`, cx: "34%", cy: "28%", r: "72%", fx: "27%", fy: "22%" });
+      const gradient = createSvgElement("radialGradient", { id: `grahaGradient-${key}`, cx: "32%", cy: "27%", r: "76%", fx: "24%", fy: "20%" });
       gradient.append(
-        createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff", "stop-opacity": "0.9" }),
-        createSvgElement("stop", { offset: "24%", "stop-color": style.color }),
-        createSvgElement("stop", { offset: "72%", "stop-color": style.color }),
-        createSvgElement("stop", { offset: "100%", "stop-color": "#05070a", "stop-opacity": "0.82" })
+        createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff", "stop-opacity": "0.92" }),
+        createSvgElement("stop", { offset: "18%", "stop-color": style.color, "stop-opacity": "0.98" }),
+        createSvgElement("stop", { offset: "58%", "stop-color": style.color }),
+        createSvgElement("stop", { offset: "82%", "stop-color": "#182128", "stop-opacity": "0.74" }),
+        createSvgElement("stop", { offset: "100%", "stop-color": "#020306", "stop-opacity": "0.92" })
       );
       defs.appendChild(gradient);
     });
-    defs.append(earthGradient, earthHighlight, earthDepth, earthAtmosphereGlow, grahaOrbDepth, glow);
+    defs.append(earthGradient, earthHighlight, grahaTerminator, earthDepth, earthAtmosphereGlow, grahaOrbDepth, glow);
     svg.appendChild(defs);
 
     svg.append(
@@ -234,7 +257,7 @@
     );
 
     for (let i = 0; i < 108; i += 1) svg.appendChild(lineAt(cx, cy, padaInner, padaOuter, i * (360 / 108), "sky-grid-line"));
-    for (let i = 0; i < 27; i += 1) svg.appendChild(lineAt(cx, cy, beltOuter, nakOuter, i * (360 / 27), "sky-grid-line"));
+    for (let i = 0; i < 27; i += 1) svg.appendChild(lineAt(cx, cy, beltOuter, nakOuter, i * (360 / 27), "sky-grid-line sky-grid-line--nak"));
     for (let i = 0; i < 12; i += 1) svg.appendChild(lineAt(cx, cy, beltInner, beltOuter, i * 30, "sky-grid-line sky-grid-line--sign"));
 
     for (let i = 0; i < SIGN_NAMES.length; i += 1) {
@@ -355,6 +378,13 @@
         r: 5.5,
         class: "sky-graha-shine"
       }));
+      group.appendChild(createSvgElement("circle", {
+        cx: position.x,
+        cy: position.y,
+        r: 20,
+        fill: "url(#grahaTerminator)",
+        class: "sky-graha-terminator"
+      }));
       if (style.ring) {
         group.appendChild(createSvgElement("ellipse", {
           cx: position.x,
@@ -404,6 +434,15 @@
     svg.append(title, description, plane);
   }
 
+  function runInitialSettleMotion() {
+    if (state.view.hasSettled) return;
+    const surface = document.querySelector(".sky-clock-viewport");
+    if (!surface) return;
+    state.view.hasSettled = true;
+    surface.classList.add("is-settling");
+    surface.addEventListener("animationend", () => surface.classList.remove("is-settling"), { once: true });
+  }
+
   function selectGraha(key) {
     state.activeKey = key;
     renderClock();
@@ -445,8 +484,7 @@
       return;
     }
     tooltip.innerHTML = `
-      <strong>${graha.name}</strong>
-      <p>${formatDegree(graha.longitude)}</p>
+      <strong>${getGrahaDisplayName(graha)}</strong>
       <p>${SIGN_NAMES[graha.signIndex]} · ${formatDegree(graha.degreeInSign)}</p>
       <p>Накшатра: ${getNakshatraLabel(graha)}</p>
       <p>Пада: ${graha.padaInNakshatra}</p>
@@ -478,6 +516,7 @@
     state.activeKey = previousKey && state.grahas.some((graha) => graha.key === previousKey) ? previousKey : null;
     updatePublicTime(response);
     renderClock();
+    runInitialSettleMotion();
     if (previousKey) {
       renderTooltip(state.grahas.find((graha) => graha.key === state.activeKey));
     }
@@ -502,10 +541,41 @@
     return Math.min(Math.max(value, min), max);
   }
 
+  function clampTilt(rotateX, rotateY) {
+    const maxTilt = 68;
+    const tilt = Math.hypot(rotateX, rotateY);
+    if (tilt <= maxTilt) return { rotateX, rotateY };
+    const scale = maxTilt / tilt;
+    return {
+      rotateX: rotateX * scale,
+      rotateY: rotateY * scale
+    };
+  }
+
+  function normalizeAngleDelta(degrees) {
+    return ((degrees + 540) % 360) - 180;
+  }
+
+  function getPointerGeometry(surface, event) {
+    const rect = surface.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const x = event.clientX - centerX;
+    const y = event.clientY - centerY;
+    const distance = Math.max(Math.hypot(x, y), 1);
+    return {
+      x,
+      y,
+      distance,
+      radius: Math.max(Math.min(rect.width, rect.height) / 2, 1),
+      angle: Math.atan2(y, x) * 180 / Math.PI
+    };
+  }
+
   function applyViewTransform() {
     const svg = document.querySelector("[data-sky-svg]");
     if (!svg) return;
-    svg.style.transform = `rotateX(${state.view.rotateX}deg) rotateY(${state.view.rotateY}deg) scale(${state.view.zoom})`;
+    svg.style.transform = `rotateX(${state.view.rotateX}deg) rotateY(${state.view.rotateY}deg) rotateZ(${state.view.rotateZ}deg) scale(${state.view.zoom})`;
   }
 
   function refreshActiveTooltipPosition() {
@@ -522,6 +592,7 @@
   function resetView() {
     state.view.rotateX = 0;
     state.view.rotateY = 0;
+    state.view.rotateZ = 0;
     state.view.zoom = 1;
     applyViewTransform();
     refreshActiveTooltipPosition();
@@ -570,6 +641,8 @@
       state.view.startY = event.clientY;
       state.view.startRotateX = state.view.rotateX;
       state.view.startRotateY = state.view.rotateY;
+      state.view.startRotateZ = state.view.rotateZ;
+      state.view.startPointer = getPointerGeometry(surface, event);
       state.view.dragMoved = false;
       state.view.pressedGrahaKey = event.target.closest?.("[data-graha-key]")?.dataset.grahaKey
         || getGrahaKeyAtPoint(event.clientX, event.clientY);
@@ -584,8 +657,18 @@
       if (!state.view.dragMoved && Math.hypot(deltaX, deltaY) <= 5) return;
       if (!state.view.dragMoved) dismissTooltipDuringDrag();
       state.view.dragMoved = true;
-      state.view.rotateX = clamp(state.view.startRotateX + deltaY * 0.2, -65, 65);
-      state.view.rotateY = clamp(state.view.startRotateY + deltaX * 0.2, -45, 45);
+      const pointer = getPointerGeometry(surface, event);
+      const startPointer = state.view.startPointer;
+      const edgeY = Math.abs(startPointer.y) / startPointer.radius;
+      const spinWeight = clamp(startPointer.distance / (startPointer.radius * 0.34), 0, 1);
+      const spinDelta = normalizeAngleDelta(pointer.angle - startPointer.angle) * spinWeight;
+      const verticalEdgeDirection = startPointer.y >= 0 ? -1 : 1;
+      const tiltXDelta = deltaY * verticalEdgeDirection * (0.1 + edgeY * 0.16);
+      const tiltYDelta = deltaX * 0.14;
+      const tilt = clampTilt(state.view.startRotateX + tiltXDelta, state.view.startRotateY + tiltYDelta);
+      state.view.rotateX = tilt.rotateX;
+      state.view.rotateY = tilt.rotateY;
+      state.view.rotateZ = state.view.startRotateZ + spinDelta;
       applyViewTransform();
       event.preventDefault();
     });
@@ -596,6 +679,7 @@
       state.view.ignoreNextClick = !cancelled && Boolean(state.view.dragMoved || shouldSelectGraha);
       state.view.pointerId = null;
       state.view.pressedGrahaKey = null;
+      state.view.startPointer = null;
       surface.classList.remove("is-dragging");
       if (surface.hasPointerCapture(event.pointerId)) surface.releasePointerCapture(event.pointerId);
       if (shouldSelectGraha) selectGraha(shouldSelectGraha);
@@ -614,6 +698,7 @@
       if (state.view.pointerId === null) return;
       state.view.pointerId = null;
       state.view.pressedGrahaKey = null;
+      state.view.startPointer = null;
       surface.classList.remove("is-dragging");
     });
   }
