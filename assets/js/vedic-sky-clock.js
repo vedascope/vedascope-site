@@ -87,6 +87,20 @@
       frameId: null,
       resizeObserver: null
     },
+    grahas3d: {
+      initialized: false,
+      renderer: null,
+      scene: null,
+      camera: null,
+      plane: null,
+      root: null,
+      THREE: null,
+      textures: new Map(),
+      textureFallbacks: new Set(),
+      meshes: new Map(),
+      frameId: null,
+      resizeObserver: null
+    },
     view: {
       rotateX: 0,
       rotateY: 0,
@@ -109,6 +123,40 @@
     "https://threejs.org/examples/textures/planets/earth_clouds_1024.png",
     "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_clouds_1024.png"
   ];
+  const GRAHA_TEXTURE_URLS = {
+    sun: [
+      "https://threejs.org/examples/textures/planets/sun.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/sun.jpg"
+    ],
+    moon: [
+      "https://threejs.org/examples/textures/planets/moon_1024.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/moon_1024.jpg"
+    ],
+    mars: [
+      "https://threejs.org/examples/textures/planets/mars_1k_color.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/mars_1k_color.jpg"
+    ],
+    mercury: [
+      "https://threejs.org/examples/textures/planets/mercury.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/mercury.jpg"
+    ],
+    jupiter: [
+      "https://threejs.org/examples/textures/planets/jupiter2_1024.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/jupiter2_1024.jpg"
+    ],
+    venus: [
+      "https://threejs.org/examples/textures/planets/venus.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/venus.jpg"
+    ],
+    saturn: [
+      "https://threejs.org/examples/textures/planets/saturn.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/saturn.jpg"
+    ],
+    saturnRing: [
+      "https://threejs.org/examples/textures/planets/saturnringcolor.jpg",
+      "https://unpkg.com/three@0.160.0/examples/textures/planets/saturnringcolor.jpg"
+    ]
+  };
 
   function longitudeToAngle(longitude) {
     return Number(longitude) % 360;
@@ -173,6 +221,62 @@
     );
   }
 
+  function syncGrahaViewOrientation() {
+    if (!state.grahas3d.root || !state.grahas3d.camera) return;
+    const toRadians = Math.PI / 180;
+    state.grahas3d.root.rotation.set(
+      state.view.rotateX * toRadians,
+      -state.view.rotateY * toRadians,
+      -(state.view.rotateZ + ZODIAC_VISUAL_OFFSET_DEG) * toRadians
+    );
+    state.grahas3d.camera.zoom = state.view.zoom;
+    state.grahas3d.camera.updateProjectionMatrix();
+  }
+
+  function createGrahaFallbackTexture(THREE, key) {
+    const width = 256;
+    const height = 128;
+    const data = new Uint8Array(width * height * 4);
+    const style = GRAHA_STYLES[key] || GRAHA_STYLES.sun;
+    const palettes = {
+      sun: [[255, 220, 92], [236, 116, 22], [120, 34, 8]],
+      moon: [[207, 211, 208], [140, 145, 146], [78, 82, 84]],
+      mars: [[174, 69, 44], [115, 36, 25], [228, 124, 76]],
+      mercury: [[100, 111, 106], [67, 78, 77], [165, 181, 168]],
+      jupiter: [[222, 163, 93], [122, 59, 27], [235, 204, 151]],
+      venus: [[218, 190, 145], [178, 150, 112], [246, 230, 196]],
+      saturn: [[125, 134, 154], [67, 79, 108], [188, 184, 160]]
+    };
+    const palette = palettes[key] || [[80, 70, 64], [28, 24, 24], [174, 135, 92]];
+    for (let y = 0; y < height; y += 1) {
+      for (let x = 0; x < width; x += 1) {
+        const i = (y * width + x) * 4;
+        const band = key === "jupiter" || key === "saturn" || key === "venus" ? Math.floor(y / 18) % palette.length : Math.floor((x * 0.07 + y * 0.11) % palette.length);
+        const noise = (((x * 17 + y * 31 + key.length * 13) % 37) - 18) * 1.5;
+        const color = palette[band];
+        data[i] = Math.max(0, Math.min(255, color[0] + noise));
+        data[i + 1] = Math.max(0, Math.min(255, color[1] + noise));
+        data[i + 2] = Math.max(0, Math.min(255, color[2] + noise));
+        data[i + 3] = 255;
+      }
+    }
+    const texture = new THREE.DataTexture(data, width, height);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.needsUpdate = true;
+    texture.anisotropy = 4;
+    texture.name = `${style.label || key}-fallback-texture`;
+    return texture;
+  }
+
+  async function loadGrahaTexture(THREE, key) {
+    try {
+      return await loadTextureWithFallback(THREE, GRAHA_TEXTURE_URLS[key]);
+    } catch (error) {
+      state.grahas3d.textureFallbacks.add(key);
+      return createGrahaFallbackTexture(THREE, key);
+    }
+  }
+
   function describeArc(cx, cy, r, startAngle, endAngle) {
     const start = polarToCartesian(cx, cy, r, endAngle);
     const end = polarToCartesian(cx, cy, r, startAngle);
@@ -223,6 +327,15 @@
 
   function getGrahaDisplayName(graha) {
     return GRAHA_NAMES_RU[graha?.key] || graha?.name || "";
+  }
+
+  function isGrahaRetrograde(graha) {
+    if (!graha || graha.key === "sun" || graha.key === "moon") return false;
+    const explicit = graha.is_retrograde ?? graha.retrograde ?? graha.isRetrograde;
+    if (explicit !== undefined && explicit !== null) return Boolean(explicit);
+    const speed = graha.speed_deg_per_day ?? graha.speedDegPerDay ?? graha.speed;
+    if (speed !== undefined && speed !== null && Number.isFinite(Number(speed))) return Number(speed) < 0;
+    return graha.key === "rahu" || graha.key === "ketu";
   }
 
   function getApiBase() {
@@ -450,6 +563,252 @@
     }
   }
 
+  function makeGrahaMaterial(THREE, key) {
+    const style = GRAHA_STYLES[key] || GRAHA_STYLES.sun;
+    if (key === "sun") {
+      return new THREE.MeshStandardMaterial({
+        map: state.grahas3d.textures.get(key),
+        color: 0xffcf55,
+        emissive: new THREE.Color(0xff8a1d),
+        emissiveIntensity: 1.45,
+        roughness: 0.55
+      });
+    }
+    if (key === "rahu" || key === "ketu") {
+      return new THREE.MeshStandardMaterial({
+        color: new THREE.Color(style.color),
+        emissive: new THREE.Color(key === "rahu" ? 0x2b2018 : 0x050507),
+        emissiveIntensity: 0.26,
+        roughness: 0.82,
+        metalness: 0.05
+      });
+    }
+    return new THREE.MeshStandardMaterial({
+      map: state.grahas3d.textures.get(key),
+      color: new THREE.Color(style.color),
+      roughness: key === "venus" || key === "jupiter" ? 0.7 : 0.86,
+      metalness: 0,
+      emissive: new THREE.Color(style.dark || "#061018"),
+      emissiveIntensity: 0.045
+    });
+  }
+
+  function grahaRadius(key) {
+    return {
+      sun: 24,
+      moon: 18,
+      mars: 18,
+      mercury: 16,
+      jupiter: 23,
+      venus: 19,
+      saturn: 21,
+      rahu: 18,
+      ketu: 18
+    }[key] || 18;
+  }
+
+  function createGrahaLabelSprite(THREE, label, retrograde) {
+    const canvas = document.createElement("canvas");
+    canvas.width = retrograde ? 116 : 78;
+    canvas.height = 38;
+    const context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = "700 18px Inter, system-ui, sans-serif";
+    context.textBaseline = "middle";
+    context.lineJoin = "round";
+    context.strokeStyle = "rgba(1, 3, 6, 0.9)";
+    context.lineWidth = 5;
+    context.fillStyle = "rgba(251, 244, 228, 0.9)";
+    context.strokeText(label, 8, 19);
+    context.fillText(label, 8, 19);
+    if (retrograde) {
+      context.font = "800 14px Inter, system-ui, sans-serif";
+      context.fillStyle = "rgba(208, 160, 87, 0.95)";
+      context.strokeText("R", 47, 19);
+      context.fillText("R", 47, 19);
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+    sprite.scale.set(retrograde ? 58 : 39, 19, 1);
+    return sprite;
+  }
+
+  async function initGraha3D() {
+    if (state.grahas3d.initialized) return;
+    const viewport = document.querySelector(".sky-clock-viewport");
+    if (!viewport) return;
+    state.grahas3d.initialized = true;
+
+    const plane = document.createElement("div");
+    plane.className = "sky-graha-webgl-plane";
+    plane.setAttribute("aria-hidden", "true");
+    const canvas = document.createElement("canvas");
+    canvas.className = "sky-graha-webgl-canvas";
+    plane.appendChild(canvas);
+    viewport.appendChild(plane);
+    applyViewTransform();
+
+    try {
+      const THREE = await import(THREE_CDN_URL);
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power" });
+      renderer.setClearColor(0x000000, 0);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-500, 500, 500, -500, -700, 700);
+      camera.position.set(0, 0, 500);
+      scene.add(new THREE.AmbientLight(0x9eb6c2, 1.05));
+      const keyLight = new THREE.DirectionalLight(0xffefd4, 1.65);
+      keyLight.position.set(-220, 180, 360);
+      scene.add(keyLight);
+      const rimLight = new THREE.DirectionalLight(0x88d8ff, 0.55);
+      rimLight.position.set(260, -160, 280);
+      scene.add(rimLight);
+
+      const textureEntries = await Promise.all(["sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "saturnRing"].map(async (key) => [key, await loadGrahaTexture(THREE, key)]));
+      state.grahas3d.textures = new Map(textureEntries);
+
+      const root = new THREE.Group();
+      scene.add(root);
+
+      const resize = () => {
+        const rect = plane.getBoundingClientRect();
+        const size = Math.max(Math.round(Math.min(rect.width, rect.height)), 1);
+        renderer.setSize(size, size, false);
+        camera.updateProjectionMatrix();
+      };
+
+      state.grahas3d.renderer = renderer;
+      state.grahas3d.scene = scene;
+      state.grahas3d.camera = camera;
+      state.grahas3d.root = root;
+      state.grahas3d.THREE = THREE;
+      state.grahas3d.plane = plane;
+      state.grahas3d.resizeObserver = new ResizeObserver(resize);
+      state.grahas3d.resizeObserver.observe(plane);
+      resize();
+      syncGrahaViewOrientation();
+      updateGraha3D();
+      viewport.classList.add("has-graha-webgl");
+
+      let previousTime = performance.now();
+      const animate = (time) => {
+        const delta = Math.min((time - previousTime) / 1000, 0.05);
+        previousTime = time;
+        state.grahas3d.meshes.forEach((entry) => {
+          entry.mesh.rotation.y += delta * entry.spin;
+          if (entry.ring) entry.ring.rotation.z += delta * 0.035;
+        });
+        renderer.render(scene, camera);
+        state.grahas3d.frameId = window.requestAnimationFrame(animate);
+      };
+      state.grahas3d.frameId = window.requestAnimationFrame(animate);
+    } catch (error) {
+      plane.classList.add("is-unavailable");
+      console.warn("Three.js grahas failed to initialize.", error);
+    }
+  }
+
+  function updateGraha3D() {
+    const root = state.grahas3d.root;
+    const scene = state.grahas3d.scene;
+    const THREE = state.grahas3d.THREE;
+    if (!root || !scene || !THREE) return;
+    const activeKeys = new Set(state.grahas.map((graha) => graha.key));
+    state.grahas3d.meshes.forEach((entry, key) => {
+      if (!activeKeys.has(key)) {
+        root.remove(entry.group);
+        state.grahas3d.meshes.delete(key);
+      }
+    });
+
+    state.grahas.forEach((graha) => {
+      let entry = state.grahas3d.meshes.get(graha.key);
+      const retrograde = isGrahaRetrograde(graha);
+      if (!entry) {
+        const radius = grahaRadius(graha.key);
+        const group = new THREE.Group();
+        const mesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 36, 24), makeGrahaMaterial(THREE, graha.key));
+        mesh.rotation.set(0.18, -0.36, 0);
+        group.add(mesh);
+
+        let ring = null;
+        if (graha.key === "saturn") {
+          ring = new THREE.Mesh(
+            new THREE.RingGeometry(radius * 1.2, radius * 1.75, 64),
+            new THREE.MeshBasicMaterial({
+              map: state.grahas3d.textures.get("saturnRing"),
+              color: 0xb9c1d4,
+              transparent: true,
+              opacity: 0.34,
+              side: THREE.DoubleSide
+            })
+          );
+          ring.rotation.set(1.18, 0.12, -0.36);
+          group.add(ring);
+        }
+        if (graha.key === "sun") {
+          const corona = new THREE.Mesh(
+            new THREE.SphereGeometry(radius * 1.28, 36, 20),
+            new THREE.MeshBasicMaterial({ color: 0xffb13b, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending })
+          );
+          group.add(corona);
+        }
+        if (graha.key === "rahu" || graha.key === "ketu") {
+          const nodeHalo = new THREE.Mesh(
+            new THREE.SphereGeometry(radius * 1.42, 32, 18),
+            new THREE.MeshBasicMaterial({
+              color: graha.key === "rahu" ? 0x78624a : 0x45383a,
+              transparent: true,
+              opacity: 0.18,
+              side: THREE.BackSide,
+              blending: THREE.AdditiveBlending,
+              depthWrite: false
+            })
+          );
+          group.add(nodeHalo);
+        }
+        const label = createGrahaLabelSprite(THREE, GRAHA_STYLES[graha.key]?.label || "", retrograde);
+        label.position.set(radius + 24, radius * 0.52, 18);
+        group.add(label);
+
+        root.add(group);
+        entry = {
+          group,
+          mesh,
+          ring,
+          label,
+          retrograde,
+          spin: {
+            sun: 0.18,
+            moon: 0.075,
+            mars: 0.095,
+            mercury: 0.14,
+            jupiter: 0.065,
+            venus: 0.055,
+            saturn: 0.05,
+            rahu: 0.035,
+            ketu: -0.035
+          }[graha.key] || 0.07
+        };
+        state.grahas3d.meshes.set(graha.key, entry);
+      } else if (entry.retrograde !== retrograde) {
+        entry.group.remove(entry.label);
+        entry.label.material.map.dispose();
+        entry.label.material.dispose();
+        const radius = grahaRadius(graha.key);
+        entry.label = createGrahaLabelSprite(THREE, GRAHA_STYLES[graha.key]?.label || "", retrograde);
+        entry.label.position.set(radius + 24, radius * 0.52, 18);
+        entry.group.add(entry.label);
+        entry.retrograde = retrograde;
+      }
+      const position = polarToCartesian(500, 500, 374, longitudeToAngle(graha.longitude));
+      entry.group.position.set(position.x - 500, 500 - position.y, 12);
+    });
+  }
+
   function renderHighlights(svg, grahas) {
     const cx = 500;
     const cy = 500;
@@ -568,12 +927,21 @@
         }));
       }
       const text = createSvgElement("text", {
-        x: 0,
-        y: 1,
+        x: 27,
+        y: -17,
         class: `sky-graha-label${style.light ? " is-light" : ""}`
       });
       text.textContent = style.label;
       group.appendChild(text);
+      if (isGrahaRetrograde(graha)) {
+        const retrograde = createSvgElement("text", {
+          x: 45,
+          y: -17,
+          class: "sky-graha-retro"
+        });
+        retrograde.textContent = "R";
+        group.appendChild(retrograde);
+      }
       group.addEventListener("click", (event) => {
         if (state.view.dragMoved) return;
         event.stopPropagation();
@@ -604,6 +972,7 @@
     renderHighlights(plane, state.grahas);
     renderGrahas(plane, state.grahas);
     svg.append(title, description, plane);
+    updateGraha3D();
   }
 
   function runInitialSettleMotion() {
@@ -660,6 +1029,7 @@
       <p>${SIGN_NAMES[graha.signIndex]} · ${formatDegree(graha.degreeInSign)}</p>
       <p>Накшатра: ${getNakshatraLabel(graha)}</p>
       <p>Пада: ${graha.padaInNakshatra}</p>
+      ${isGrahaRetrograde(graha) ? "<p>Ретроградный</p>" : ""}
     `;
     tooltip.hidden = false;
     positionTooltip(graha);
@@ -747,11 +1117,14 @@
   function applyViewTransform() {
     const svg = document.querySelector("[data-sky-svg]");
     const earthPlane = document.querySelector(".sky-earth-webgl-plane");
-    if (!svg && !earthPlane) return;
+    const grahaPlane = document.querySelector(".sky-graha-webgl-plane");
+    if (!svg && !earthPlane && !grahaPlane) return;
     const transform = `rotateX(${state.view.rotateX}deg) rotateY(${state.view.rotateY}deg) rotateZ(${state.view.rotateZ}deg) scale(${state.view.zoom})`;
     if (svg) svg.style.transform = transform;
     if (earthPlane) earthPlane.style.transform = `scale(${state.view.zoom})`;
+    if (grahaPlane) grahaPlane.style.transform = "";
     syncEarthViewOrientation();
+    syncGrahaViewOrientation();
   }
 
   function refreshActiveTooltipPosition() {
@@ -806,6 +1179,7 @@
 
     applyViewTransform();
     initWebGLEarth();
+    initGraha3D();
     zoomIn.addEventListener("click", () => setZoom(state.view.zoom + 0.1));
     zoomOut.addEventListener("click", () => setZoom(state.view.zoom - 0.1));
     reset.addEventListener("click", resetView);
