@@ -1253,18 +1253,29 @@
       state.view.startRotateZ = state.view.rotateZ;
       state.view.startPointer = getPointerGeometry(surface, event);
       state.view.dragMoved = false;
+      state.view.pointerCaptured = false;
       state.view.pressedGrahaKey = event.target.closest?.("[data-graha-key]")?.dataset.grahaKey
         || getGrahaKeyAtPoint(event.clientX, event.clientY);
-      surface.setPointerCapture(event.pointerId);
       surface.classList.add("is-dragging");
     });
 
     surface.addEventListener("pointermove", (event) => {
       if (event.pointerId !== state.view.pointerId) return;
-      const deltaX = event.clientX - state.view.startX;
-      const deltaY = event.clientY - state.view.startY;
-      if (!state.view.dragMoved && Math.hypot(deltaX, deltaY) <= 5) return;
-      if (!state.view.dragMoved) dismissTooltipDuringDrag();
+      var dx = event.clientX - state.view.startX;
+      var dy = event.clientY - state.view.startY;
+      var dist = Math.hypot(dx, dy);
+      if (dist <= 8) return;
+      if (!state.view.dragMoved) {
+        if (Math.abs(dy) > Math.abs(dx) * 1.4) {
+          finishDrag(event, true);
+          return;
+        }
+        dismissTooltipDuringDrag();
+      }
+      if (!state.view.pointerCaptured) {
+        try { surface.setPointerCapture(event.pointerId); } catch (e) {}
+        state.view.pointerCaptured = true;
+      }
       state.view.dragMoved = true;
       const pointer = getPointerGeometry(surface, event);
       const startPointer = state.view.startPointer;
@@ -1272,8 +1283,8 @@
       const spinWeight = clamp(startPointer.distance / (startPointer.radius * 0.34), 0, 1);
       const spinDelta = normalizeAngleDelta(pointer.angle - startPointer.angle) * spinWeight;
       const verticalEdgeDirection = startPointer.y >= 0 ? -1 : 1;
-      const tiltXDelta = deltaY * verticalEdgeDirection * (0.1 + edgeY * 0.16);
-      const tiltYDelta = deltaX * 0.14;
+      const tiltXDelta = dy * verticalEdgeDirection * (0.1 + edgeY * 0.16);
+      const tiltYDelta = dx * 0.14;
       const tilt = clampTilt(state.view.startRotateX + tiltXDelta, state.view.startRotateY + tiltYDelta);
       state.view.rotateX = tilt.rotateX;
       state.view.rotateY = tilt.rotateY;
@@ -1289,8 +1300,9 @@
       state.view.pointerId = null;
       state.view.pressedGrahaKey = null;
       state.view.startPointer = null;
+      state.view.pointerCaptured = false;
       surface.classList.remove("is-dragging");
-      if (surface.hasPointerCapture(event.pointerId)) surface.releasePointerCapture(event.pointerId);
+      if (surface.hasPointerCapture && surface.hasPointerCapture(event.pointerId)) surface.releasePointerCapture(event.pointerId);
       if (shouldSelectGraha) selectGraha(shouldSelectGraha);
     };
     surface.addEventListener("pointerup", finishDrag);
