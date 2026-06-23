@@ -16,8 +16,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/footer.css?v=20260615-2">
-    <link rel="stylesheet" href="../assets/css/sky-clock.css?v=20260619-ux2">
-    <script src="../assets/js/vedic-sky-clock.js?v=20260619-ux2" defer></script>
+    <link rel="stylesheet" href="../assets/css/sky-clock.css?v=20260623-nabhasa2d">
+    <script src="../assets/js/vedic-sky-clock.js?v=20260623-nabhasa2d" defer></script>
 
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
@@ -52,7 +52,11 @@
         <a href="/#consultations">Консультации</a>
         <a href="/#community">Сообщество</a>
       </nav>
-      <a class="header-action" href="/account/">Регистрация / вход</a>
+      <button class="header-burger" type="button" aria-label="Открыть меню" aria-expanded="false" data-header-burger>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </header>
 
     <main class="sky-page">
@@ -209,5 +213,40 @@
         <div class="global-footer-bottom"><p>© 2026 vedascope</p><nav><a href="../legal/privacy.html">Политика конфиденциальности</a><a href="../legal/personal-data.html">Политика обработки персональных данных</a><a href="../legal/consent.html">Согласие на обработку персональных данных</a></nav></div>
       </div>
     </footer>
+
+    <script>
+      (function () {
+        const header = document.querySelector(".site-header");
+        const burger = document.querySelector("[data-header-burger]");
+        const nav = document.querySelector(".header-nav");
+
+        if (!header || !burger || !nav) return;
+
+        function closeMenu() {
+          header.classList.remove("is-menu-open");
+          burger.setAttribute("aria-expanded", "false");
+        }
+
+        burger.addEventListener("click", function () {
+          const isOpen = header.classList.toggle("is-menu-open");
+          burger.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        nav.querySelectorAll("a").forEach(function (link) {
+          link.addEventListener("click", closeMenu);
+        });
+
+        document.addEventListener("click", function (event) {
+          if (!header.classList.contains("is-menu-open")) return;
+          if (header.contains(event.target)) return;
+          closeMenu();
+        });
+
+        window.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") closeMenu();
+        });
+      })();
+    </script>
+
   </body>
 </html>

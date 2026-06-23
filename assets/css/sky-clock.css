@@ -527,3 +527,786 @@ h1 { max-width: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; font
     font-size: 0.68rem !important;
   }
 }
+
+
+/* Nabhasa graha visual pass: premium 2D SVG planets */
+.sky-graha-shadow {
+  fill: rgba(0, 0, 0, 0.58);
+  filter: blur(5.5px);
+}
+
+.sky-graha-marker {
+  stroke: rgba(255, 248, 228, 0.78);
+  stroke-width: 1.15;
+  filter: url("#grahaOrbDepth");
+}
+
+.sky-graha.is-active .sky-graha-marker {
+  stroke: #fff9e8;
+  stroke-width: 2.15;
+}
+
+.sky-graha-texture {
+  opacity: 0.96;
+}
+
+.sky-graha-surface {
+  opacity: 0.72;
+  mix-blend-mode: screen;
+}
+
+.sky-graha-shine {
+  fill: rgba(255, 255, 255, 0.58);
+  filter: blur(0.75px);
+}
+
+.sky-graha-terminator {
+  opacity: 0.82;
+}
+
+/* Sun: glowing star, less physical-planet texture */
+.sky-graha-texture--sun .sky-graha-surface {
+  opacity: 0.46;
+}
+
+.sky-graha-texture--sun .sky-graha-band {
+  fill: rgba(255, 235, 111, 0.34);
+  filter: blur(0.72px);
+}
+
+.sky-graha-texture--sun .sky-graha-spot {
+  fill: rgba(255, 120, 24, 0.16);
+  mix-blend-mode: multiply;
+}
+
+/* Moon: soft lunar disk and craters */
+.sky-graha-texture--moon .sky-graha-band {
+  fill: rgba(255, 255, 255, 0.18);
+  filter: blur(0.34px);
+}
+
+.sky-graha-texture--moon .sky-graha-spot {
+  fill: rgba(74, 82, 88, 0.28);
+  filter: blur(0.52px);
+  mix-blend-mode: multiply;
+}
+
+.sky-graha-texture--moon .sky-graha-spot--soft {
+  fill: rgba(255, 255, 255, 0.18);
+  mix-blend-mode: screen;
+}
+
+/* Mars: red terrain */
+.sky-graha-texture--mars .sky-graha-band {
+  fill: rgba(255, 173, 112, 0.22);
+}
+
+.sky-graha-texture--mars .sky-graha-spot {
+  fill: rgba(60, 13, 8, 0.34);
+}
+
+/* Mercury: emerald-metallic */
+.sky-graha-texture--mercury .sky-graha-band {
+  fill: rgba(180, 255, 205, 0.2);
+}
+
+.sky-graha-texture--mercury .sky-graha-spot {
+  fill: rgba(5, 47, 45, 0.2);
+}
+
+/* Jupiter: visible soft bands */
+.sky-graha-texture--jupiter .sky-graha-band {
+  fill: rgba(255, 219, 148, 0.36);
+  filter: blur(0.28px);
+}
+
+.sky-graha-texture--jupiter .sky-graha-band--upper {
+  fill: rgba(121, 52, 15, 0.28);
+}
+
+.sky-graha-texture--jupiter .sky-graha-spot {
+  fill: rgba(106, 38, 10, 0.3);
+}
+
+/* Venus: creamy lilac atmosphere */
+.sky-graha-texture--venus .sky-graha-band {
+  fill: rgba(255, 238, 208, 0.31);
+  filter: blur(0.54px);
+}
+
+.sky-graha-texture--venus .sky-graha-spot {
+  fill: rgba(151, 114, 152, 0.14);
+}
+
+/* Saturn: darker body, elegant thin ring */
+.sky-graha-texture--saturn .sky-graha-band {
+  fill: rgba(195, 208, 244, 0.22);
+}
+
+.sky-graha-texture--saturn .sky-graha-spot {
+  fill: rgba(7, 13, 36, 0.24);
+}
+
+.sky-graha-ring {
+  stroke: rgba(221, 228, 250, 0.82);
+  stroke-width: 1.55;
+  filter: drop-shadow(0 0 2px rgba(221, 228, 250, 0.36));
+}
+
+/* Rahu/Ketu: smoky shadow nodes, not physical planets */
+.sky-graha-texture--rahu,
+.sky-graha-texture--ketu {
+  opacity: 0.72;
+}
+
+.sky-graha-texture--rahu .sky-graha-band,
+.sky-graha-texture--ketu .sky-graha-band {
+  fill: rgba(188, 153, 102, 0.13);
+  filter: blur(0.9px);
+}
+
+.sky-graha-texture--rahu .sky-graha-spot,
+.sky-graha-texture--ketu .sky-graha-spot {
+  fill: rgba(0, 0, 0, 0.34);
+  filter: blur(0.9px);
+}
+
+.sky-graha-texture--ketu .sky-graha-band--upper {
+  transform: translateX(5px) rotate(-7deg);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+
+/* Nabhasa central Earth */
+.nabhasa-earth-core-layer {
+  pointer-events: none;
+}
+
+.nabhasa-earth-continents {
+  animation: nabhasa-earth-rotate 120s linear infinite;
+  transform-origin: 0 0;
+  transform-box: fill-box;
+}
+
+.nabhasa-earth-clouds {
+  animation: nabhasa-earth-cloud-drift 96s linear infinite;
+  transform-origin: 0 0;
+  transform-box: fill-box;
+}
+
+@keyframes nabhasa-earth-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes nabhasa-earth-cloud-drift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nabhasa-earth-continents,
+  .nabhasa-earth-clouds {
+    animation: none;
+  }
+}
+
+
+/* Nabhasa realistic Earth and SVG zoom controls */
+.sky-view-controls {
+  display: flex !important;
+  position: static !important;
+  transform: none !important;
+  margin: 12px auto 0 !important;
+  width: fit-content;
+}
+
+.sky-clock-svg {
+  transform-origin: 50% 50%;
+  transition: transform 180ms ease-out;
+}
+
+.nabhasa-earth-core-layer {
+  pointer-events: none;
+}
+
+.nabhasa-earth-texture-drift {
+  animation: nabhasa-earth-texture-drift 90s linear infinite;
+  transform-origin: 0 0;
+}
+
+.nabhasa-earth-clouds {
+  animation: nabhasa-earth-cloud-drift 120s linear infinite;
+  transform-origin: 0 0;
+}
+
+@keyframes nabhasa-earth-texture-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-284px); }
+}
+
+@keyframes nabhasa-earth-cloud-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(80px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nabhasa-earth-texture-drift,
+  .nabhasa-earth-clouds {
+    animation: none;
+  }
+}
+
+
+/* Nabhasa controls under chart */
+.sky-clock-frame {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.sky-clock-viewport {
+  order: 1;
+}
+
+.sky-view-controls {
+  order: 2;
+  display: flex !important;
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  margin: 10px auto 0 !important;
+  width: fit-content;
+  z-index: 5;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-frame {
+    gap: 10px;
+  }
+
+  .sky-view-controls {
+    margin-top: 8px !important;
+  }
+}
+
+
+/* Nabhasa zoom-safe frame and calmer sign labels */
+.sky-clock-frame {
+  overflow: visible !important;
+  padding-block: 42px 22px;
+}
+
+.sky-clock-viewport {
+  overflow: visible !important;
+}
+
+.sky-clock-svg {
+  overflow: visible !important;
+}
+
+.sky-sign-label {
+  font-size: 15px !important;
+  font-weight: 700;
+  fill: rgba(186, 177, 154, 0.58) !important;
+  stroke: rgba(1, 5, 8, 0.68);
+  stroke-width: 1.7px;
+  paint-order: stroke fill;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-frame {
+    min-height: min(128vw, 510px) !important;
+    padding-block: 54px 34px;
+  }
+
+  .sky-clock-viewport {
+    width: min(88vw, 350px) !important;
+  }
+
+  .sky-sign-label {
+    font-size: 16px !important;
+    fill: rgba(186, 177, 154, 0.52) !important;
+    stroke: rgba(1, 5, 8, 0.72);
+    stroke-width: 1.8px;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-frame {
+    min-height: min(132vw, 500px) !important;
+    padding-block: 58px 36px;
+  }
+
+  .sky-sign-label {
+    font-size: 17px !important;
+  }
+}
+
+
+/* Nabhasa zoom + pan behavior */
+.sky-clock-frame {
+  overflow: visible !important;
+  padding-block: 72px 52px !important;
+}
+
+.sky-clock-viewport {
+  overflow: hidden !important;
+  border-radius: 50%;
+  touch-action: pan-y;
+}
+
+.sky-clock-viewport.is-zoomed {
+  cursor: grab;
+  touch-action: none;
+}
+
+.sky-clock-viewport.is-panning {
+  cursor: grabbing;
+}
+
+.sky-clock-svg {
+  transform-origin: 50% 50%;
+  transition: transform 180ms ease-out;
+  will-change: transform;
+}
+
+.sky-clock-viewport.is-panning .sky-clock-svg {
+  transition: none;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-frame {
+    min-height: min(148vw, 570px) !important;
+    padding-block: 78px 58px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-frame {
+    min-height: min(154vw, 560px) !important;
+    padding-block: 82px 62px !important;
+  }
+}
+
+
+/* Nabhasa zoom fix: do not clip chart by circular viewport */
+.sky-clock-frame {
+  overflow: visible !important;
+}
+
+.sky-clock-viewport {
+  overflow: visible !important;
+  border-radius: 0 !important;
+}
+
+.sky-clock-svg {
+  overflow: visible !important;
+}
+
+.sky-clock-viewport.is-zoomed {
+  cursor: grab;
+}
+
+.sky-clock-viewport.is-panning {
+  cursor: grabbing;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-frame {
+    min-height: min(165vw, 620px) !important;
+    padding-block: 96px 78px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-frame {
+    min-height: min(172vw, 620px) !important;
+    padding-block: 104px 84px !important;
+  }
+}
+
+
+/* Nabhasa mobile default chart scale and vertical placement */
+@media (max-width: 768px) {
+  .sky-workspace {
+    padding-top: 88px !important;
+  }
+
+  .sky-clock-frame {
+    min-height: auto !important;
+    padding-block: 24px 52px !important;
+    margin-top: -28px !important;
+  }
+
+  .sky-clock-viewport {
+    width: min(94vw, 390px) !important;
+    max-width: calc(100vw - 18px) !important;
+  }
+
+  .sky-view-controls {
+    margin-top: 14px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-workspace {
+    padding-top: 84px !important;
+  }
+
+  .sky-clock-frame {
+    padding-block: 18px 50px !important;
+    margin-top: -34px !important;
+  }
+
+  .sky-clock-viewport {
+    width: min(96vw, 390px) !important;
+    max-width: calc(100vw - 12px) !important;
+  }
+}
+
+
+/* Nabhasa mobile spacing final adjustment */
+@media (max-width: 768px) {
+  .sky-workspace {
+    padding-top: 126px !important;
+  }
+
+  .sky-clock-frame {
+    margin-top: -14px !important;
+    padding-block: 18px 18px !important;
+    min-height: auto !important;
+  }
+
+  .sky-view-controls {
+    margin-top: 10px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .sky-graha-table-section {
+    margin-top: 14px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-workspace {
+    padding-top: 122px !important;
+  }
+
+  .sky-clock-frame {
+    margin-top: -10px !important;
+    padding-block: 14px 14px !important;
+  }
+
+  .sky-view-controls {
+    margin-top: 8px !important;
+  }
+
+  .sky-graha-table-section {
+    margin-top: 12px !important;
+  }
+}
+
+
+/* Nabhasa header burger menu */
+.header-burger {
+  display: none;
+  width: 56px;
+  height: 48px;
+  border: 1px solid rgba(251, 244, 228, 0.28);
+  border-radius: 999px;
+  background: rgba(4, 8, 14, 0.58);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.header-burger span {
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(251, 244, 228, 0.92);
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.site-header.is-menu-open .header-burger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.site-header.is-menu-open .header-burger span:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header.is-menu-open .header-burger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  .header-burger {
+    display: flex !important;
+  }
+
+  .header-nav {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 18px;
+    left: 18px;
+    display: none !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 12px;
+    border: 1px solid rgba(251, 244, 228, 0.14);
+    border-radius: 22px;
+    background: rgba(4, 8, 14, 0.94);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(18px);
+  }
+
+  .site-header.is-menu-open .header-nav {
+    display: flex !important;
+  }
+
+  .header-nav a {
+    display: block;
+    padding: 13px 14px;
+    border-radius: 16px;
+    color: rgba(251, 244, 228, 0.9);
+    text-decoration: none;
+  }
+
+  .header-nav a:hover,
+  .header-nav a:focus-visible {
+    background: rgba(208, 160, 87, 0.12);
+    color: #fff7e6;
+  }
+}
+
+
+/* Nabhasa title size adjustment */
+@media (max-width: 768px) {
+  .sky-heading h1,
+  #sky-title {
+    font-size: clamp(42px, 13vw, 62px) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  .sky-heading {
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-heading h1,
+  #sky-title {
+    font-size: clamp(38px, 12vw, 52px) !important;
+    line-height: 0.94 !important;
+  }
+}
+
+
+/* Nabhasa title size adjustment */
+@media (max-width: 768px) {
+  .sky-heading h1,
+  #sky-title {
+    font-size: clamp(42px, 13vw, 62px) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  .sky-heading {
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-heading h1,
+  #sky-title {
+    font-size: clamp(38px, 12vw, 52px) !important;
+    line-height: 0.94 !important;
+  }
+}
+
+
+/* Nabhasa mobile title: force smaller */
+@media (max-width: 768px) {
+  body .sky-page .sky-heading h1,
+  body .sky-page .sky-heading [data-sky-title],
+  body .sky-page #sky-title {
+    font-size: clamp(34px, 9vw, 42px) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.04em !important;
+    max-width: 94vw !important;
+  }
+
+  body .sky-page .sky-heading {
+    margin-bottom: 8px !important;
+  }
+
+  body .sky-page .sky-updated {
+    font-size: 18px !important;
+    margin-top: 8px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  body .sky-page .sky-heading h1,
+  body .sky-page .sky-heading [data-sky-title],
+  body .sky-page #sky-title {
+    font-size: clamp(32px, 8.8vw, 38px) !important;
+    line-height: 1.04 !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  body .sky-page .sky-updated {
+    font-size: 17px !important;
+  }
+}
+
+
+/* Nabhasa mobile title: 30% smaller */
+@media (max-width: 768px) {
+  body .sky-page .sky-heading h1,
+  body .sky-page .sky-heading [data-sky-title],
+  body .sky-page #sky-title {
+    font-size: clamp(24px, 6.3vw, 29px) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.025em !important;
+    max-width: 94vw !important;
+  }
+
+  body .sky-page .sky-heading {
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+  }
+
+  body .sky-page .sky-updated {
+    font-size: 16px !important;
+    margin-top: 6px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  body .sky-page .sky-heading h1,
+  body .sky-page .sky-heading [data-sky-title],
+  body .sky-page #sky-title {
+    font-size: clamp(22px, 6vw, 26px) !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  body .sky-page .sky-updated {
+    font-size: 15px !important;
+  }
+}
+
+
+/* Nabhasa Sun rays */
+.sky-sun-rays {
+  pointer-events: none;
+}
+
+.sky-sun-rays line {
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 5px rgba(255, 184, 54, 0.38));
+}
+
+
+
+/* Nabhasa moon phase row in graha table */
+.sky-graha-table .sky-moon-phase-row td {
+  display: table-cell !important;
+  padding-top: 0;
+  padding-bottom: 14px;
+  color: rgba(251, 244, 228, 0.76);
+  font-size: 0.92em;
+  white-space: normal;
+}
+
+.sky-graha-table .sky-moon-phase-row span {
+  color: rgba(208, 160, 87, 0.92);
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .sky-graha-table .sky-moon-phase-row td {
+    font-size: 13px;
+    padding-top: 0;
+    padding-bottom: 12px;
+  }
+}
+
+/* Nabhasa Moon realistic phase */
+.sky-moon-image {
+  opacity: 0.98;
+}
+
+.sky-moon-phase-shadow {
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.3));
+}
+
+.sky-moon-rim {
+  filter: drop-shadow(0 0 3px rgba(226, 233, 244, 0.18));
+}
+
+.sky-moon-shine {
+  filter: blur(1px);
+}
+
+/* Clean realistic moon */
+.sky-moon-disc {
+  filter: drop-shadow(0 0 5px rgba(220, 228, 240, 0.16));
+}
+
+.sky-moon-craters {
+  pointer-events: none;
+}
+
+.sky-moon-phase-shadow {
+  filter: blur(0.35px);
+}
+
+.sky-moon-rim {
+  filter: drop-shadow(0 0 2px rgba(220, 228, 240, 0.12));
+}
+
+.sky-moon-shine {
+  filter: blur(1px);
+}
+
+
+/* Nabhasa textured Moon */
+.sky-moon-image {
+  opacity: 0.98;
+  filter: contrast(1.08) brightness(0.96) saturate(0);
+}
+
+.sky-moon-phase-shadow {
+  filter: blur(0.35px);
+}
+
+.sky-moon-rim {
+  filter: drop-shadow(0 0 3px rgba(226, 233, 244, 0.16));
+}
+
+.sky-moon-shine {
+  filter: blur(1px);
+}

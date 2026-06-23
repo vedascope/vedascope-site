@@ -49,15 +49,15 @@
     delhi: { name: "Дели", lat: 28.6139, lon: 77.209, tz: "Asia/Kolkata" }
   };
   const GRAHA_STYLES = {
-    sun: { color: "#f3c766", label: "Su", light: false, glow: true, mid: "#f7a62f", dark: "#6f2d08", accent: "#fff1a8" },
-    moon: { color: "#f7f1dc", label: "Mo", light: false, glow: true, mid: "#c8d1d6", dark: "#58636a", accent: "#ffffff" },
-    mars: { color: "#d94b3d", label: "Ma", light: true, mid: "#983226", dark: "#3d0d08", accent: "#f2a06d" },
-    mercury: { color: "#57b876", label: "Me", light: false, mid: "#3c8e83", dark: "#133739", accent: "#b5f0bf" },
-    jupiter: { color: "#e49443", label: "Ju", light: false, mid: "#b76a2c", dark: "#47200b", accent: "#ffd08a" },
-    venus: { color: "#c7a0dd", label: "Ve", light: false, mid: "#d6b890", dark: "#64505e", accent: "#fff0ce" },
-    saturn: { color: "#586fa4", label: "Sa", light: true, ring: true, mid: "#2f477e", dark: "#111936", accent: "#b6c1df" },
-    rahu: { color: "#8a6446", label: "Ra", light: true, mid: "#5f5143", dark: "#16120f", accent: "#c6aa78" },
-    ketu: { color: "#24232a", label: "Ke", light: true, mid: "#5a423d", dark: "#030305", accent: "#a0785d" }
+    sun: { color: "#ffd35a", label: "Su", light: false, glow: true, mid: "#ff9f1f", dark: "#7a2606", accent: "#fff3a6" },
+    moon: { color: "#f8f3e6", label: "Mo", light: false, glow: true, mid: "#d7dde0", dark: "#6d747a", accent: "#ffffff" },
+    mars: { color: "#e24d35", label: "Ma", light: true, mid: "#a73522", dark: "#3b0b06", accent: "#ffb079" },
+    mercury: { color: "#58c884", label: "Me", light: false, mid: "#2d8f79", dark: "#0c3031", accent: "#b8ffd0" },
+    jupiter: { color: "#eaa052", label: "Ju", light: false, mid: "#b96b2e", dark: "#4b210a", accent: "#ffd79a" },
+    venus: { color: "#d8b2e8", label: "Ve", light: false, mid: "#e2c8a4", dark: "#69526b", accent: "#fff1d8" },
+    saturn: { color: "#526aa7", label: "Sa", light: true, ring: true, mid: "#263f78", dark: "#0c1432", accent: "#c9d5f2" },
+    rahu: { color: "#6d5140", label: "Ra", light: true, mid: "#3f3834", dark: "#080707", accent: "#b49368" },
+    ketu: { color: "#29272e", label: "Ke", light: true, mid: "#4d3934", dark: "#030304", accent: "#9b725a" }
   };
   const GRAHA_NAMES_RU = {
     sun: "Солнце",
@@ -675,7 +675,7 @@
       state.grahas3d.resizeObserver.observe(plane);
       resize();
       syncGrahaViewOrientation();
-      updateGraha3D();
+      // updateGraha3D(); // disabled: Nabhasa is SVG-only
       updateGrahaRenderOrder();
 
       let previousTime = performance.now();
@@ -845,6 +845,79 @@
     };
   }
 
+
+  function ensureEarthDefs(svg) {
+    const defs = createSvgElement("defs", { "data-nabhasa-earth-defs": "" });
+    defs.innerHTML = `
+      <radialGradient id="nabhasa-earth-ocean" cx="38%" cy="34%" r="68%">
+        <stop offset="0%" stop-color="#5ecdf6"/>
+        <stop offset="42%" stop-color="#0d5f94"/>
+        <stop offset="78%" stop-color="#052643"/>
+        <stop offset="100%" stop-color="#020814"/>
+      </radialGradient>
+
+      <radialGradient id="nabhasa-earth-terminator" cx="72%" cy="30%" r="82%">
+        <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+        <stop offset="58%" stop-color="#000000" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#000000" stop-opacity="0.82"/>
+      </radialGradient>
+
+      <radialGradient id="nabhasa-earth-highlight" cx="33%" cy="27%" r="48%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.34"/>
+        <stop offset="52%" stop-color="#ffffff" stop-opacity="0.06"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+
+      <filter id="nabhasa-earth-glow" x="-35%" y="-35%" width="170%" height="170%">
+        <feGaussianBlur stdDeviation="5" result="glow"/>
+        <feMerge>
+          <feMergeNode in="glow"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+
+      <clipPath id="nabhasa-earth-clip">
+        <circle cx="0" cy="0" r="142"/>
+      </clipPath>
+
+      <g id="nabhasa-earth-core">
+        <circle cx="0" cy="0" r="144" fill="rgba(102, 210, 255, 0.14)" filter="url(#nabhasa-earth-glow)"/>
+        <circle cx="0" cy="0" r="142" fill="url(#nabhasa-earth-ocean)"/>
+
+        <image x="-174" y="-174" width="348" height="348"
+            href="/assets/img/earth/earth-globe.jpg"
+            clip-path="url(#nabhasa-earth-clip)"
+            preserveAspectRatio="xMidYMid slice"/>
+
+        <g class="nabhasa-earth-clouds" clip-path="url(#nabhasa-earth-clip)">
+          <ellipse cx="-54" cy="-44" rx="42" ry="10" fill="#ffffff" opacity="0.13"/>
+          <ellipse cx="42" cy="-62" rx="36" ry="9" fill="#ffffff" opacity="0.11"/>
+          <ellipse cx="-20" cy="42" rx="58" ry="11" fill="#ffffff" opacity="0.1"/>
+          <ellipse cx="56" cy="46" rx="36" ry="9" fill="#ffffff" opacity="0.12"/>
+        </g>
+
+        <circle cx="0" cy="0" r="142" fill="url(#nabhasa-earth-highlight)"/>
+        <circle cx="0" cy="0" r="142" fill="url(#nabhasa-earth-terminator)" opacity="0.34"/>
+        <circle cx="0" cy="0" r="142" fill="none" stroke="rgba(198, 235, 255, 0.38)" stroke-width="1.4"/>
+      </g>
+    `;
+    svg.appendChild(defs);
+  }
+
+  function renderCenterEarth(plane) {
+    const earthGroup = createSvgElement("g", {
+      class: "nabhasa-earth-core-layer",
+      transform: "translate(500 500)"
+    });
+    earthGroup.style.pointerEvents = "none";
+
+    earthGroup.appendChild(createSvgElement("use", {
+      href: "#nabhasa-earth-core"
+    }));
+
+    plane.appendChild(earthGroup);
+  }
+
   function renderHighlights(svg, grahas) {
     const cx = 500;
     const cy = 500;
@@ -884,9 +957,120 @@
     });
   }
 
+
+  function createSunRays(radius = 20, color = "#ffc75a") {
+    const raysGroup = createSvgElement("g", {
+      class: "sky-sun-rays",
+      "aria-hidden": "true",
+      fill: "none",
+      stroke: color,
+      "stroke-width": 0.82,
+      "stroke-linecap": "round",
+      opacity: 0.36
+    });
+
+    const rayCount = 27;
+    const inner = radius + 3;
+
+    for (let index = 0; index < rayCount; index += 1) {
+      const angle = ((index * 360) / rayCount - 90) * Math.PI / 180;
+      const outer = radius + (index % 3 === 0 ? 13 : index % 3 === 1 ? 9 : 6);
+
+      raysGroup.appendChild(createSvgElement("line", {
+        x1: inner * Math.cos(angle),
+        y1: inner * Math.sin(angle),
+        x2: outer * Math.cos(angle),
+        y2: outer * Math.sin(angle)
+      }));
+    }
+
+    return raysGroup;
+  }
+
+
+  function getMoonPhaseVisualInfo(sunLongitude, moonLongitude) {
+    var sun = Number(sunLongitude);
+    var moon = Number(moonLongitude);
+
+    if (!Number.isFinite(sun)) sun = 0;
+    if (!Number.isFinite(moon)) moon = 0;
+
+    var elongation = ((moon - sun + 360) % 360 + 360) % 360;
+    var illumination = (1 - Math.cos(elongation * Math.PI / 180)) / 2;
+    var waxing = elongation < 180;
+    var radius = 20;
+    var shadowShift = (1 - Math.cos(elongation * Math.PI / 180)) * radius;
+
+    return {
+      elongation: elongation,
+      illumination: illumination,
+      waxing: waxing,
+      shadowShift: shadowShift
+    };
+  }
+
+  function appendMoonPhaseVisual(group, graha, sunLongitude, clipId) {
+    var phase = getMoonPhaseVisualInfo(sunLongitude, graha.longitude);
+    var radius = 20;
+
+    group.appendChild(createSvgElement("circle", {
+      cx: 0,
+      cy: 0,
+      r: radius,
+      fill: "#070a10",
+      class: "sky-moon-base"
+    }));
+
+    group.appendChild(createSvgElement("image", {
+      x: -radius,
+      y: -radius,
+      width: radius * 2,
+      height: radius * 2,
+      href: "/assets/img/moon/moon-texture.svg",
+      preserveAspectRatio: "xMidYMid slice",
+      "clip-path": `url(#${clipId})`,
+      class: "sky-moon-image"
+    }));
+
+    var shadowOffset = (1 - phase.illumination) * radius * 1.75;
+
+    group.appendChild(createSvgElement("circle", {
+      cx: phase.waxing ? -shadowOffset : shadowOffset,
+      cy: 0,
+      r: radius,
+      fill: "#03050a",
+      opacity: 0.84,
+      "clip-path": `url(#${clipId})`,
+      class: "sky-moon-phase-shadow"
+    }));
+
+    group.appendChild(createSvgElement("ellipse", {
+      cx: -5,
+      cy: -7,
+      rx: 6,
+      ry: 4,
+      fill: "#ffffff",
+      opacity: 0.12,
+      class: "sky-moon-shine"
+    }));
+
+    group.appendChild(createSvgElement("circle", {
+      cx: 0,
+      cy: 0,
+      r: radius,
+      fill: "none",
+      stroke: "#e7edf5",
+      "stroke-opacity": 0.52,
+      "stroke-width": 0.9,
+      class: "sky-moon-rim"
+    }));
+  }
+
   function renderGrahas(svg, grahas) {
     const cx = 500;
     const cy = 500;
+    const sunGraha = grahas.find(function (item) { return item.key === "sun"; });
+    const sunLongitude = sunGraha ? sunGraha.longitude : 0;
     const sorted = [...grahas].sort(function (a, b) { return (GRAHA_VISUAL_STACK_ORDER[a.key] || 50) - (GRAHA_VISUAL_STACK_ORDER[b.key] || 50); });
     sorted.forEach((graha) => {
       const style = GRAHA_STYLES[graha.key] || GRAHA_STYLES.sun;
@@ -918,41 +1102,50 @@
         ry: 7,
         class: "sky-graha-shadow"
       }));
-      group.appendChild(createSvgElement("circle", {
-        cx: 0,
-        cy: 0,
-        r: 20,
-        fill: `url(#grahaGradient-${graha.key})`,
-        class: "sky-graha-marker",
-        filter: style.glow ? "url(#grahaGlow)" : ""
-      }));
-      const texture = createSvgElement("g", {
-        class: `sky-graha-texture sky-graha-texture--${graha.key}`,
-        "clip-path": `url(#${clipId})`
-      });
-      texture.append(
-        createSvgElement("rect", { x: -58, y: -22, width: 116, height: 44, fill: `url(#grahaSurface-${graha.key})`, class: "sky-graha-surface" }),
-        createSvgElement("ellipse", { cx: -32, cy: -5, rx: 19, ry: 4.4, class: "sky-graha-band sky-graha-band--upper" }),
-        createSvgElement("ellipse", { cx: 0, cy: 4, rx: 25, ry: 5.2, class: "sky-graha-band" }),
-        createSvgElement("ellipse", { cx: 33, cy: -3, rx: 19, ry: 4.2, class: "sky-graha-band sky-graha-band--upper" }),
-        createSvgElement("ellipse", { cx: -25, cy: 10, rx: 12, ry: 3.2, class: "sky-graha-spot" }),
-        createSvgElement("ellipse", { cx: 17, cy: -9, rx: 9, ry: 2.8, class: "sky-graha-spot sky-graha-spot--soft" }),
-        createSvgElement("ellipse", { cx: 42, cy: 9, rx: 13, ry: 3.4, class: "sky-graha-spot" })
-      );
-      group.appendChild(texture);
-      group.appendChild(createSvgElement("circle", {
-        cx: -6,
-        cy: -7,
-        r: 5.5,
-        class: "sky-graha-shine"
-      }));
-      group.appendChild(createSvgElement("circle", {
-        cx: 0,
-        cy: 0,
-        r: 20,
-        fill: "url(#grahaTerminator)",
-        class: "sky-graha-terminator"
-      }));
+
+      if (graha.key === "sun") {
+        group.appendChild(createSunRays(20, style.accent || style.color));
+      }
+
+      if (graha.key === "moon") {
+        appendMoonPhaseVisual(group, graha, sunLongitude, clipId);
+      } else {
+        group.appendChild(createSvgElement("circle", {
+          cx: 0,
+          cy: 0,
+          r: 20,
+          fill: `url(#grahaGradient-${graha.key})`,
+          class: "sky-graha-marker",
+          filter: style.glow ? "url(#grahaGlow)" : ""
+        }));
+        const texture = createSvgElement("g", {
+          class: `sky-graha-texture sky-graha-texture--${graha.key}`,
+          "clip-path": `url(#${clipId})`
+        });
+        texture.append(
+          createSvgElement("rect", { x: -58, y: -22, width: 116, height: 44, fill: `url(#grahaSurface-${graha.key})`, class: "sky-graha-surface" }),
+          createSvgElement("ellipse", { cx: -32, cy: -5, rx: 19, ry: 4.4, class: "sky-graha-band sky-graha-band--upper" }),
+          createSvgElement("ellipse", { cx: 0, cy: 4, rx: 25, ry: 5.2, class: "sky-graha-band" }),
+          createSvgElement("ellipse", { cx: 33, cy: -3, rx: 19, ry: 4.2, class: "sky-graha-band sky-graha-band--upper" }),
+          createSvgElement("ellipse", { cx: -25, cy: 10, rx: 12, ry: 3.2, class: "sky-graha-spot" }),
+          createSvgElement("ellipse", { cx: 17, cy: -9, rx: 9, ry: 2.8, class: "sky-graha-spot sky-graha-spot--soft" }),
+          createSvgElement("ellipse", { cx: 42, cy: 9, rx: 13, ry: 3.4, class: "sky-graha-spot" })
+        );
+        group.appendChild(texture);
+        group.appendChild(createSvgElement("circle", {
+          cx: -6,
+          cy: -7,
+          r: 5.5,
+          class: "sky-graha-shine"
+        }));
+        group.appendChild(createSvgElement("circle", {
+          cx: 0,
+          cy: 0,
+          r: 20,
+          fill: "url(#grahaTerminator)",
+          class: "sky-graha-terminator"
+        }));
+      }
       if (style.ring) {
         group.appendChild(createSvgElement("ellipse", {
           cx: 0,
@@ -997,6 +1190,7 @@
   function renderClock() {
     const svg = document.querySelector("[data-sky-svg]");
     svg.replaceChildren();
+    ensureEarthDefs(svg);
     const title = createSvgElement("title", { id: "sky-svg-title" });
     const description = createSvgElement("desc", { id: "sky-svg-description" });
     const plane = createSvgElement("g", {
@@ -1006,10 +1200,11 @@
     title.textContent = "Nabhasa — Vedic Sky Clock";
     description.textContent = "Положение грах по сидерической долготе в знаках, накшатрах и падах.";
     renderStaticGeometry(plane);
+    renderCenterEarth(plane);
     renderHighlights(plane, state.grahas);
     renderGrahas(plane, state.grahas);
     svg.append(title, description, plane);
-    updateGraha3D();
+    // updateGraha3D(); // disabled: Nabhasa is SVG-only
     updateGrahaRenderOrder();
   }
 
@@ -1055,15 +1250,133 @@
     tooltip.style.top = `${clampedY}px`;
   }
 
+
+  function getMoonPhaseNameByElongation(elongation) {
+    if (elongation < 10 || elongation > 350) return "Новолуние";
+    if (elongation < 80) return "Растущий серп";
+    if (elongation < 100) return "Первая четверть";
+    if (elongation < 170) return "Растущая Луна";
+    if (elongation < 190) return "Полнолуние";
+    if (elongation < 260) return "Убывающая Луна";
+    if (elongation < 280) return "Последняя четверть";
+    return "Убывающий серп";
+  }
+
+  function getMoonPhaseInfo(sunLongitude, moonLongitude) {
+    const sun = Number(sunLongitude);
+    const moon = Number(moonLongitude);
+
+    if (!Number.isFinite(sun) || !Number.isFinite(moon)) {
+      return null;
+    }
+
+    const elongation = ((moon - sun + 360) % 360 + 360) % 360;
+    const radians = elongation * Math.PI / 180;
+    const illumination = (1 - Math.cos(radians)) / 2;
+
+    return {
+      elongation,
+      illumination,
+      waxing: elongation < 180,
+      phaseName: getMoonPhaseNameByElongation(elongation),
+      percent: Math.round(illumination * 100)
+    };
+  }
+
+  function formatMoonPhaseCell(graha, sunLongitude) {
+    if (!graha || graha.key !== "moon") return "—";
+
+    const phase = getMoonPhaseInfo(sunLongitude, graha.longitude);
+    if (!phase) return "—";
+
+    return phase.phaseName + ", " + phase.percent + "%";
+  }
+
+
+  function getNabhasaMoonPhaseName(elongation) {
+    if (elongation < 10 || elongation > 350) return "Новолуние";
+    if (elongation < 80) return "Растущий серп";
+    if (elongation < 100) return "Первая четверть";
+    if (elongation < 170) return "Растущая Луна";
+    if (elongation < 190) return "Полнолуние";
+    if (elongation < 260) return "Убывающая Луна";
+    if (elongation < 280) return "Последняя четверть";
+    return "Убывающий серп";
+  }
+
+  function getNabhasaMoonPhaseInfo(sunLongitude, moonLongitude) {
+    const sun = Number(sunLongitude);
+    const moon = Number(moonLongitude);
+
+    if (!Number.isFinite(sun) || !Number.isFinite(moon)) {
+      return null;
+    }
+
+    const elongation = ((moon - sun + 360) % 360 + 360) % 360;
+    const radians = elongation * Math.PI / 180;
+    const illumination = (1 - Math.cos(radians)) / 2;
+
+    return {
+      elongation,
+      illumination,
+      waxing: elongation < 180,
+      phaseName: getNabhasaMoonPhaseName(elongation),
+      percent: Math.round(illumination * 100)
+    };
+  }
+
+  function formatNabhasaMoonPhase(graha, sunLongitude) {
+    if (!graha || graha.key !== "moon") return "";
+
+    const phase = getNabhasaMoonPhaseInfo(sunLongitude, graha.longitude);
+    if (!phase) return "";
+
+    return phase.phaseName + ", " + phase.percent + "%";
+  }
+
+
+  function getNabhasaMoonLunarDay(sunLongitude, moonLongitude) {
+    const sun = Number(sunLongitude);
+    const moon = Number(moonLongitude);
+
+    if (!Number.isFinite(sun) || !Number.isFinite(moon)) {
+      return null;
+    }
+
+    const elongation = ((moon - sun + 360) % 360 + 360) % 360;
+    return Math.floor(elongation / 12) + 1;
+  }
+
+  function formatNabhasaGrahaNameCell(graha, sunLongitude) {
+    const name = getGrahaDisplayName(graha);
+
+    if (!graha || graha.key !== "moon") {
+      return name;
+    }
+
+    const lunarDay = getNabhasaMoonLunarDay(sunLongitude, graha.longitude);
+
+    if (!lunarDay) {
+      return name;
+    }
+
+    return name + " (" + lunarDay + " л.с.)";
+  }
+
   function renderGrahaTable() {
     var table = document.querySelector("[data-sky-graha-table]");
     if (!table) return;
+
+    var sunGraha = state.grahas.find(function (item) { return item.key === "sun"; });
+    var sunLongitude = sunGraha ? sunGraha.longitude : null;
+
     var rows = state.grahas.map(function (graha) {
       var signName = SIGN_NAMES[graha.signIndex] || "—";
       var nakName = NAKSHATRA_NAMES[graha.nakshatraIndex] || ("Накшатра " + graha.nakshatraNumber);
       var pada = graha.padaInNakshatra;
+
       return "<tr>" +
-        "<td>" + getGrahaDisplayName(graha) + "</td>" +
+        "<td>" + formatNabhasaGrahaNameCell(graha, sunLongitude) + "</td>" +
         "<td>" + signName + "</td>" +
         "<td>" + Number(graha.degreeInSign).toFixed(2) + "°" + "</td>" +
         "<td>" + nakName + " (" + graha.nakshatraNumber + ")" + "</td>" +
@@ -1071,6 +1384,7 @@
         "<td>" + Number(graha.longitude).toFixed(2) + "°" + "</td>" +
         "</tr>";
     }).join("");
+
     table.querySelector("tbody").innerHTML = rows || "<tr><td colspan='6'>Загрузка…</td></tr>";
   }
 
@@ -1228,26 +1542,133 @@
   }
 
   function initViewControls() {
-    // SVG-only mode: 3D/WebGL view controls are disabled.
-    // Keep the SVG chart, API loading, table, and tooltip logic intact.
-    const surface = document.querySelector(".sky-clock-viewport");
+    const viewport = document.querySelector(".sky-clock-viewport");
+    const svg = document.querySelector("[data-sky-svg]");
     const controls = document.querySelector(".sky-view-controls");
+    const zoomIn = document.querySelector("[data-sky-zoom-in]");
+    const zoomOut = document.querySelector("[data-sky-zoom-out]");
+    const reset = document.querySelector("[data-sky-view-reset]");
 
-    if (surface) {
-      surface.classList.remove("is-dragging", "has-graha-webgl");
-      surface.style.transform = "";
+    if (controls) controls.hidden = false;
+    if (!viewport || !svg || !zoomIn || !zoomOut || !reset) return;
+
+    let currentScale = state.view.zoom || 1;
+    let panX = state.view.panX || 0;
+    let panY = state.view.panY || 0;
+    let isPanning = false;
+    let startX = 0;
+    let startY = 0;
+    let startPanX = 0;
+    let startPanY = 0;
+
+    function getZoomLimits() {
+      return window.matchMedia("(max-width: 768px)").matches
+        ? { min: 0.9, max: 1.75 }
+        : { min: 0.8, max: 2.2 };
     }
 
-    if (controls) {
-      controls.hidden = true;
+    function getMaxPan() {
+      const rect = viewport.getBoundingClientRect();
+      return {
+        x: Math.max(0, rect.width * (currentScale - 1) * 0.58),
+        y: Math.max(0, rect.height * (currentScale - 1) * 0.58)
+      };
     }
 
-    state.view.rotateX = 0;
-    state.view.rotateY = 0;
-    state.view.rotateZ = 0;
-    state.view.zoom = 1;
-    state.view.pointerId = null;
-    state.view.pointerCaptured = false;
+    function clampPan() {
+      const maxPan = getMaxPan();
+      panX = clamp(panX, -maxPan.x, maxPan.x);
+      panY = clamp(panY, -maxPan.y, maxPan.y);
+    }
+
+    function applySvgView() {
+      const limits = getZoomLimits();
+      currentScale = clamp(currentScale, limits.min, limits.max);
+
+      if (currentScale <= 1.01) {
+        panX = 0;
+        panY = 0;
+      } else {
+        clampPan();
+      }
+
+      state.view.zoom = currentScale;
+      state.view.panX = panX;
+      state.view.panY = panY;
+
+      svg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+      svg.style.transformOrigin = "50% 50%";
+
+      viewport.classList.toggle("is-zoomed", currentScale > 1.01);
+    }
+
+    zoomIn.addEventListener("click", () => {
+      currentScale += 0.1;
+      applySvgView();
+    });
+
+    zoomOut.addEventListener("click", () => {
+      currentScale -= 0.1;
+      applySvgView();
+    });
+
+    reset.addEventListener("click", () => {
+      currentScale = 1;
+      panX = 0;
+      panY = 0;
+      applySvgView();
+    });
+
+    viewport.addEventListener("pointerdown", (event) => {
+      if (!event.isPrimary || currentScale <= 1.01) return;
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+
+      isPanning = true;
+      state.view.dragMoved = false;
+      startX = event.clientX;
+      startY = event.clientY;
+      startPanX = panX;
+      startPanY = panY;
+      viewport.classList.add("is-panning");
+
+      try { viewport.setPointerCapture(event.pointerId); } catch (e) {}
+    });
+
+    viewport.addEventListener("pointermove", (event) => {
+      if (!isPanning || currentScale <= 1.01) return;
+
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+
+      if (Math.hypot(dx, dy) > 4) {
+        state.view.dragMoved = true;
+      }
+
+      panX = startPanX + dx;
+      panY = startPanY + dy;
+      applySvgView();
+
+      event.preventDefault();
+    });
+
+    function finishPan(event) {
+      if (!isPanning) return;
+      isPanning = false;
+      viewport.classList.remove("is-panning");
+
+      try { viewport.releasePointerCapture(event.pointerId); } catch (e) {}
+
+      window.setTimeout(() => {
+        state.view.dragMoved = false;
+      }, 0);
+    }
+
+    viewport.addEventListener("pointerup", finishPan);
+    viewport.addEventListener("pointercancel", finishPan);
+
+    window.addEventListener("resize", applySvgView);
+
+    applySvgView();
   }
 
   function init() {

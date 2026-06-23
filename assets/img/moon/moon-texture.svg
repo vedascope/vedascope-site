@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="moonBase" cx="38%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#f4f1e8"/>
+      <stop offset="45%" stop-color="#c9cbd0"/>
+      <stop offset="78%" stop-color="#8e949d"/>
+      <stop offset="100%" stop-color="#5f6873"/>
+    </radialGradient>
+
+    <radialGradient id="craterDark" cx="38%" cy="34%" r="72%">
+      <stop offset="0%" stop-color="#6c747d" stop-opacity="0.48"/>
+      <stop offset="72%" stop-color="#303842" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#111820" stop-opacity="0.05"/>
+    </radialGradient>
+
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="4" seed="23"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.13"/>
+      </feComponentTransfer>
+      <feBlend mode="multiply" in2="SourceGraphic"/>
+    </filter>
+
+    <clipPath id="moonClip">
+      <circle cx="128" cy="128" r="126"/>
+    </clipPath>
+  </defs>
+
+  <circle cx="128" cy="128" r="126" fill="url(#moonBase)"/>
+
+  <g clip-path="url(#moonClip)" filter="url(#grain)">
+    <rect width="256" height="256" fill="url(#moonBase)"/>
+
+    <circle cx="83" cy="74" r="22" fill="url(#craterDark)"/>
+    <circle cx="83" cy="74" r="15" fill="#d9d9d5" opacity="0.14"/>
+
+    <circle cx="151" cy="59" r="13" fill="#626b75" opacity="0.32"/>
+    <circle cx="154" cy="57" r="8" fill="#e4e2da" opacity="0.12"/>
+
+    <circle cx="177" cy="112" r="24" fill="#56616d" opacity="0.28"/>
+    <circle cx="174" cy="107" r="13" fill="#e7e4dc" opacity="0.1"/>
+
+    <circle cx="108" cy="126" r="16" fill="#555f6a" opacity="0.24"/>
+    <circle cx="105" cy="122" r="8" fill="#f0eee6" opacity="0.1"/>
+
+    <circle cx="71" cy="154" r="29" fill="#48525e" opacity="0.23"/>
+    <circle cx="65" cy="146" r="13" fill="#e7e4dc" opacity="0.08"/>
+
+    <circle cx="155" cy="173" r="18" fill="#525c67" opacity="0.25"/>
+    <circle cx="151" cy="168" r="9" fill="#e8e5dd" opacity="0.1"/>
+
+    <circle cx="204" cy="184" r="12" fill="#3f4853" opacity="0.22"/>
+    <circle cx="201" cy="180" r="6" fill="#ebe8df" opacity="0.08"/>
+
+    <ellipse cx="128" cy="212" rx="54" ry="19" fill="#38424d" opacity="0.13"/>
+    <ellipse cx="52" cy="105" rx="26" ry="13" fill="#eef0ef" opacity="0.09" transform="rotate(-24 52 105)"/>
+    <ellipse cx="195" cy="72" rx="31" ry="12" fill="#404a56" opacity="0.13" transform="rotate(18 195 72)"/>
+  </g>
+
+  <circle cx="128" cy="128" r="126" fill="none" stroke="#eef3f9" stroke-opacity="0.28" stroke-width="2"/>
+</svg>
