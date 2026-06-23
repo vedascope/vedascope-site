@@ -213,12 +213,12 @@ GET /chart/svg?date=2026-06-18&time=09:00&lat=55.7558&lon=37.6173&tz=Europe/Mosc
 
 Текущее состояние: страница `/panchanga` продолжает использовать `/api/full/html` для SVG, чтобы не ломать production.
 
-## `/api/sky-clock/state`
+## `/api/nabhasa/state`
 
 Целевой endpoint:
 
 ```http
-GET /api/sky-clock/state?date=2026-06-18&time=09:00&lat=55.7558&lon=37.6173&tz=Europe/Moscow
+GET /api/nabhasa/state?date=2026-06-18&time=09:00&lat=55.7558&lon=37.6173&tz=Europe/Moscow
 ```
 
 Response должен быть JSON-state без HTML:
@@ -304,9 +304,9 @@ Mobile widget / daily post generator:
 
 Sky Clock:
 
-- `/api/sky-clock/state`;
-- later `/api/sky-clock/snapshot.svg`;
-- later `/api/sky-clock/snapshot.png`.
+- `/api/nabhasa/state`;
+- later `/api/nabhasa/snapshot.svg`;
+- later `/api/nabhasa/snapshot.png`.
 
 ## Backend implementation checklist
 
@@ -319,4 +319,4 @@ Sky Clock:
 5. `/api/grahas` JSON.
 6. `/api/chart` JSON.
 7. Optional `/chart/svg`.
-8. Optional `/api/sky-clock/state`.
+8. Optional `/api/nabhasa/state`.
