@@ -164,9 +164,9 @@ Backend возвращает `calculation_time_local`, то есть получ�
 - `/api/locations/resolve` для стабильного location object;
 - `/api/chart` как чистый JSON карты;
 - `/api/grahas` как отдельный JSON endpoint положений грах;
-- `/api/nabhasa/state` с longitudes всех грах, date/time, timezone, location, ayanamsa, settings;
-- `/api/nabhasa/snapshot.svg`;
-- `/api/nabhasa/snapshot.png`;
+- `/api/sky-clock/state` с longitudes всех грах, date/time, timezone, location, ayanamsa, settings;
+- `/api/sky-clock/snapshot.svg`;
+- `/api/sky-clock/snapshot.png`;
 - разделения calculation JSON и visual render/export;
 - единых calculation settings в ответе: ayanamsa, zodiac, house system/chart style, timezone source.
 
@@ -347,9 +347,9 @@ Backend должен возвращать в response normalized calculation con
 - `/api/panchanga`;
 - `/api/chart`;
 - `/api/grahas`;
-- `/api/nabhasa/state`;
-- `/api/nabhasa/snapshot.svg`;
-- `/api/nabhasa/snapshot.png`.
+- `/api/sky-clock/state`;
+- `/api/sky-clock/snapshot.svg`;
+- `/api/sky-clock/snapshot.png`.
 
 ## 10. Files to change later
 
