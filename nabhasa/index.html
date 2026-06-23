@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/footer.css?v=20260615-2">
-    <link rel="stylesheet" href="../assets/css/sky-clock.css?v=20260623-nabhasa2d">
+    <link rel="stylesheet" href="../assets/css/sky-clock.css?v=20260623-telegram-nudge1">
     <script src="../assets/js/vedic-sky-clock.js?v=20260623-nabhasa2d" defer></script>
 
   <!-- Yandex.Metrika counter -->
@@ -258,5 +258,163 @@
       })();
     </script>
 
-  </body>
+  
+  <div class="telegram-popup" data-telegram-popup hidden>
+    <div class="telegram-popup__backdrop" data-telegram-popup-close></div>
+
+    <aside class="telegram-popup__card" role="dialog" aria-modal="true" aria-labelledby="telegram-popup-title">
+      <button class="telegram-popup__close" type="button" aria-label="Закрыть" data-telegram-popup-close>×</button>
+
+      <div class="telegram-popup__visual" aria-hidden="true">
+        <div class="telegram-popup__orbit">
+          <span class="telegram-popup__planet telegram-popup__planet--sun"></span>
+          <span class="telegram-popup__planet telegram-popup__planet--moon"></span>
+          <span class="telegram-popup__planet telegram-popup__planet--jupiter"></span>
+        </div>
+        <div class="telegram-popup__logo">vedascope</div>
+      </div>
+
+      <div class="telegram-popup__content">
+        <p class="telegram-popup__eyebrow">Telegram-канал</p>
+        <h2 id="telegram-popup-title">Подпишись на vedascope</h2>
+        <p>Там много интересного: Джйотиш, наблюдения за временем, накшатры, грахи, события и новые инструменты проекта.</p>
+
+        <div class="telegram-popup__actions">
+          <a class="telegram-popup__button" href="https://t.me/vedascope" target="_blank" rel="noopener noreferrer">
+            Открыть Telegram
+          </a>
+          <button class="telegram-popup__later" type="button" data-telegram-popup-close>
+            Позже
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+
+  <script>
+    (function () {
+      var popup = document.querySelector("[data-telegram-popup]");
+      if (!popup) return;
+
+      var storageKey = "vedascopeTelegramPopupClosedAt";
+      var delayMs = 30000;
+      var hideDays = 7;
+      var closedAt = Number(localStorage.getItem(storageKey) || 0);
+      var hideMs = hideDays * 24 * 60 * 60 * 1000;
+
+      if (closedAt && Date.now() - closedAt < hideMs) {
+        return;
+      }
+
+      function openPopup() {
+        popup.hidden = false;
+        requestAnimationFrame(function () {
+          popup.classList.add("is-visible");
+        });
+      }
+
+      function closePopup() {
+        popup.classList.remove("is-visible");
+        localStorage.setItem(storageKey, String(Date.now()));
+        window.setTimeout(function () {
+          popup.hidden = true;
+        }, 260);
+      }
+
+      window.setTimeout(openPopup, delayMs);
+
+      popup.querySelectorAll("[data-telegram-popup-close]").forEach(function (button) {
+        button.addEventListener("click", closePopup);
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !popup.hidden) {
+          closePopup();
+        }
+      });
+    })();
+  </script>
+
+
+  <!-- Vedascope Telegram nudge start -->
+  <aside class="telegram-nudge" data-telegram-nudge hidden aria-label="Подписка на Telegram vedascope">
+    <button class="telegram-nudge__close" type="button" aria-label="Закрыть" data-telegram-nudge-close>×</button>
+
+    <div class="telegram-nudge__media" aria-hidden="true">
+      <div class="telegram-nudge__sky">
+        <span class="telegram-nudge__planet telegram-nudge__planet--sun"></span>
+        <span class="telegram-nudge__planet telegram-nudge__planet--moon"></span>
+      </div>
+      <div class="telegram-nudge__brand">vedascope</div>
+    </div>
+
+    <div class="telegram-nudge__body">
+      <p class="telegram-nudge__eyebrow">Telegram</p>
+      <h2>Подпишись на vedascope</h2>
+      <p>Общаемся, учимся, делимся.</p>
+
+      <div class="telegram-nudge__actions">
+        <a class="telegram-nudge__button" href="https://t.me/vedascope" target="_blank" rel="noopener noreferrer" data-telegram-nudge-link>
+          Подписаться
+        </a>
+        <button class="telegram-nudge__secondary" type="button" data-telegram-nudge-close>
+          Не сейчас
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <script>
+    (function () {
+      var nudge = document.querySelector("[data-telegram-nudge]");
+      if (!nudge) return;
+
+      var forceShow = window.location.search.indexOf("showTelegramNudge=1") !== -1;
+      var storageKey = "vedascopeTelegramNudgeClosedAt";
+      var delayMs = forceShow ? 700 : 30000;
+      var hideMs = 7 * 24 * 60 * 60 * 1000;
+      var closedAt = Number(localStorage.getItem(storageKey) || 0);
+
+      if (!forceShow && closedAt && Date.now() - closedAt < hideMs) {
+        return;
+      }
+
+      function showNudge() {
+        nudge.hidden = false;
+        requestAnimationFrame(function () {
+          nudge.classList.add("is-visible");
+        });
+      }
+
+      function closeNudge() {
+        nudge.classList.remove("is-visible");
+        localStorage.setItem(storageKey, String(Date.now()));
+        window.setTimeout(function () {
+          nudge.hidden = true;
+        }, 260);
+      }
+
+      window.setTimeout(showNudge, delayMs);
+
+      nudge.querySelectorAll("[data-telegram-nudge-close]").forEach(function (button) {
+        button.addEventListener("click", closeNudge);
+      });
+
+      nudge.querySelectorAll("[data-telegram-nudge-link]").forEach(function (link) {
+        link.addEventListener("click", function () {
+          localStorage.setItem(storageKey, String(Date.now()));
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !nudge.hidden) {
+          closeNudge();
+        }
+      });
+    })();
+  </script>
+  <!-- Vedascope Telegram nudge end -->
+
+</body>
 </html>
