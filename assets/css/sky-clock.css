@@ -1310,3 +1310,27 @@ h1 { max-width: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; font
 .sky-moon-shine {
   filter: blur(1px);
 }
+
+
+/* Nabhasa SEO copy */
+.seo-subtitle {
+  margin: 6px auto 0;
+  max-width: 720px;
+  color: rgba(251, 244, 228, 0.72);
+  font-size: clamp(16px, 2.4vw, 20px);
+  line-height: 1.45;
+  text-align: center;
+}
+
+.sky-seo-section .sky-seo-links {
+  color: rgba(251, 244, 228, 0.76);
+}
+
+.sky-seo-section a {
+  color: #d0a057;
+  text-decoration: none;
+}
+
+.sky-seo-section a:hover {
+  text-decoration: underline;
+}
