@@ -1950,3 +1950,305 @@ h1 { max-width: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; font
     opacity: 0.78 !important;
   }
 }
+
+
+/* ===== Nabhasa mobile composition final ===== */
+
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .sky-page {
+    overflow-x: hidden !important;
+  }
+
+  /* Минимальный отступ от header до VEDASCOPE + H1 */
+  .sky-workspace {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    overflow: visible !important;
+  }
+
+  .sky-shell {
+    padding-top: 10px !important;
+    overflow: visible !important;
+    isolation: isolate;
+  }
+
+  /* Заголовок — верхний слой, без бокса */
+  .sky-heading {
+    position: relative !important;
+    z-index: 60 !important;
+    margin: 0 !important;
+    padding: 0 16px !important;
+    background: transparent !important;
+    pointer-events: none;
+  }
+
+  .sky-heading::before,
+  .sky-heading::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .sky-heading .eyebrow,
+  #sky-title,
+  [data-sky-title],
+  .sky-updated,
+  [data-sky-updated] {
+    position: relative !important;
+    z-index: 70 !important;
+    text-shadow:
+      0 2px 12px rgba(0, 0, 0, 0.9),
+      0 0 34px rgba(3, 7, 13, 0.86);
+  }
+
+  #sky-title,
+  [data-sky-title] {
+    max-width: 96vw !important;
+    margin: 8px 0 0 !important;
+    font-size: clamp(38px, 10.8vw, 56px) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  .sky-updated,
+  [data-sky-updated] {
+    margin-top: 14px !important;
+  }
+
+  /* Карта поднимается под заголовок и становится full-bleed */
+  .sky-stage {
+    position: relative !important;
+    z-index: 1 !important;
+    margin-top: -44px !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .sky-clock-frame {
+    position: relative !important;
+    z-index: 1 !important;
+    width: 100vw !important;
+    min-height: 128vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    padding: 0 0 26px !important;
+    overflow: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .sky-clock-viewport {
+    position: relative !important;
+    z-index: 1 !important;
+    width: 118vw !important;
+    height: 118vw !important;
+    max-width: none !important;
+    margin-left: -9vw !important;
+    margin-right: 0 !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+  }
+
+  .sky-clock-svg {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+  }
+
+  .sky-view-controls {
+    position: relative !important;
+    z-index: 20 !important;
+    margin-top: -18px !important;
+  }
+
+  .sky-status {
+    position: relative !important;
+    z-index: 5 !important;
+  }
+
+  .sky-graha-table-section {
+    position: relative !important;
+    z-index: 5 !important;
+    margin-top: 24px !important;
+  }
+}
+
+/* Узкие iPhone — чуть компактнее, чтобы карта не улетала слишком низко */
+@media (max-width: 430px) {
+  .sky-shell {
+    padding-top: 6px !important;
+  }
+
+  .sky-stage {
+    margin-top: -52px !important;
+  }
+
+  .sky-clock-frame {
+    min-height: 122vw !important;
+  }
+
+  .sky-clock-viewport {
+    width: 116vw !important;
+    height: 116vw !important;
+    margin-left: -8vw !important;
+  }
+}
+
+
+/* ===== Nabhasa mobile composition lock ===== */
+
+/*
+  Фиксирует правильную мобильную композицию:
+  - hero близко к header;
+  - карта крупная;
+  - карта по умолчанию в границах экрана;
+  - заголовок поверх карты;
+  - режим сохраняется до tablet/mobile preview width.
+*/
+
+@media (max-width: 1024px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .sky-page,
+  .sky-workspace,
+  .sky-shell,
+  .sky-stage,
+  .sky-clock-frame,
+  .sky-clock-viewport {
+    overflow: visible !important;
+  }
+
+  .sky-page {
+    overflow-x: hidden !important;
+  }
+
+  .sky-workspace {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .sky-shell {
+    padding-top: 6px !important;
+    isolation: isolate;
+  }
+
+  .sky-heading {
+    position: relative !important;
+    z-index: 80 !important;
+    margin: 0 !important;
+    padding: 0 16px !important;
+    background: transparent !important;
+    pointer-events: none;
+  }
+
+  .sky-heading::before,
+  .sky-heading::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .sky-heading .eyebrow,
+  #sky-title,
+  [data-sky-title],
+  .sky-updated,
+  [data-sky-updated] {
+    position: relative !important;
+    z-index: 90 !important;
+    text-shadow:
+      0 2px 12px rgba(0, 0, 0, 0.92),
+      0 0 34px rgba(3, 7, 13, 0.88);
+  }
+
+  #sky-title,
+  [data-sky-title] {
+    margin-top: 8px !important;
+  }
+
+  .sky-stage {
+    position: relative !important;
+    z-index: 1 !important;
+    margin-top: -44px !important;
+    padding: 0 !important;
+  }
+
+  .sky-clock-frame {
+    position: relative !important;
+    z-index: 1 !important;
+    width: 100vw !important;
+    min-height: 118vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    padding: 0 0 24px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .sky-clock-viewport {
+    position: relative !important;
+    z-index: 1 !important;
+    width: 100vw !important;
+    height: 100vw !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+  }
+
+  .sky-clock-svg {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+  }
+
+  .sky-view-controls {
+    position: relative !important;
+    z-index: 20 !important;
+    margin-top: -10px !important;
+  }
+
+  .sky-graha-table-section {
+    position: relative !important;
+    z-index: 5 !important;
+    margin-top: 20px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-shell {
+    padding-top: 4px !important;
+  }
+
+  .sky-stage {
+    margin-top: -48px !important;
+  }
+
+  .sky-clock-frame {
+    min-height: 114vw !important;
+  }
+
+  .sky-clock-viewport {
+    width: 100vw !important;
+    height: 100vw !important;
+  }
+}
+
+
+/* ===== Nabhasa mobile composition lock: keep chart inside viewport ===== */
+
+@media (max-width: 1024px) {
+  .sky-clock-viewport {
+    width: 96vw !important;
+    height: 96vw !important;
+  }
+
+  .sky-clock-frame {
+    min-height: 112vw !important;
+  }
+}
