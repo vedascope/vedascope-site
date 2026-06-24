@@ -2477,3 +2477,31 @@ h1 { max-width: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; font
     font-size: 10px !important;
   }
 }
+
+
+
+/* ===== Nabhasa: desktop heading header gap ===== */
+
+@media (min-width: 1025px) {
+  .sky-page {
+    padding-top: 0 !important;
+  }
+
+  .sky-workspace {
+    padding-top: 8px !important;
+    margin-top: 0 !important;
+  }
+
+  .sky-shell {
+    padding-top: 8px !important;
+  }
+
+  .sky-heading {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .sky-heading .eyebrow {
+    margin-top: 0 !important;
+  }
+}
