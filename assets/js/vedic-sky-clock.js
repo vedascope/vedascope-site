@@ -205,7 +205,7 @@
   function describeGrahaPosition(graha) {
     const signName = SIGN_NAMES[graha.signIndex] || `Знак ${graha.signIndex + 1}`;
     const nakshatraName = NAKSHATRA_NAMES[graha.nakshatraIndex] || `Накшатра ${graha.nakshatraNumber}`;
-    return `${graha.name}: ${formatDegree(graha.longitude)} · ${signName} ${formatDegree(graha.degreeInSign)} · Накшатра: ${nakshatraName} (${graha.nakshatraNumber}) · Пада: ${graha.padaInNakshatra}`;
+    return `${graha.name}: ${formatDegree(graha.longitude)} · ${signName} ${formatDegree(graha.degreeInSign)} · Накшатра: ${nakshatraName} ${graha.nakshatraNumber} · Пада: ${graha.padaInNakshatra}`;
   }
 
   function createSvgElement(tag, attrs = {}) {
@@ -340,7 +340,7 @@
   }
 
   function getNakshatraLabel(graha) {
-    return `${NAKSHATRA_NAMES[graha.nakshatraIndex] || "Накшатра"} (${graha.nakshatraNumber})`;
+    return `${NAKSHATRA_NAMES[graha.nakshatraIndex] || "Накшатра"} ${graha.nakshatraNumber}`;
   }
 
   function getVisibleNakshatraLabel(name) {
@@ -471,7 +471,7 @@
         class: "sky-nak-label",
         transform: `rotate(${angle > 90 && angle < 270 ? angle + 180 : angle} ${position.x} ${position.y})`
       });
-      label.textContent = `${getVisibleNakshatraLabel(NAKSHATRA_NAMES[i])} (${i + 1})`;
+      label.textContent = `${getVisibleNakshatraLabel(NAKSHATRA_NAMES[i])} ${i + 1}`;
       svg.appendChild(label);
     }
 
@@ -1379,7 +1379,7 @@
         "<td>" + formatNabhasaGrahaNameCell(graha, sunLongitude) + "</td>" +
         "<td>" + signName + "</td>" +
         "<td>" + Number(graha.degreeInSign).toFixed(2) + "°" + "</td>" +
-        "<td>" + nakName + " (" + graha.nakshatraNumber + ")" + "</td>" +
+        "<td>" + nakName + " " + graha.nakshatraNumber + "</td>" +
         "<td>" + pada + "</td>" +
         "<td>" + Number(graha.longitude).toFixed(2) + "°" + "</td>" +
         "</tr>";

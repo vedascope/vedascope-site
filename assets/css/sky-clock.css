@@ -2326,3 +2326,154 @@ h1 { max-width: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; font
     min-height: 132vw !important;
   }
 }
+
+
+/* ===== Nabhasa: exact nakshatra label size + lower iPhone chart ===== */
+
+/* Точный класс подписей накшатр в SVG */
+.sky-clock-svg .sky-nak-label {
+  font-size: 12px !important;
+  font-weight: 720 !important;
+  letter-spacing: 0.015em !important;
+  opacity: 0.98 !important;
+}
+
+/* На мобильных делаем чуть крупнее, потому что SVG визуально уменьшается */
+@media (max-width: 768px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 12px !important;
+    font-weight: 760 !important;
+  }
+}
+
+/* iPhone: карту ещё ниже */
+@media (max-width: 430px) {
+  .sky-stage {
+    margin-top: 10px !important;
+  }
+
+  .sky-clock-frame {
+    min-height: 136vw !important;
+  }
+
+  .sky-view-controls {
+    margin-top: 2px !important;
+  }
+}
+
+
+
+/* ===== Nabhasa: final nakshatra label style ===== */
+
+.sky-clock-svg .sky-nak-label {
+  font-size: 12px !important;
+  font-weight: 720 !important;
+  letter-spacing: 0.01em !important;
+  fill: rgba(251, 245, 235, 0.92) !important;
+  color: rgba(251, 245, 235, 0.92) !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 12px !important;
+    fill: rgba(251, 245, 235, 0.92) !important;
+    color: rgba(251, 245, 235, 0.92) !important;
+  }
+}
+
+
+/* ===== Nabhasa: final nakshatra labels match sign labels ===== */
+
+.sky-clock-svg .sky-nak-label {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  fill: rgba(186, 177, 154, 0.58) !important;
+  color: rgba(186, 177, 154, 0.58) !important;
+  stroke: rgba(1, 5, 8, 0.68) !important;
+  stroke-width: 1.7px !important;
+  paint-order: stroke fill !important;
+  letter-spacing: 0.015em !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 12px !important;
+    fill: rgba(186, 177, 154, 0.52) !important;
+    color: rgba(186, 177, 154, 0.52) !important;
+    stroke: rgba(1, 5, 8, 0.72) !important;
+    stroke-width: 1.8px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 12px !important;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 11.6px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 11.6px !important;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 11px !important;
+  }
+}
+
+
+
+/* ===== Nabhasa: final nakshatra label size 10.5px ===== */
+
+.sky-clock-svg .sky-nak-label {
+  font-size: 10.5px !important;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 10.5px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 10.5px !important;
+  }
+}
+
+
+/* ===== Nabhasa: final nakshatra label size 10px ===== */
+
+.sky-clock-svg .sky-nak-label {
+  font-size: 10px !important;
+}
+
+@media (max-width: 768px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .sky-clock-svg .sky-nak-label {
+    font-size: 10px !important;
+  }
+}
