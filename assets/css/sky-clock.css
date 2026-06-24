@@ -2279,3 +2279,50 @@ h1 { max-width: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; font
     min-height: 116vw !important;
   }
 }
+
+
+/* ===== Nabhasa: stronger nakshatra labels + lower iPhone chart ===== */
+
+/* Увеличиваем именно подписи накшатр на SVG-кольце */
+.sky-clock-svg text[class*="nakshatra"],
+.sky-clock-svg text[class*="Nakshatra"],
+.sky-clock-svg .sky-nakshatra-label,
+.sky-clock-svg .sky-nakshatra-name,
+.sky-clock-svg .nakshatra-label,
+.sky-clock-svg .nakshatra-name,
+.sky-clock-svg .sky-label-nakshatra,
+.sky-clock-svg .sky-nakshatra-text,
+.sky-clock-svg .sky-ring-label--nakshatra {
+  font-size: 1.22em !important;
+  font-weight: 720 !important;
+  letter-spacing: 0.015em !important;
+  opacity: 0.96 !important;
+}
+
+/* iPhone: карту ниже, чтобы она меньше залезала на заголовок */
+@media (max-width: 430px) {
+  .sky-stage {
+    margin-top: -12px !important;
+  }
+
+  .sky-clock-frame {
+    min-height: 124vw !important;
+  }
+
+  .sky-view-controls {
+    margin-top: -4px !important;
+  }
+}
+
+
+/* ===== Nabhasa: iPhone chart lower v2 ===== */
+
+@media (max-width: 430px) {
+  .sky-stage {
+    margin-top: 4px !important;
+  }
+
+  .sky-clock-frame {
+    min-height: 132vw !important;
+  }
+}
