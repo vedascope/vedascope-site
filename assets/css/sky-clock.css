@@ -2252,3 +2252,30 @@ h1 { max-width: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; font
     min-height: 112vw !important;
   }
 }
+
+
+/* ===== Nabhasa: nakshatra labels + iPhone vertical tune ===== */
+
+/* Чуть крупнее подписи накшатр на кольце */
+.sky-clock-svg .sky-nakshatra-label,
+.sky-clock-svg .sky-nakshatra-name,
+.sky-clock-svg .nakshatra-label,
+.sky-clock-svg .nakshatra-name,
+.sky-clock-svg .sky-label-nakshatra,
+.sky-clock-svg text[class*="nakshatra"],
+.sky-clock-svg text[class*="Nakshatra"] {
+  font-size: 1.08em !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* iPhone / узкие мобильные: карту чуть ниже, текущую композицию сохраняем */
+@media (max-width: 430px) {
+  .sky-stage {
+    margin-top: -30px !important;
+  }
+
+  .sky-clock-frame {
+    min-height: 116vw !important;
+  }
+}
