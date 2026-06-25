@@ -91,6 +91,6 @@ Always run `nginx -t` before reloading nginx.
 
 ## Current limitations
 
-Authentication is still temporary and uses the development `X-User-Id` header. This is not production authentication.
+Authentication is still temporary and uses the development `X-User-Id` header only outside production. `APP_ENV=production` disables `X-User-Id` access for protected account routes. Real authentication and Telegram login are required before a public user-facing account launch.
 
 There is no astro-engine integration yet. Saved birth charts currently store source birth data only, and calculations are not implemented.

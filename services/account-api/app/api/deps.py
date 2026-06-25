@@ -4,6 +4,7 @@ import uuid
 from fastapi import Depends, Header, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.models.user import User
 
 
@@ -25,6 +26,12 @@ def get_current_user(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Missing X-User-Id header for development user identity.",
+        )
+
+    if settings.app_env == "production":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Temporary development identity is disabled in production.",
         )
 
     try:

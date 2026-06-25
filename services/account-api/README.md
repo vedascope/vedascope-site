@@ -49,6 +49,8 @@ Expected response:
 
 The first account endpoints use a temporary `X-User-Id` request header to identify a user during local development and tests.
 
+This is a dev-only identity mechanism. When `APP_ENV=production`, protected account routes reject `X-User-Id` with HTTP 403 until real authentication is implemented. `/health` and `/api/account/health` remain public.
+
 This is not production authentication. Future account work should replace it with real user sessions, auth identities, and Telegram account linking.
 
 ## Saved charts API
