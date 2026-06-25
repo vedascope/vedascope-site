@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vedascope-account-api"
+version = "0.1.0"
+description = "FastAPI skeleton for the vedascope account API."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "sqlalchemy>=2.0",
+  "alembic",
+  "psycopg",
+  "pydantic-settings",
+  "python-dotenv",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
