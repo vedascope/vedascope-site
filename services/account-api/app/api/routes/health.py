@@ -9,3 +9,8 @@ router = APIRouter()
 @router.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
     return HealthResponse(status="ok", service=settings.app_name)
+
+
+@router.get("/api/account/health", response_model=HealthResponse)
+def account_health() -> HealthResponse:
+    return health()

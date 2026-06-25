@@ -20,3 +20,15 @@ def test_health_endpoint_returns_service_status() -> None:
         "status": "ok",
         "service": "vedascope-account-api",
     }
+
+
+def test_account_health_endpoint_returns_service_status() -> None:
+    client = TestClient(create_app())
+
+    response = client.get("/api/account/health")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "status": "ok",
+        "service": "vedascope-account-api",
+    }
