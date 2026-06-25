@@ -59,6 +59,15 @@ Run a Python syntax check for the app and tests:
 python -m compileall -q app tests
 ```
 
+## Database smoke checks
+
+The test suite includes lightweight database metadata and Alembic checks. Alembic offline SQL generation renders migration SQL without connecting to a live PostgreSQL server:
+
+```bash
+alembic upgrade head --sql
+pytest
+```
+
 ## Alembic migrations
 
 Run migrations against a local database only:
