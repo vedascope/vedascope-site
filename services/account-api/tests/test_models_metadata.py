@@ -13,6 +13,8 @@ def test_expected_tables_are_registered() -> None:
     expected_tables = {
         "users",
         "auth_identities",
+        "auth_login_codes",
+        "auth_sessions",
         "user_settings",
         "birth_charts",
         "astro_calculations",

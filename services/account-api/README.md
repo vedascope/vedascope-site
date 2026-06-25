@@ -53,6 +53,22 @@ This is a dev-only identity mechanism. When `APP_ENV=production`, protected acco
 
 This is not production authentication. Future account work should replace it with real user sessions, auth identities, and Telegram account linking.
 
+## Passwordless email auth foundation
+
+The account API has the first passwordless email flow:
+
+- `POST /api/account/auth/request-code`;
+- `POST /api/account/auth/verify-code`;
+- `POST /api/account/auth/logout`.
+
+`request-code` creates a short-lived one-time code and stores only its hash. In local, test, and development modes the response includes `dev_code` for testing. In production, the raw code is not returned.
+
+Real SMTP/email sending is not implemented yet. Production creates the login code and responds generically, ready for a later email provider integration.
+
+Successful `verify-code` creates a user if needed, links an `email` auth identity, creates a hashed session token, and sets the `vedascope_session` HTTP-only cookie.
+
+`X-User-Id` remains dev-only and is blocked in production. CAPTCHA provider integration is planned before public launch; for now `CAPTCHA_REQUIRED=false` ignores `captcha_token`, and `CAPTCHA_REQUIRED=true` returns a clear not-configured error.
+
 ## Saved charts API
 
 Saved birth chart endpoints currently use the temporary `X-User-Id` development identity:

@@ -65,6 +65,15 @@ source .venv/bin/activate
 alembic upgrade head
 ```
 
+When syncing from the repository, preserve production secrets and the virtualenv:
+
+```bash
+rsync -a --delete \
+  --exclude '.env' \
+  --exclude '.venv' \
+  services/account-api/ /root/vedascope-account-api/
+```
+
 ## Nginx
 
 Public route:
@@ -92,5 +101,7 @@ Always run `nginx -t` before reloading nginx.
 ## Current limitations
 
 Authentication is still temporary and uses the development `X-User-Id` header only outside production. `APP_ENV=production` disables `X-User-Id` access for protected account routes. Real authentication and Telegram login are required before a public user-facing account launch.
+
+Passwordless email auth foundation is present, but SMTP/email provider delivery is not implemented yet. Production does not expose raw login codes. CAPTCHA provider integration is planned before public launch; `CAPTCHA_REQUIRED=true` currently returns a not-configured error until a provider is added.
 
 There is no astro-engine integration yet. Saved birth charts currently store source birth data only, and calculations are not implemented.

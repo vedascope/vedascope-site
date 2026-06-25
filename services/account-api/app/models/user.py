@@ -30,3 +30,4 @@ class User(Base):
     settings: Mapped["UserSettings | None"] = relationship(back_populates="user", cascade="all, delete-orphan")
     birth_charts: Mapped[list["BirthChart"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     astro_calculations: Mapped[list["AstroCalculation"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    auth_sessions: Mapped[list["AuthSession"]] = relationship(back_populates="user", cascade="all, delete-orphan")
