@@ -45,6 +45,12 @@ Expected response:
 }
 ```
 
+## Development account identity
+
+The first account endpoints use a temporary `X-User-Id` request header to identify a user during local development and tests.
+
+This is not production authentication. Future account work should replace it with real user sessions, auth identities, and Telegram account linking.
+
 ## Tests
 
 Run the test suite from this service directory:

@@ -4,17 +4,17 @@ import uuid
 from datetime import date, datetime, time
 
 from sqlalchemy import Date, DateTime, Float, ForeignKey, Index, String, Time, func
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+from app.db.types import GUID
 
 
 class BirthChart(Base):
     __tablename__ = "birth_charts"
     __table_args__ = (Index("ix_birth_charts_user_id", "user_id"),)
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(GUID(), primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     chart_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     person_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
