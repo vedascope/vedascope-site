@@ -51,6 +51,18 @@ The first account endpoints use a temporary `X-User-Id` request header to identi
 
 This is not production authentication. Future account work should replace it with real user sessions, auth identities, and Telegram account linking.
 
+## Saved charts API
+
+Saved birth chart endpoints currently use the temporary `X-User-Id` development identity:
+
+- `GET /api/account/charts`
+- `POST /api/account/charts`
+- `GET /api/account/charts/{chart_id}`
+- `PATCH /api/account/charts/{chart_id}`
+- `DELETE /api/account/charts/{chart_id}`
+
+Calculations are not implemented yet. Charts currently store source birth data only; divisional charts, dashas, yogas, and other calculations will be derived later by the astro-engine.
+
 ## Tests
 
 Run the test suite from this service directory:
