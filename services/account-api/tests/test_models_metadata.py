@@ -14,6 +14,7 @@ def test_expected_tables_are_registered() -> None:
         "users",
         "auth_identities",
         "auth_login_codes",
+        "auth_rate_limits",
         "auth_sessions",
         "user_settings",
         "birth_charts",

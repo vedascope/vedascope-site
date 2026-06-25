@@ -40,6 +40,17 @@ Required values:
 DATABASE_URL=postgresql+psycopg://vedascope_account:<PASSWORD>@localhost:5432/vedascope_account
 APP_ENV=production
 APP_NAME=vedascope-account-api
+CAPTCHA_REQUIRED=false
+CAPTCHA_PROVIDER=none
+SMTP_ENABLED=false
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USERNAME=
+SMTP_PASSWORD=
+SMTP_FROM_EMAIL=
+SMTP_FROM_NAME=vedascope
+SMTP_USE_TLS=true
+AUTH_CODE_EMAIL_SUBJECT=Ваш код входа в vedascope
 ```
 
 Store the generated database password only in the server `.env` file.
@@ -63,6 +74,19 @@ Run migrations from `/root/vedascope-account-api`:
 ```bash
 source .venv/bin/activate
 alembic upgrade head
+```
+
+Enable SMTP only after provider credentials are present in `/root/vedascope-account-api/.env`:
+
+```text
+SMTP_ENABLED=true
+SMTP_HOST=<provider-host>
+SMTP_PORT=587
+SMTP_USERNAME=<provider-user>
+SMTP_PASSWORD=<provider-password>
+SMTP_FROM_EMAIL=<sender@example.com>
+SMTP_FROM_NAME=vedascope
+SMTP_USE_TLS=true
 ```
 
 When syncing from the repository, preserve production secrets and the virtualenv:
@@ -102,6 +126,6 @@ Always run `nginx -t` before reloading nginx.
 
 Authentication is still temporary and uses the development `X-User-Id` header only outside production. `APP_ENV=production` disables `X-User-Id` access for protected account routes. Real authentication and Telegram login are required before a public user-facing account launch.
 
-Passwordless email auth foundation is present, but SMTP/email provider delivery is not implemented yet. Production does not expose raw login codes. CAPTCHA provider integration is planned before public launch; `CAPTCHA_REQUIRED=true` currently returns a not-configured error until a provider is added.
+Passwordless email auth foundation is present, and SMTP delivery is supported when provider credentials are configured. Production does not expose raw login codes. Request-code also has database-backed email/IP rate limiting. CAPTCHA provider integration is planned before public launch; `CAPTCHA_REQUIRED=true` currently returns a not-configured error until a provider is added.
 
 There is no astro-engine integration yet. Saved birth charts currently store source birth data only, and calculations are not implemented.

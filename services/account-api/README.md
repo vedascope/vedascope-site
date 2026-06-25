@@ -69,6 +69,34 @@ Successful `verify-code` creates a user if needed, links an `email` auth identit
 
 `X-User-Id` remains dev-only and is blocked in production. CAPTCHA provider integration is planned before public launch; for now `CAPTCHA_REQUIRED=false` ignores `captcha_token`, and `CAPTCHA_REQUIRED=true` returns a clear not-configured error.
 
+## SMTP email delivery
+
+Passwordless login codes can be sent through SMTP when these environment variables are configured:
+
+- `SMTP_ENABLED`;
+- `SMTP_HOST`;
+- `SMTP_PORT`;
+- `SMTP_USERNAME`;
+- `SMTP_PASSWORD`;
+- `SMTP_FROM_EMAIL`;
+- `SMTP_FROM_NAME`;
+- `SMTP_USE_TLS`;
+- `AUTH_CODE_EMAIL_SUBJECT`.
+
+In local, test, and development modes `request-code` may still return `dev_code`. In production, `dev_code` is never returned. If `SMTP_ENABLED=true`, the API sends a plain text Russian login-code email. If SMTP delivery fails, the API returns a generic `Email delivery failed.` error and does not expose raw SMTP details.
+
+If `SMTP_ENABLED=false` in production, the code is still created and stored hashed, but it is not delivered. This mode is useful only while provider credentials are being prepared.
+
+## Auth rate limiting
+
+`POST /api/account/auth/request-code` has basic database-backed protection:
+
+- max 5 code requests per normalized email per 15 minutes;
+- max 20 code requests per client IP per 15 minutes when client IP is available;
+- wrong verify-code attempts are still limited per login code.
+
+Rate-limit responses do not reveal whether an email already has an account.
+
 ## Saved charts API
 
 Saved birth chart endpoints currently use the temporary `X-User-Id` development identity:

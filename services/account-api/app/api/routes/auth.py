@@ -1,4 +1,5 @@
 from datetime import timedelta
+import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy import select
@@ -9,6 +10,9 @@ from app.core.config import settings
 from app.core.security import (
     LOGIN_CODE_TTL_SECONDS,
     MAX_LOGIN_CODE_ATTEMPTS,
+    REQUEST_CODE_EMAIL_LIMIT,
+    REQUEST_CODE_IP_LIMIT,
+    REQUEST_CODE_RATE_LIMIT_SECONDS,
     SESSION_COOKIE_NAME,
     SESSION_TTL_SECONDS,
     as_aware_utc,
@@ -19,29 +23,86 @@ from app.core.security import (
 )
 from app.models.auth_identity import AuthIdentity
 from app.models.auth_login_code import AuthLoginCode
+from app.models.auth_rate_limit import AuthRateLimit
 from app.models.auth_session import AuthSession
 from app.models.user import User
 from app.schemas.auth import AuthLogoutResponse, AuthRequestCodeRequest, AuthRequestCodeResponse, AuthVerifyCodeRequest
 from app.schemas.user import UserProfileRead
+from app.services.email import EmailDeliveryError, send_login_code_email
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
+
+
+def apply_rate_limit(db: Session, *, scope: str, key: str, limit: int, now) -> None:
+    window_start_floor = now - timedelta(seconds=REQUEST_CODE_RATE_LIMIT_SECONDS)
+    rate_limit = db.scalar(
+        select(AuthRateLimit).where(
+            AuthRateLimit.scope == scope,
+            AuthRateLimit.key == key,
+        )
+    )
+    if rate_limit is None:
+        db.add(AuthRateLimit(scope=scope, key=key, window_start=now, count=1))
+        return
+
+    if as_aware_utc(rate_limit.window_start) <= window_start_floor:
+        rate_limit.window_start = now
+        rate_limit.count = 1
+        return
+
+    if rate_limit.count >= limit:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many login code requests. Please try again later.",
+        )
+    rate_limit.count += 1
 
 
 @router.post("/request-code", response_model=AuthRequestCodeResponse, response_model_exclude_none=True)
-def request_login_code(payload: AuthRequestCodeRequest, db: Session = Depends(get_db)) -> AuthRequestCodeResponse:
+def request_login_code(
+    payload: AuthRequestCodeRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+) -> AuthRequestCodeResponse:
     if settings.captcha_required:
         raise HTTPException(
             status_code=status.HTTP_501_NOT_IMPLEMENTED,
             detail="CAPTCHA verification is not configured yet.",
         )
 
+    now = utc_now()
+    apply_rate_limit(db, scope="login_code_email", key=payload.email, limit=REQUEST_CODE_EMAIL_LIMIT, now=now)
+    if request.client and request.client.host:
+        apply_rate_limit(
+            db,
+            scope="login_code_ip",
+            key=request.client.host,
+            limit=REQUEST_CODE_IP_LIMIT,
+            now=now,
+        )
+
     code = generate_login_code()
     login_code = AuthLoginCode(
         email=payload.email,
         code_hash=hash_secret(code),
-        expires_at=utc_now() + timedelta(seconds=LOGIN_CODE_TTL_SECONDS),
+        expires_at=now + timedelta(seconds=LOGIN_CODE_TTL_SECONDS),
     )
     db.add(login_code)
+
+    if settings.smtp_enabled:
+        try:
+            send_login_code_email(payload.email, code)
+        except EmailDeliveryError as exc:
+            db.rollback()
+            logger.warning("Login code email delivery failed for %s", payload.email)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Email delivery failed.",
+            ) from exc
+    elif settings.app_env == "production":
+        logger.warning("SMTP is disabled; login code was created but not delivered for %s", payload.email)
+
     db.commit()
 
     response = AuthRequestCodeResponse(status="code_created", email=payload.email)
