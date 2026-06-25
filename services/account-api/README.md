@@ -45,6 +45,20 @@ Expected response:
 }
 ```
 
+## Tests
+
+Run the test suite from this service directory:
+
+```bash
+pytest
+```
+
+Run a Python syntax check for the app and tests:
+
+```bash
+python -m compileall -q app tests
+```
+
 ## Alembic migrations
 
 Run migrations against a local database only:
