@@ -45,6 +45,14 @@ test("longitude 359.999 maps to final rashi, nakshatra and global pada", () => {
   assert.equal(graha.globalPada, 108);
 });
 
+test("longitude 359.999999 maps to final rashi, nakshatra and global pada", () => {
+  const graha = deriveVedaClockGraha("Ju", 359.999999);
+
+  assert.equal(graha.rashi, 12);
+  assert.equal(graha.nakshatra, 27);
+  assert.equal(graha.globalPada, 108);
+});
+
 test("longitude 360 normalizes to 0", () => {
   const graha = deriveVedaClockGraha("Ve", 360);
 

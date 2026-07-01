@@ -7,14 +7,25 @@ const CENTER = VIEWBOX_SIZE / 2;
 export const defaultTheme = {
   background: "#F8F3EA",
   surface: "#FFFDF8",
-  line: "#C9A86A",
-  lineSoft: "#E7D8BD",
-  text: "#8A7352",
-  textSoft: "#B9A98D",
-  activeNakshatra: "#F1E1B8",
-  activePada: "#D7B66E",
+  line: "#B9924D",
+  lineSoft: "#E8DCC6",
+  text: "#7A6548",
+  textSoft: "#B4A58A",
+  activeNakshatra: "#EEE1BF",
+  activePada: "#D8B15F",
   hand: "#B88A3D",
-  secondHand: "#9B6E2F"
+  secondHand: "#9B6E2F",
+  grahas: {
+    Su: "#A77A18",
+    Mo: "#767B84",
+    Ma: "#A33E34",
+    Me: "#35765B",
+    Ju: "#C07628",
+    Ve: "#7B5A9B",
+    Sa: "#284D78",
+    Ra: "#7A563A",
+    Ke: "#22211F"
+  }
 };
 
 export const southIndianRashiCells = {
@@ -62,16 +73,13 @@ export function squareRingSegmentPath(index, count, outerInset, innerInset) {
   const current = normalizeSegmentIndex(index, count);
   const start = current / count;
   const end = (current + 1) / count;
-  const outerStart = pointOnSquare(start, outerInset);
-  const outerEnd = pointOnSquare(end, outerInset);
-  const innerEnd = pointOnSquare(end, innerInset);
-  const innerStart = pointOnSquare(start, innerInset);
+  const outerPoints = squarePerimeterPoints(start, end, outerInset);
+  const innerPoints = squarePerimeterPoints(start, end, innerInset).reverse();
 
   return [
-    `M ${formatPoint(outerStart)}`,
-    `L ${formatPoint(outerEnd)}`,
-    `L ${formatPoint(innerEnd)}`,
-    `L ${formatPoint(innerStart)}`,
+    `M ${formatPoint(outerPoints[0])}`,
+    ...outerPoints.slice(1).map((point) => `L ${formatPoint(point)}`),
+    ...innerPoints.map((point) => `L ${formatPoint(point)}`),
     "Z"
   ].join(" ");
 }
@@ -158,8 +166,8 @@ function renderPadaRing(svg, state, theme) {
       d: squareRingSegmentPath(index, 108, 94, 128),
       fill: isActive ? theme.activePada : theme.surface,
       stroke: isActive ? theme.line : theme.lineSoft,
-      "stroke-width": isActive ? 1.5 : 0.45,
-      opacity: isActive ? 0.78 : 0.3,
+      "stroke-width": isActive ? 1.15 : 0.45,
+      opacity: isActive ? 0.72 : 0.3,
       "data-pada": String(number),
       "data-active": String(isActive)
     }));
@@ -174,16 +182,16 @@ function renderNakshatraRing(svg, state, theme) {
     const number = index + 1;
     const isActive = activeNakshatras.has(number);
     group.append(svgEl("path", {
-      d: squareRingSegmentPath(index, 27, 142, 214),
+      d: squareRingSegmentPath(index, 27, 130, 214),
       fill: isActive ? theme.activeNakshatra : "transparent",
       stroke: isActive ? theme.line : theme.lineSoft,
-      "stroke-width": isActive ? 1.25 : 0.7,
-      opacity: isActive ? 0.9 : 0.52,
+      "stroke-width": isActive ? 1.1 : 0.65,
+      opacity: isActive ? 0.86 : 0.52,
       "data-nakshatra": String(number),
       "data-active": String(isActive)
     }));
 
-    const labelPoint = pointOnSquare((index + 0.5) / 27, 176);
+    const labelPoint = pointOnSquare((index + 0.5) / 27, 172);
     group.append(svgEl("text", {
       x: labelPoint.x,
       y: labelPoint.y,
@@ -240,7 +248,8 @@ function renderSouthIndianChart(svg, state, theme) {
       fill: theme.textSoft,
       "font-size": 12,
       "font-family": "Inter, system-ui, sans-serif",
-      "letter-spacing": "0"
+      "letter-spacing": "0",
+      "data-rashi-label": rashi
     }, rashi));
     renderGrahasInCell(group, grahasByRashi.get(Number(rashi)) || [], x, y, cell, theme);
   });
@@ -260,15 +269,18 @@ function renderGrahasInCell(group, grahas, x, y, cell, theme) {
 
   grahas.slice(0, slots.length).forEach((graha, index) => {
     const slot = slots[index];
+    const color = theme.grahas?.[graha.key] || theme.text;
     group.append(svgEl("text", {
       x: x + cell * slot.x,
       y: y + cell * slot.y,
-      fill: theme.text,
+      fill: color,
       "text-anchor": "middle",
       "dominant-baseline": "middle",
-      "font-size": grahas.length > 3 ? 12 : 14,
+      "font-size": grahas.length > 3 ? 13.5 : 16,
       "font-family": "Inter, system-ui, sans-serif",
-      "letter-spacing": "0"
+      "font-weight": 700,
+      "letter-spacing": "0",
+      "data-graha": graha.key
     }, `${graha.key} ${formatDegreeMinute(graha.degreeInRashi)}`));
   });
 }
@@ -386,6 +398,15 @@ function formatDegreeMinute(value) {
 
 function formatPoint(point) {
   return `${round(point.x)} ${round(point.y)}`;
+}
+
+function squarePerimeterPoints(start, end, inset) {
+  const points = [pointOnSquare(start, inset)];
+  [0.25, 0.5, 0.75, 1].forEach((corner) => {
+    if (corner > start && corner < end) points.push(pointOnSquare(corner, inset));
+  });
+  points.push(pointOnSquare(end, inset));
+  return points;
 }
 
 function round(value) {

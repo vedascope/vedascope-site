@@ -1,10 +1,10 @@
-import { buildVedaClockState, GRAHA_KEYS, normalizeGrahaKey } from "./veda-clock-state.mjs?v=mvp06b";
+import { buildVedaClockState, GRAHA_KEYS, normalizeGrahaKey } from "./veda-clock-state.mjs?v=mvp07";
 import {
   exportVedaClockPng,
   exportVedaClockSvg,
   renderVedaClock,
   updateVedaClockHands
-} from "./veda-clock-renderer.mjs?v=mvp06b";
+} from "./veda-clock-renderer.mjs?v=mvp07";
 
 export const CACHE_KEY = "vedaClock:lastState:v1";
 export const MIN_REFRESH_MS = 10000;

@@ -23,6 +23,10 @@ import {
   saveCachedState,
   validateVedaClockApiState
 } from "../assets/js/veda-clock-preview.mjs";
+import {
+  validateBoundaryCases,
+  validateVedaClockStateForQa
+} from "../scripts/veda-clock-qa.mjs";
 
 test("pointOnSquare starts at the top left corner", () => {
   assert.deepEqual(pointOnSquare(0, 100), { x: 100, y: 100 });
@@ -39,6 +43,13 @@ test("squareRingSegmentPath returns a closed segment path", () => {
 
   assert.match(path, /^M 94 94 L /);
   assert.match(path, / Z$/);
+});
+
+test("squareRingSegmentPath follows square corners instead of cutting across them", () => {
+  const path = squareRingSegmentPath(6, 27, 142, 214);
+
+  assert.match(path, /858 142/);
+  assert.match(path, /786 214/);
 });
 
 test("active padas use 1-based indices from state", () => {
@@ -88,6 +99,88 @@ test("renderer creates an SVG for the sample state", async () => {
   } finally {
     global.document = previousDocument;
   }
+});
+
+test("active padas and nakshatras use filled segments without marker dots", async () => {
+  const previousDocument = global.document;
+  global.document = createFakeDocument();
+
+  try {
+    const sample = JSON.parse(await readFile(new URL("../docs/veda-clock-state.sample.json", import.meta.url), "utf8"));
+    const svg = createVedaClockSvg(sample, { now: new Date("2026-07-01T10:08:00") });
+    const activeSegments = findNodes(svg, (node) =>
+      ["data-pada", "data-nakshatra"].some((attribute) => node.attributes[attribute])
+      && node.attributes["data-active"] === "true"
+    );
+    const padaLayer = findNode(svg, (node) => node.attributes["data-layer"] === "padas");
+    const nakshatraLayer = findNode(svg, (node) => node.attributes["data-layer"] === "nakshatras");
+
+    assert.ok(activeSegments.length > 0);
+    assert.equal(activeSegments.every((node) => !["transparent", "none"].includes(node.attributes.fill)), true);
+    assert.equal(countNodes(padaLayer, (node) => node.tagName === "circle"), 0);
+    assert.equal(countNodes(nakshatraLayer, (node) => node.tagName === "circle"), 0);
+  } finally {
+    global.document = previousDocument;
+  }
+});
+
+test("renderer keeps numeric and graha labels horizontal", async () => {
+  const previousDocument = global.document;
+  global.document = createFakeDocument();
+
+  try {
+    const sample = JSON.parse(await readFile(new URL("../docs/veda-clock-state.sample.json", import.meta.url), "utf8"));
+    const svg = createVedaClockSvg(sample, { now: new Date("2026-07-01T10:08:00") });
+    const labels = findNodes(svg, (node) =>
+      node.tagName === "text"
+      && (
+        node.attributes["data-nakshatra-label"]
+        || node.attributes["data-rashi-label"]
+        || node.attributes["data-graha"]
+      )
+    );
+
+    assert.ok(labels.length > 0);
+    assert.equal(labels.every((node) => node.attributes.transform === undefined), true);
+  } finally {
+    global.document = previousDocument;
+  }
+});
+
+test("graha labels use configured planet colors", async () => {
+  const previousDocument = global.document;
+  global.document = createFakeDocument();
+
+  try {
+    const sample = JSON.parse(await readFile(new URL("../docs/veda-clock-state.sample.json", import.meta.url), "utf8"));
+    const svg = createVedaClockSvg(sample, { now: new Date("2026-07-01T10:08:00") });
+    const colors = new Map(findNodes(svg, (node) => node.attributes["data-graha"]).map((node) => [node.attributes["data-graha"], node.attributes.fill]));
+
+    assert.equal(colors.get("Sa"), "#284D78");
+    assert.equal(colors.get("Ma"), "#A33E34");
+    assert.equal(colors.get("Me"), "#35765B");
+    assert.equal(colors.get("Mo"), "#767B84");
+    assert.equal(colors.get("Ve"), "#7B5A9B");
+    assert.equal(colors.get("Su"), "#A77A18");
+    assert.equal(colors.get("Ju"), "#C07628");
+    assert.equal(colors.get("Ra"), "#7A563A");
+    assert.equal(colors.get("Ke"), "#22211F");
+  } finally {
+    global.document = previousDocument;
+  }
+});
+
+test("QA validator accepts the bundled sample state", async () => {
+  const sample = JSON.parse(await readFile(new URL("../docs/veda-clock-state.sample.json", import.meta.url), "utf8"));
+  const validation = validateVedaClockStateForQa(sample, { requireSchema: false, requireCalculationInstant: false });
+
+  assert.deepEqual(validation.errors, []);
+});
+
+test("QA boundary helper validates derived-field edge cases", () => {
+  const result = validateBoundaryCases();
+
+  assert.equal(result.passed, true);
 });
 
 test("createClockTimeSource uses state.datetime with timezone offset", () => {
@@ -330,8 +423,15 @@ class FakeElement {
 }
 
 function countNodes(node, predicate) {
+  if (!node) return 0;
   const self = predicate(node) ? 1 : 0;
   return self + node.children.reduce((total, child) => total + countNodes(child, predicate), 0);
+}
+
+function findNodes(node, predicate) {
+  if (!node) return [];
+  const self = predicate(node) ? [node] : [];
+  return node.children.reduce((items, child) => items.concat(findNodes(child, predicate)), self);
 }
 
 function findNode(node, predicate) {
