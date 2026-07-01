@@ -1,0 +1,131 @@
+{
+  "datetime": "2026-07-01T10:08:00",
+  "timezone": "Europe/Moscow",
+  "dateLabel": "01.07.26",
+  "time": {
+    "hour": 10,
+    "minute": 8,
+    "second": 0
+  },
+  "grahas": [
+    {
+      "key": "Su",
+      "longitude": 76.125,
+      "rashi": 3,
+      "degreeInRashi": 16.125,
+      "nakshatra": 6,
+      "nakshatraName": "Ardra",
+      "pada": 3,
+      "globalPada": 23
+    },
+    {
+      "key": "Mo",
+      "longitude": 222.75,
+      "rashi": 8,
+      "degreeInRashi": 12.75,
+      "nakshatra": 17,
+      "nakshatraName": "Anuradha",
+      "pada": 3,
+      "globalPada": 67
+    },
+    {
+      "key": "Ma",
+      "longitude": 152.4,
+      "rashi": 6,
+      "degreeInRashi": 2.4,
+      "nakshatra": 12,
+      "nakshatraName": "Uttara Phalguni",
+      "pada": 2,
+      "globalPada": 46
+    },
+    {
+      "key": "Me",
+      "longitude": 91.2,
+      "rashi": 4,
+      "degreeInRashi": 1.2,
+      "nakshatra": 7,
+      "nakshatraName": "Punarvasu",
+      "pada": 4,
+      "globalPada": 28
+    },
+    {
+      "key": "Ju",
+      "longitude": 105.95,
+      "rashi": 4,
+      "degreeInRashi": 15.95,
+      "nakshatra": 8,
+      "nakshatraName": "Pushya",
+      "pada": 4,
+      "globalPada": 32
+    },
+    {
+      "key": "Ve",
+      "longitude": 58.8,
+      "rashi": 2,
+      "degreeInRashi": 28.8,
+      "nakshatra": 5,
+      "nakshatraName": "Mrigashira",
+      "pada": 2,
+      "globalPada": 18
+    },
+    {
+      "key": "Sa",
+      "longitude": 337.1,
+      "rashi": 12,
+      "degreeInRashi": 7.1,
+      "nakshatra": 26,
+      "nakshatraName": "Uttara Bhadrapada",
+      "pada": 2,
+      "globalPada": 102
+    },
+    {
+      "key": "Ra",
+      "longitude": 315.33,
+      "rashi": 11,
+      "degreeInRashi": 15.33,
+      "nakshatra": 24,
+      "nakshatraName": "Shatabhisha",
+      "pada": 3,
+      "globalPada": 95
+    },
+    {
+      "key": "Ke",
+      "longitude": 135.33,
+      "rashi": 5,
+      "degreeInRashi": 15.33,
+      "nakshatra": 11,
+      "nakshatraName": "Purva Phalguni",
+      "pada": 1,
+      "globalPada": 41
+    }
+  ],
+  "activeNakshatras": [
+    5,
+    6,
+    7,
+    8,
+    11,
+    12,
+    17,
+    24,
+    26
+  ],
+  "activePadas": [
+    18,
+    23,
+    28,
+    32,
+    41,
+    46,
+    67,
+    95,
+    102
+  ],
+  "panchanga": {
+    "tithi": "Pratipada",
+    "vara": "Wednesday",
+    "yoga": "Siddhi",
+    "karana": "Bava",
+    "lunarNakshatra": "Anuradha"
+  }
+}
