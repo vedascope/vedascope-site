@@ -392,4 +392,3 @@ export const NAKSHATRAS = Object.freeze([
 if (NAKSHATRAS.length !== 27 || NAKSHATRAS.some((item) => item.padaFocus.length !== 4 || item.sounds.length !== 4)) {
   throw new Error("Nakshatra catalog must contain 27 records and 108 complete padas");
 }
-

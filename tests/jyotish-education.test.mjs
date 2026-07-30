@@ -264,6 +264,7 @@ test("20. content has no unfinished markers and provides substantive page length
     const html = read(relativePath);
     const plain = html.replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
     assert.doesNotMatch(plain, /\bTODO\b|\bTBD\b|заглушка|контент позже|скоро появится/i, relativePath);
+    assert.doesNotMatch(html, /[ \t]+\n/, `${relativePath}: trailing whitespace`);
     assert.ok(plain.split(" ").filter(Boolean).length >= 450, `${relativePath}: page is too short`);
   });
 });

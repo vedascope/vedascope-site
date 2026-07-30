@@ -78,6 +78,10 @@ function wordCount(html) {
     .filter(Boolean).length;
 }
 
+function normalizeOutput(value) {
+  return String(value).replace(/[ \t]+$/gm, "").replace(/\n+$/g, "\n");
+}
+
 function absoluteUrl(urlPath) {
   return `${SITE.origin}${urlPath}`;
 }
@@ -898,7 +902,7 @@ async function writePage(url, html) {
   const relative = url.replace(/^\/|\/$/g, "");
   const outputDirectory = path.join(REPO_ROOT, relative);
   await fs.mkdir(outputDirectory, { recursive: true });
-  await fs.writeFile(path.join(outputDirectory, "index.html"), html, "utf8");
+  await fs.writeFile(path.join(outputDirectory, "index.html"), normalizeOutput(html), "utf8");
 }
 
 function educationUrls() {
