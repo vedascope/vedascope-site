@@ -1,0 +1,891 @@
+:root {
+  --jy-paper: #f7f2e7;
+  --jy-paper-strong: #fffdf8;
+  --jy-ink: #142523;
+  --jy-muted: #64716e;
+  --jy-green: #166d66;
+  --jy-green-deep: #0e4743;
+  --jy-gold: #b87a32;
+  --jy-line: rgba(24, 58, 54, 0.16);
+  --jy-shadow: 0 18px 60px rgba(28, 44, 39, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body.jyotish-page {
+  margin: 0;
+  color: var(--jy-ink);
+  background:
+    radial-gradient(circle at 82% 8%, rgba(63, 123, 111, 0.11), transparent 30rem),
+    #eeefe9;
+  font-family: Inter, system-ui, sans-serif;
+  overflow-x: clip;
+}
+
+.jyotish-page *,
+.jyotish-page *::before,
+.jyotish-page *::after {
+  box-sizing: border-box;
+}
+
+.jyotish-page a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.jyotish-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(247, 242, 231, 0.12);
+  background: rgba(13, 30, 29, 0.97);
+  backdrop-filter: blur(12px);
+}
+
+.jyotish-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.jyotish-header .public-mobile-menu__panel nav {
+  display: grid;
+}
+
+.jyotish-mobile-account {
+  margin-top: 4px;
+  color: #d7ad72 !important;
+  border-top: 1px solid rgba(247, 242, 231, 0.12);
+}
+
+.jyotish-page main {
+  padding: 34px 0 96px;
+}
+
+.jyotish-shell {
+  width: min(1240px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.jyotish-breadcrumbs {
+  margin: 0 0 18px;
+  color: var(--jy-muted);
+  font-size: 0.78rem;
+}
+
+.jyotish-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jyotish-breadcrumbs li:not(:last-child)::after {
+  content: "·";
+  margin-left: 7px;
+  color: rgba(20, 37, 35, 0.36);
+}
+
+.jyotish-breadcrumbs a {
+  color: inherit;
+}
+
+.jyotish-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
+  min-height: 370px;
+  overflow: hidden;
+  border: 1px solid var(--jy-line);
+  border-radius: 28px;
+  color: #f8f5ed;
+  background:
+    radial-gradient(circle at 84% 18%, rgba(210, 167, 102, 0.16), transparent 22rem),
+    linear-gradient(130deg, #102b29 0%, #173d38 68%, #244a42 100%);
+  box-shadow: var(--jy-shadow);
+}
+
+.jyotish-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto auto -78px 43%;
+  width: 210px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(220, 178, 112, 0.14);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.jyotish-hero__copy {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  padding: clamp(38px, 6vw, 76px);
+}
+
+.jyotish-hero__eyebrow,
+.jyotish-section__index,
+.education-cta__label {
+  margin: 0 0 17px;
+  color: #d7ad72;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.jyotish-hero h1 {
+  max-width: 900px;
+  margin: 0;
+  font-family: Literata, Georgia, serif;
+  font-size: clamp(2.6rem, 6vw, 5.8rem);
+  font-weight: 500;
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+
+.jyotish-hero__lead {
+  max-width: 760px;
+  margin: 25px 0 0;
+  color: rgba(248, 245, 237, 0.74);
+  font-size: clamp(1rem, 1.7vw, 1.22rem);
+  line-height: 1.7;
+}
+
+.jyotish-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: 30px 0 0;
+}
+
+.jyotish-hero__facts div {
+  min-width: 110px;
+}
+
+.jyotish-hero__facts dt {
+  margin-bottom: 5px;
+  color: rgba(248, 245, 237, 0.48);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.jyotish-hero__facts dd {
+  margin: 0;
+  color: #fffdf7;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.jyotish-hero__visual {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  padding: 26px;
+  opacity: 0.88;
+}
+
+.jyotish-hero__visual::before {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border: 1px solid rgba(247, 242, 231, 0.08);
+  border-radius: 50%;
+}
+
+.jyotish-diagram {
+  display: block;
+  width: min(100%, 420px);
+  height: auto;
+  fill: none;
+  stroke: rgba(231, 221, 195, 0.34);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.jyotish-diagram__node {
+  fill: rgba(231, 221, 195, 0.68);
+  stroke: none;
+}
+
+.jyotish-diagram .jyotish-diagram__accent {
+  stroke: #d8a960;
+  stroke-width: 2.2;
+}
+
+.jyotish-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 34px;
+  align-items: start;
+  margin-top: 34px;
+}
+
+.jyotish-article {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--jy-line);
+  border-radius: 24px;
+  background: rgba(255, 253, 248, 0.88);
+  box-shadow: var(--jy-shadow);
+}
+
+.jyotish-section {
+  padding: clamp(36px, 5.5vw, 72px);
+  border-bottom: 1px solid var(--jy-line);
+}
+
+.jyotish-section__index {
+  color: var(--jy-green);
+}
+
+.jyotish-section h2,
+.education-cta h2 {
+  max-width: 850px;
+  margin: 0 0 22px;
+  color: var(--jy-ink);
+  font-family: Literata, Georgia, serif;
+  font-size: clamp(1.8rem, 3.6vw, 3.15rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.jyotish-section > p,
+.jyotish-section > ul,
+.jyotish-section > ol {
+  max-width: 790px;
+}
+
+.jyotish-section p,
+.jyotish-section li {
+  color: #53625f;
+  font-size: clamp(0.97rem, 1.3vw, 1.08rem);
+  line-height: 1.78;
+}
+
+.jyotish-section p {
+  margin: 0 0 19px;
+}
+
+.jyotish-section p:last-child {
+  margin-bottom: 0;
+}
+
+.jyotish-sidebar {
+  position: sticky;
+  top: 104px;
+  min-width: 0;
+}
+
+.jyotish-toc {
+  overflow: hidden;
+  border: 1px solid var(--jy-line);
+  border-radius: 18px;
+  background: rgba(255, 253, 248, 0.86);
+  box-shadow: 0 12px 34px rgba(28, 44, 39, 0.05);
+}
+
+.jyotish-toc summary {
+  padding: 18px 19px;
+  color: var(--jy-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.jyotish-toc nav {
+  display: grid;
+  padding: 0 9px 10px;
+}
+
+.jyotish-toc a {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 8px 11px;
+  border-radius: 9px;
+  color: var(--jy-muted);
+  font-size: 0.84rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.jyotish-toc a:hover,
+.jyotish-toc a:focus-visible,
+.jyotish-toc a.is-active {
+  color: var(--jy-green-deep);
+  background: rgba(22, 109, 102, 0.08);
+  outline: none;
+}
+
+.education-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: end;
+  padding: clamp(34px, 5vw, 62px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f7f2e7;
+  background: #123330;
+}
+
+.education-cta--consultation {
+  background:
+    radial-gradient(circle at 85% 0, rgba(212, 162, 91, 0.16), transparent 19rem),
+    #203a36;
+}
+
+.education-cta--community {
+  background: #132827;
+}
+
+.education-cta h2 {
+  margin-bottom: 12px;
+  color: #fffdf8;
+  font-size: clamp(1.65rem, 3vw, 2.55rem);
+}
+
+.education-cta p {
+  max-width: 690px;
+  margin: 0;
+  color: rgba(247, 242, 231, 0.68);
+  line-height: 1.68;
+}
+
+.education-cta .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  white-space: nowrap;
+}
+
+.education-cta .button-secondary {
+  color: #f7f2e7;
+  border-color: rgba(247, 242, 231, 0.4);
+  background: transparent;
+}
+
+.education-cta__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.education-cta__socials a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(247, 242, 231, 0.26);
+  border-radius: 999px;
+  color: #f7f2e7;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.education-cta__socials a:hover,
+.education-cta__socials a:focus-visible {
+  border-color: #d8a960;
+  outline: 2px solid transparent;
+}
+
+.jyotish-passport {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 840px;
+  margin: 30px 0 0;
+  border-top: 1px solid var(--jy-line);
+  border-left: 1px solid var(--jy-line);
+}
+
+.jyotish-passport div {
+  padding: 20px;
+  border-right: 1px solid var(--jy-line);
+  border-bottom: 1px solid var(--jy-line);
+}
+
+.jyotish-passport dt {
+  margin-bottom: 8px;
+  color: var(--jy-green);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.jyotish-passport dd {
+  margin: 0;
+  color: var(--jy-ink);
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.jyotish-catalog-grid,
+.jyotish-entity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.jyotish-catalog-card,
+.jyotish-entity-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 260px;
+  padding: 27px;
+  border: 1px solid var(--jy-line);
+  border-radius: 17px;
+  color: var(--jy-ink);
+  background: rgba(246, 246, 239, 0.72);
+  flex-direction: column;
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.jyotish-entity-card {
+  min-height: 245px;
+}
+
+.jyotish-catalog-card:hover,
+.jyotish-catalog-card:focus-visible,
+.jyotish-entity-card:hover,
+.jyotish-entity-card:focus-visible {
+  border-color: rgba(22, 109, 102, 0.52);
+  box-shadow: 0 14px 40px rgba(21, 67, 60, 0.08);
+  transform: translateY(-3px);
+  outline: none;
+}
+
+.jyotish-catalog-card > span,
+.jyotish-entity-card > span {
+  color: var(--jy-green);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.jyotish-catalog-card h2,
+.jyotish-entity-card h2 {
+  margin: 42px 0 11px;
+  font-family: Literata, Georgia, serif;
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.jyotish-entity-card b {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  max-width: 48%;
+  overflow: hidden;
+  color: rgba(22, 109, 102, 0.42);
+  font-family: Literata, Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 500;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jyotish-catalog-card p,
+.jyotish-entity-card p {
+  display: -webkit-box;
+  margin: 0 0 24px;
+  overflow: hidden;
+  color: var(--jy-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.jyotish-catalog-card strong,
+.jyotish-entity-card strong {
+  margin-top: auto;
+  color: var(--jy-green);
+  font-size: 0.83rem;
+}
+
+.jyotish-steps {
+  display: grid;
+  gap: 12px;
+  padding-left: 24px;
+}
+
+.jyotish-padas {
+  display: grid;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.jyotish-pada {
+  overflow: hidden;
+  border: 1px solid var(--jy-line);
+  border-radius: 17px;
+  background: rgba(246, 246, 239, 0.65);
+  scroll-margin-top: 100px;
+}
+
+.jyotish-pada header {
+  padding: 24px 25px 18px;
+  border-bottom: 1px solid var(--jy-line);
+}
+
+.jyotish-pada header span {
+  color: var(--jy-green);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.jyotish-pada h3 {
+  margin: 8px 0 0;
+  color: var(--jy-ink);
+  font-family: Literata, Georgia, serif;
+  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+  font-weight: 500;
+}
+
+.jyotish-pada dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  border-bottom: 1px solid var(--jy-line);
+}
+
+.jyotish-pada dl div {
+  padding: 17px 20px;
+  border-right: 1px solid var(--jy-line);
+}
+
+.jyotish-pada dl div:last-child {
+  border-right: 0;
+}
+
+.jyotish-pada dt {
+  margin-bottom: 6px;
+  color: var(--jy-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.jyotish-pada dd {
+  margin: 0;
+  color: var(--jy-ink);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.jyotish-pada p {
+  margin: 0;
+  padding: 19px 24px 0;
+  color: #52615e;
+  font-size: 0.94rem;
+  line-height: 1.72;
+}
+
+.jyotish-pada p:last-child {
+  padding-bottom: 24px;
+}
+
+.jyotish-sources ul {
+  display: grid;
+  gap: 10px;
+  padding-left: 20px;
+}
+
+.jyotish-faq__item {
+  max-width: 840px;
+  border-top: 1px solid var(--jy-line);
+}
+
+.jyotish-faq__item:last-child {
+  border-bottom: 1px solid var(--jy-line);
+}
+
+.jyotish-faq__item summary {
+  padding: 20px 40px 20px 0;
+  color: var(--jy-ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.jyotish-faq__item p {
+  padding: 0 28px 20px 0;
+  font-size: 0.94rem;
+}
+
+.jyotish-prev-next {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--jy-line);
+}
+
+.jyotish-prev-next a,
+.jyotish-prev-next > span {
+  min-width: 0;
+  min-height: 130px;
+  padding: 30px;
+  color: var(--jy-ink);
+  background: #f5f4ed;
+  text-decoration: none;
+}
+
+.jyotish-prev-next a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.jyotish-prev-next__next {
+  text-align: right;
+}
+
+.jyotish-prev-next span {
+  margin-bottom: 7px;
+  color: var(--jy-green);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.jyotish-prev-next strong {
+  overflow: hidden;
+  font-family: Literata, Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.academy-card[href="/jyotish/"] {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (max-width: 980px) {
+  .jyotish-hero {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+
+  .jyotish-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .jyotish-sidebar {
+    position: static;
+    grid-row: 1;
+  }
+
+  .jyotish-toc nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  html {
+    scroll-padding-top: 82px;
+  }
+
+  .jyotish-page main {
+    padding-top: 22px;
+  }
+
+  .jyotish-shell {
+    width: min(100% - 24px, 680px);
+  }
+
+  .jyotish-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    border-radius: 20px;
+  }
+
+  .jyotish-hero__copy {
+    padding: 34px 27px 30px;
+  }
+
+  .jyotish-hero h1 {
+    font-size: clamp(2.25rem, 12vw, 4.2rem);
+  }
+
+  .jyotish-hero__lead {
+    font-size: 0.98rem;
+  }
+
+  .jyotish-hero__facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .jyotish-hero__visual {
+    position: absolute;
+    top: 3px;
+    right: -76px;
+    width: 250px;
+    padding: 0;
+    opacity: 0.16;
+    pointer-events: none;
+  }
+
+  .jyotish-layout {
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .jyotish-article {
+    border-radius: 18px;
+  }
+
+  .jyotish-section {
+    padding: 35px 25px;
+  }
+
+  .jyotish-section p,
+  .jyotish-section li {
+    font-size: 0.96rem;
+  }
+
+  .jyotish-toc nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .education-cta {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    padding: 34px 25px;
+  }
+
+  .education-cta .button {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .education-cta__socials a {
+    flex: 1 1 100px;
+    justify-content: center;
+  }
+
+  .jyotish-passport,
+  .jyotish-catalog-grid,
+  .jyotish-entity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jyotish-catalog-card,
+  .jyotish-entity-card {
+    min-height: 220px;
+  }
+
+  .jyotish-pada dl {
+    grid-template-columns: 1fr;
+  }
+
+  .jyotish-pada dl div {
+    border-right: 0;
+    border-bottom: 1px solid var(--jy-line);
+  }
+
+  .jyotish-pada dl div:last-child {
+    border-bottom: 0;
+  }
+
+  .jyotish-prev-next {
+    grid-template-columns: 1fr;
+  }
+
+  .jyotish-prev-next a,
+  .jyotish-prev-next > span {
+    min-height: 112px;
+  }
+
+  .jyotish-prev-next__next {
+    text-align: left;
+  }
+}
+
+@media (max-width: 679px) {
+  .jyotish-desktop-nav,
+  .jyotish-account-action {
+    display: none;
+  }
+
+  .jyotish-header .public-mobile-menu {
+    display: block;
+  }
+}
+
+@media (max-width: 420px) {
+  .jyotish-shell {
+    width: calc(100% - 18px);
+  }
+
+  .jyotish-breadcrumbs {
+    font-size: 0.72rem;
+  }
+
+  .jyotish-hero__copy,
+  .jyotish-section,
+  .education-cta {
+    padding-right: 21px;
+    padding-left: 21px;
+  }
+
+  .jyotish-hero__facts {
+    grid-template-columns: 1fr;
+  }
+
+  .jyotish-toc nav {
+    grid-template-columns: 1fr;
+  }
+
+  .jyotish-passport div {
+    padding: 17px;
+  }
+
+  .jyotish-pada header,
+  .jyotish-pada p {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .jyotish-catalog-card,
+  .jyotish-entity-card {
+    transition: none;
+  }
+}
+
