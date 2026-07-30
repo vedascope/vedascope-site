@@ -1,0 +1,332 @@
+[
+  {
+    "name": "root",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "grahas",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "saturn",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "signs",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "vrischika",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "houses",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "house-8",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "nakshatras",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "ashwini",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "vishakha",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "revati",
+    "width": 1440,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "root",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "grahas",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "saturn",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "signs",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "vrischika",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "houses",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "house-8",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "nakshatras",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "ashwini",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "vishakha",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "revati",
+    "width": 1024,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 1024
+  },
+  {
+    "name": "root",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "grahas",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "saturn",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "signs",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "vrischika",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "houses",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "house-8",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "nakshatras",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "ashwini",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "vishakha",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "revati",
+    "width": 768,
+    "ctas": 3,
+    "h1": 1,
+    "scrollWidth": 768
+  },
+  {
+    "name": "root",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "grahas",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "saturn",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "signs",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "vrischika",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "houses",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "house-8",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "nakshatras",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "ashwini",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "vishakha",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  },
+  {
+    "name": "revati",
+    "width": 390,
+    "bodyWidth": 390,
+    "ctas": 3,
+    "h1": 1,
+    "menuVisible": "block",
+    "scrollWidth": 390
+  }
+]
